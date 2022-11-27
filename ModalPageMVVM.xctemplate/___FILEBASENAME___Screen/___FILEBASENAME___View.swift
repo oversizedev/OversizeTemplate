@@ -1,6 +1,8 @@
 // ___FILEHEADER___
 
-import OversizeCraft
+import OversizeComponents
+import OversizeCore
+import OversizeLocalizable
 import OversizeServices
 import OversizeUI
 import SwiftUI
@@ -8,52 +10,57 @@ import SwiftUI
 struct ___FILEBASENAMEASIDENTIFIER___: View {
     @StateObject var viewModel: ___FILEBASENAMEASIDENTIFIER___Model
     @Environment(\.presentationMode) var presentationMode
-
+    
     init() {
         _viewModel = StateObject(wrappedValue: ___FILEBASENAMEASIDENTIFIER___Model())
     }
-
+    
     var body: some View {
-        switch viewModel.state {
-        case .initial:
-            ProgressView()
-                .onAppear {
-                    Task {
-                        await viewModel.fetchData()
+        PageView("") {
+            Group {
+                switch viewModel.state {
+                case .initial:
+                    placeholder()
+                        .onAppear {
+                            Task {
+                                await viewModel.fetchData()
+                            }
+                        }
+                case .loading:
+                    placeholder()
+                case let .result(data):
+                    content(data: data)
+                case let .error(error):
+                    ErrorView(error)
+                }
+            }
+        }
+        .leadingBar {
+            BarButton(type: .close)
+        }
+        .trailingBar {
+            BarButton(type: .secondary(L10n.Button.save, action: {
+                Task {
+                    let result = await viewModel.save()
+                    switch result {
+                    case let .success(data):
+                        log("✅ ___VARIABLE_productType___ saved")
+                    case let .failure(error):
+                        log("❌ ___VARIABLE_productType___ not saved (\(error.title))")
                     }
                 }
-        case .loading:
-            ProgressView()
-        case let .result(data):
-            content(data: data)
-        case let .error(error):
-            ErrorView(error)
+            }))
         }
     }
-
+    
     @ViewBuilder
-    private func content(data _: ___VARIABLE_productType___) -> some View {
-        PageView("") {}
-            .leadingBar {
-                BarButton(type: .close)
-            }
-            .trailingBar {
-                BarButton(type: .secondary(L10n.Button.save, action: {
-                    Task {
-                        let result = await viewModel.save()
-                        switch result {
-                        case let .success(data):
-                            #if DEBUG
-                                print("✅ ___VARIABLE_productType___ saved")
-                            #endif
-                        case let .failure(error):
-                            #if DEBUG
-                                print("❌ ___VARIABLE_productType___ not saved (\(error.title))")
-                            #endif
-                        }
-                    }
-                }))
-            }
+    private func content(data _: [ ___VARIABLE_productType___]) -> some View {
+        
+    }
+    
+    @ViewBuilder
+    private func placeholder() -> some View {
+        
     }
 }
 
