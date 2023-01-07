@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SupportsSwiftPackage</key>
+	<true/>
+	<key>Kind</key>
+	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
+	<key>Description</key>
+	<string>A SwiftUI custom view with preview and library content provider</string>
+	<key>Summary</key>
+	<string>SwiftUI View</string>
+	<key>SortOrder</key>
+	<string>1</string>
+	<key>AllowedTypes</key>
+	<array>
+		<string>public.swift-source</string>
+	</array>
+	<key>Platforms</key>
+	<array/>
+	<key>DefaultCompletionName</key>
+	<string>SwiftUIView</string>
+	<key>MainTemplateFile</key>
+	<string>___FILEBASENAME___.swift</string>
+	<key>Image</key>
+	<dict>
+		<key>FileTypeIcon</key>
+		<string>swift</string>
+	</dict>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Screen</string>
+			<key>Description</key>
+			<string>The name of the view to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>productType</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Model</string>
+			<key>Description</key>
+			<string>New Product Prefix</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Not Persisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>productService</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Local service</string>
+			<key>Description</key>
+			<string>New Product Prefix</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Not Persisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>productServiceGlobal</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Global service</string>
+			<key>Description</key>
+			<string>New Product Prefix</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Not Persisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>importService</string>
+			<key>Required</key>
+			<false/>
+			<key>Name</key>
+			<string>Import Service</string>
+			<key>Description</key>
+			<string>Add Service</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Not Persisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>WithSheet</string>
+			<key>Name</key>
+			<string>Also create sheet</string>
+			<key>Description</key>
+			<string>Whether to create a page created sheet enum</string>
+			<key>Type</key>
+			<string>checkbox</string>
+			<key>Default</key>
+			<string>false</string>
+			<key>NotPersisted</key>
+			<true/>
+		</dict>
+	</array>
+</dict>
+</plist>

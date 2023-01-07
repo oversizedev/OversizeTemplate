@@ -40,51 +40,35 @@
             <string>The name of the view to create</string>
             <key>Type</key>
             <string>text</string>
-            <key>NotPersisted</key>
-            <true/>
+            <key>Default</key>
+			<string>Module Name</string>
+			<key>RequiredOptions</key>
+			<dict>
+				<key>classType</key>
+				<array>
+					<string>CalendarService</string>
+				</array>
+			</dict>
         </dict>
         <dict>
-			<key>Identifier</key>
-			<string>productType</string>
-			<key>Required</key>
-			<true/>
-			<key>Name</key>
-			<string>Model</string>
-			<key>Description</key>
-			<string>New Product Prefix</string>
-			<key>Type</key>
-			<string>text</string>
-			<key>Not Persisted</key>
-			<true/>
-		</dict>
-        <dict>
-			<key>Identifier</key>
-			<string>productService</string>
-			<key>Required</key>
-			<true/>
-			<key>Name</key>
-			<string>Local service</string>
-			<key>Description</key>
-			<string>New Product Prefix</string>
-			<key>Type</key>
-			<string>text</string>
-			<key>Not Persisted</key>
-			<true/>
-		</dict>
-        <dict>
-			<key>Identifier</key>
-			<string>productServiceGlobal</string>
-			<key>Required</key>
-			<true/>
-			<key>Name</key>
-			<string>Global service</string>
-			<key>Description</key>
-			<string>New Product Prefix</string>
-			<key>Type</key>
-			<string>text</string>
-			<key>Not Persisted</key>
-			<true/>
-		</dict>
+            <key>Identifier</key>
+            <string>serviseTypeSelection</string>
+            <key>Required</key>
+            <true/>
+            <key>Name</key>
+            <string>Service</string>
+            <key>Description</key>
+            <string>The type of view to use</string>
+            <key>Type</key>
+            <string>popup</string>
+            <key>Default</key>
+            <string>CalendarService</string>
+            <key>Values</key>
+            <array>
+                <string>CalendarService</string>
+                <string>HealthService</string>
+            </array>
+        </dict>
     </array>
 </dict>
 </plist>

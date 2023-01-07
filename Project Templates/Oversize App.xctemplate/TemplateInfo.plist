@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Kind</key>
+	<string>Xcode.Xcode3.ProjectTemplateUnitKind</string>
+	<key>Identifier</key>
+	<string>com.apple.dt.unit.singleViewApplication.Oversize</string>
+	<key>Ancestors</key>
+	<array>
+		<string>com.apple.dt.unit.coreDataCocoaTouchApplication.Oversize</string>
+		<string>com.apple.dt.unit.sceneLifecycleApplication</string>
+	</array>
+	<key>Concrete</key>
+	<true/>
+	<key>Description</key>
+	<string>This template provides a starting point for an application that uses a single view. It provides a view controller to manage the view, and a storyboard or nib file that contains the view.</string>
+	<key>SortOrder</key>
+	<integer>1</integer>
+	<key>NameOfInitialFileForEditor</key>
+	<string>Screens/Main/MainView.swift</string>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>languageChoice</string>
+			<key>Units</key>
+			<dict>
+				<key>Objective-C</key>
+				<dict>
+					<key>Nodes</key>
+					<array>
+						<string>ViewController.h:comments</string>
+						<string>ViewController.h:imports:importCocoa</string>
+						<string>ViewController.h:interface(___FILEBASENAME___ : UIViewController)</string>
+						<string>ViewController.m:comments</string>
+						<string>ViewController.m:imports:importHeader:ViewController.h</string>
+						<string>ViewController.m:extension</string>
+						<string>ViewController.m:implementation:methods:viewDidLoad(- (void\)viewDidLoad)</string>
+						<string>ViewController.m:implementation:methods:viewDidLoad:super</string>
+						<string>Info.plist:UIApplicationSceneManifest:UISceneStoryboardFile</string>
+						<string>Base.lproj/Main.storyboard</string>
+					</array>
+					<key>Definitions</key>
+					<dict>
+						<key>Base.lproj/Main.storyboard</key>
+						<dict>
+							<key>Path</key>
+							<string>Main.storyboard</string>
+							<key>SortOrder</key>
+							<integer>98</integer>
+						</dict>
+					</dict>
+					<key>Targets</key>
+					<array>
+						<dict>
+							<key>SharedSettings</key>
+							<dict>
+								<key>INFOPLIST_KEY_UIMainStoryboardFile</key>
+								<string>Main</string>
+							</dict>
+						</dict>
+					</array>
+				</dict>
+				<key>Swift</key>
+				<array>
+					<dict>
+						<key>RequiredOptions</key>
+						<dict>
+							<key>userInterface</key>
+							<string>Storyboard</string>
+						</dict>
+						<key>Nodes</key>
+						<array>
+							<string>ViewController.swift:comments</string>
+							<string>ViewController.swift:imports:importCocoa</string>
+							<string>ViewController.swift:implementation(___FILEBASENAME___: UIViewController)</string>
+							<string>ViewController.swift:implementation:methods:viewDidLoad(override func viewDidLoad(\))</string>
+							<string>ViewController.swift:implementation:methods:viewDidLoad:super</string>
+							<string>Info.plist:UIApplicationSceneManifest:UISceneStoryboardFile</string>
+							<string>Base.lproj/Main.storyboard</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Base.lproj/Main.storyboard</key>
+							<dict>
+								<key>Path</key>
+								<string>Main.storyboard</string>
+								<key>SortOrder</key>
+								<integer>98</integer>
+							</dict>
+						</dict>
+						<key>Targets</key>
+						<array>
+							<dict>
+								<key>SharedSettings</key>
+								<dict>
+									<key>INFOPLIST_KEY_UIMainStoryboardFile</key>
+									<string>Main</string>
+								</dict>
+							</dict>
+						</array>
+					</dict>
+					<dict>
+						<key>RequiredOptions</key>
+						<dict>
+							<key>userInterface</key>
+							<string>SwiftUI</string>
+							<key>appLifecycle</key>
+							<string>Cocoa</string>
+						</dict>
+						<key>Nodes</key>
+						<array>
+							<string>Preview Content/Preview Assets.xcassets</string>
+							<string>SceneDelegate.swift:imports:importSwiftUI</string>
+							<string>SceneDelegate.swift:implementation:methods:sceneWillConnectToSession:body</string>
+							<string>SceneDelegate.swift:implementation:methods:sceneWillConnectToSession:body:windowScene</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>SceneDelegate.swift:implementation:methods:sceneWillConnectToSession:body</key>
+							<string>
+// Create the SwiftUI view that provides the window contents.
+let contentView = ContentView()
+</string>
+							<key>SceneDelegate.swift:implementation:methods:sceneWillConnectToSession:body:windowScene</key>
+							<string>
+// Use a UIHostingController as window root view controller.
+if let windowScene = scene as? UIWindowScene {
+    let window = UIWindow(windowScene: windowScene)
+    window.rootViewController = UIHostingController(rootView: contentView)
+    self.window = window
+    window.makeKeyAndVisible()
+}</string>
+							<key>*:imports:importSwiftUI</key>
+							<string>import SwiftUI</string>
+						</dict>
+						<key>Targets</key>
+						<array>
+							<dict>
+								<key>SharedSettings</key>
+								<dict>
+									<key>ENABLE_PREVIEWS</key>
+									<string>YES</string>
+									<key>DEVELOPMENT_ASSET_PATHS</key>
+									<string>___PACKAGENAMEPREVIEWCONTENT:quoteIfNeeded___</string>
+								</dict>
+							</dict>
+						</array>
+					</dict>
+					<dict>
+						<key>RequiredOptions</key>
+						<dict>
+							<key>userInterface</key>
+							<string>SwiftUI</string>
+							<key>coreData</key>
+							<string>true</string>
+							<key>appLifecycle</key>
+							<string>Cocoa</string>
+						</dict>
+						<key>Nodes</key>
+						<array>
+							<string>SceneDelegate.swift:implementation:methods:sceneWillConnectToSession:body</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>SceneDelegate.swift:implementation:methods:sceneWillConnectToSession:body</key>
+							<string>
+// Get the managed object context from the shared persistent container.
+let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
+// Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
+// Add `@Environment(\.managedObjectContext)` in the views that will need the context.
+let contentView = ContentView().environment(\.managedObjectContext, context)
+</string>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>userInterface</string>
+			<key>Name</key>
+			<string>Interface:</string>
+			<key>Description</key>
+			<string>The type of user interface.</string>
+			<key>Values</key>
+			<array>
+				<string>SwiftUI</string>
+				<string>Storyboard</string>
+			</array>
+			<key>Default</key>
+			<string>SwiftUI</string>
+			<key>Type</key>
+			<string>popup</string>
+			<key>Units</key>
+			<dict>
+				<key>SwiftUI</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>Info.plist:ITSAppUsesNonExemptEncryption</string>
+							<string>Assets.xcassets</string>
+							<string>../.gitignore</string>
+							<string>../.swiftformat</string>
+							<string>../.swiftlint.yml</string>
+							<string>Resources/Scripts/swiftgen.yml</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Info.plist:ITSAppUsesNonExemptEncryption</key>
+							<string>&lt;key&gt;ITSAppUsesNonExemptEncryption&lt;/key&gt;&lt;false/&gt;</string>
+							<key>../.swiftlint.yml</key>
+							<dict>
+								<key>Path</key>
+								<string>.swiftlint.yml</string>
+								<key>Group</key>
+								<array>
+									<string>Resources</string>
+									<string>Scripts</string>
+								</array>
+							</dict>
+							<key>Resources/Scripts/swiftgen.yml</key>
+							<dict>
+								<key>Path</key>
+								<string>swiftgen.yml</string>
+								<key>Group</key>
+								<array>
+									<string>Resources</string>
+									<string>Scripts</string>
+								</array>
+							</dict>
+							<key>../.swiftformat</key>
+							<dict>
+								<key>Path</key>
+								<string>.swiftformat</string>
+								<key>Group</key>
+								<array>
+									<string>Resources</string>
+									<string>Scripts</string>
+								</array>
+							</dict>
+							<key>../.gitignore</key>
+							<dict>
+								<key>Group</key>
+								<array>
+									<string>Resources</string>
+									<string>Scripts</string>
+								</array>
+								<key>Path</key>
+								<string>.gitignore</string>
+							</dict>
+							<key>Assets.xcassets</key>
+							<dict>
+								<key>Group</key>
+								<array>
+									<string>Resources</string>
+								</array>
+								<key>Path</key>
+								<string>Assets.xcassets</string>
+								<key>AssetGeneration</key>
+								<array>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AppIcon</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AlternateAppIcon1</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AlternateAppIcon2</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AlternateAppIcon3</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AlternateAppIcon4</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AlternateAppIcon5</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AlternateAppIcon6</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AlternateAppIcon7</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>image</string>
+										<key>Name</key>
+										<string>OnbardingBackground</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+											<key>macOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+									<dict>
+										<key>Type</key>
+										<string>appicon</string>
+										<key>Name</key>
+										<string>AppIcon</string>
+										<key>Platforms</key>
+										<dict>
+											<key>iOS</key>
+											<string>true</string>
+											<key>macOS</key>
+											<string>true</string>
+										</dict>
+									</dict>
+								</array>
+								<key>SortOrder</key>
+								<integer>100</integer>
+							</dict>
+						</dict>
+					</dict>
+				</array>
+				<key>Storyboard</key>
+				<dict/>
+			</dict>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>lookscreen</string>
+			<key>Name</key>
+			<string>Use Lookscreen</string>
+			<key>Description</key>
+			<string>Whether the application should use the Lookscreen</string>
+			<key>Type</key>
+			<string>checkbox</string>
+			<key>Default</key>
+			<string>false</string>
+			<key>SortOrder</key>
+			<integer>400</integer>
+			<key>Units</key>
+			<dict>
+				<key>true</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>Info.plist:NSFaceIDUsageDescription</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Info.plist:NSFaceIDUsageDescription</key>
+							<string>&lt;key&gt;NSFaceIDUsageDescription&lt;/key&gt;&lt;string&gt;$(PRODUCT_NAME) Authentication with TouchId or FaceID&lt;/string&gt;</string>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>Image</key>
+	<dict>
+		<key>BundleImageName</key>
+		<string>app</string>
+		<key>BundleIdentifier</key>
+		<string>com.apple.dt.IDEKit</string>
+	</dict>
+	<key>Targets</key>
+	<array>
+		<dict>
+			<key>TargetIdentifier</key>
+			<string>app.oversize.swiftlintTarget</string>
+			<key>BuildPhases</key>
+			<array>
+				<dict>
+					<key>Name</key>
+					<string>SwiftGen</string>
+					<key>SortOrder</key>
+					<string>1</string>
+					<key>Class</key>
+					<string>ShellScript</string>
+					<key>ShellPath</key>
+					<string>/bin/sh</string>
+					<key>ShellScript</key>
+					<string>LOCALIZATION_CRAFT_PATH=&quot;$SRCROOT/Resources/Scripts&quot;
+CONFIG_FILE_CRAFT=&quot;swiftgen.yml&quot;
+
+cd $LOCALIZATION_CRAFT_PATH
+
+if which swiftgen &gt;/dev/null; then
+  swiftgen config run --config &quot;$LOCALIZATION_CRAFT_PATH/$CONFIG_FILE_CRAFT&quot;
+else
+  echo &quot;warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen&quot;
+fi
+</string>
+				</dict>
+				<dict>
+					<key>Name</key>
+					<string>SwiftLint</string>
+					<key>Class</key>
+					<string>ShellScript</string>
+					<key>ShellPath</key>
+					<string>/bin/sh</string>
+					<key>ShellScript</key>
+					<string>export PATH=&quot;$PATH:/opt/homebrew/bin&quot;
+if which swiftlint &gt; /dev/null; then
+  swiftlint
+else
+  echo &quot;warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint&quot;
+fi</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

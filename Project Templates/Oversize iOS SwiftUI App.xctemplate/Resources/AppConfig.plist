@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Links</key>
+	<dict>
+		<key>App</key>
+		<dict>
+			<key>Url</key>
+			<string>https://oversize.design/___PACKAGENAME___</string>
+			<key>AppStoreID</key>
+			<string></string>
+			<key>TelegramChat</key>
+			<string></string>
+		</dict>
+		<key>Developer</key>
+		<dict>
+			<key>Name</key>
+			<string>Alexander Romanov</string>
+			<key>Url</key>
+			<string>romanov.cc</string>
+			<key>Email</key>
+			<string>alexander@oversize.design</string>
+			<key>Fecebook</key>
+			<string>aromanov91</string>
+			<key>Telegram</key>
+			<string>aromanov91</string>
+		</dict>
+		<key>Company</key>
+		<dict>
+			<key>Name</key>
+			<string>Oversize</string>
+			<key>Url</key>
+			<string>https://oversize.design</string>
+			<key>CDNUrl</key>
+			<string>https://cdn.oversize.design</string>
+			<key>Email</key>
+			<string>support@oversize.design</string>
+			<key>Facebook</key>
+			<string>oversizedev</string>
+			<key>Telegram</key>
+			<string>oversizeapp</string>
+			<key>Dribbble</key>
+			<string>oversizedesign</string>
+			<key>Instagram</key>
+			<string>oversize.design</string>
+			<key>Twitter</key>
+			<string>oversizedesign</string>
+			<key>AppStoreID</key>
+			<string>1459928735</string>
+		</dict>
+	</dict>
+	<key>FeatureFlags</key>
+	<dict>
+		<key>Onboarding</key>
+		<true/>
+		<key>Apperance</key>
+		<true/>
+		<key>StoreKit</key>
+		<true/>
+		<key>CloudKit</key>
+		<false/>
+		<key>HealthKit</key>
+		<false/>
+		<key>FaceID</key>
+		<false/>
+		<key>FaceIDSecureCodes</key>
+		<false/>
+		<key>Notifications</key>
+		<false/>
+		<key>Lookscreen</key>
+		<false/>
+		<key>Vibration</key>
+		<false/>
+		<key>Sounds</key>
+		<false/>
+		<key>Spotlight</key>
+		<false/>
+		<key>BlurMinimize</key>
+		<false/>
+		<key>AlertPINCode</key>
+		<false/>
+		<key>CVVCodes</key>
+		<false/>
+		<key>BruteForceSecure</key>
+		<false/>
+		<key>PhotoBreaker</key>
+		<false/>
+		<key>AlternateAppIcons</key>
+		<integer>7</integer>
+		<key>PremiumFeatures</key>
+		<dict>
+			<key>BlurMinimize</key>
+			<true/>
+			<key>Lookscreen</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>Store</key>
+	<dict>
+		<key>BannerLabel</key>
+		<string>Store.BannerLabelDressWeathrt</string>
+		<key>SubscriptionsName</key>
+		<string>Pro</string>
+		<key>SubscriptionsDescription</key>
+		<string>No limits, without Ads, iСloud, application design setting and much more</string>
+		<key>ProductIdentifiers</key>
+		<array>
+			<string>app.oversize.___PACKAGENAME___.monthly</string>
+			<string>app.oversize.___PACKAGENAME___.yearly</string>
+			<string>app.oversize.___PACKAGENAME___.forever</string>
+			<string>app.oversize.___PACKAGENAME___.offerYearly</string>
+		</array>
+		<key>Features</key>
+		<array>
+			<dict>
+				<key>image</key>
+				<string>Solid/ShoppingandEcommerce/Megaphone</string>
+				<key>title</key>
+				<string>No Ads</string>
+				<key>subtitle</key>
+				<string>Advertising will not be displayed</string>
+				<key>topScreenAlignment</key>
+				<true/>
+				<key>illustrationURL</key>
+				<string>https://cdn.oversize.design/assets/illustrations/objects/tools/speaker/large.png</string>
+				<key>backgroundColor</key>
+				<string>FF7A20</string>
+			</dict>
+			<dict>
+				<key>image</key>
+				<string>Solid/DateandTime/Calendar02</string>
+				<key>title</key>
+				<string>No limits for subtasks</string>
+				<key>subtitle</key>
+				<string>Save any number of subtasks</string>
+				<key>illustrationURL</key>
+				<string>https://cdn.oversize.design/assets/illustrations/objects/education/calendar-b/large.png</string>
+				<key>backgroundColor</key>
+				<string>FB616B</string>
+			</dict>
+			<dict>
+				<key>image</key>
+				<string>Solid/UserInterface/Lock</string>
+				<key>title</key>
+				<string>PIN code</string>
+				<key>subtitle</key>
+				<string>Increase the security of personal data</string>
+				<key>illustrationURL</key>
+				<string>https://cdn.oversize.design/assets/illustrations/objects/houseware/lock-a/large.png</string>
+				<key>backgroundColor</key>
+				<string>FF5795</string>
+			</dict>
+			<dict>
+				<key>image</key>
+				<string>Solid/Weather/Cloudy01</string>
+				<key>title</key>
+				<string>Sync with iCloud</string>
+				<key>subtitle</key>
+				<string>Data will not be lost</string>
+				<key>illustrationURL</key>
+				<string>https://cdn.oversize.design/assets/illustrations/objects/tools/cloud/large.png</string>
+				<key>backgroundColor</key>
+				<string>AF7AFF</string>
+			</dict>
+			<dict>
+				<key>image</key>
+				<string>Solid/Design/Brush</string>
+				<key>title</key>
+				<string>Custumize theme and fonts</string>
+				<key>subtitle</key>
+				<string>Setting app design</string>
+				<key>illustrationURL</key>
+				<string>https://cdn.oversize.design/assets/illustrations/objects/tools/bucket/large.png</string>
+				<key>backgroundColor</key>
+				<string>5E92FE</string>
+			</dict>
+			<dict>
+				<key>image</key>
+				<string>Solid/Design/Palette</string>
+				<key>title</key>
+				<string>Alternate app icon</string>
+				<key>subtitle</key>
+				<string>Choose from a selection app icons for your homescreen</string>
+				<key>illustrationURL</key>
+				<string>https://cdn.oversize.design/assets/illustrations/objects/tools/roller/large.png</string>
+				<key>backgroundColor</key>
+				<string>5E92FE</string>
+			</dict>
+			<dict>
+				<key>image</key>
+				<string>Solid/FoodandDrinks/CupToGo</string>
+				<key>title</key>
+				<string>Help developer :)</string>
+				<key>subtitle</key>
+				<string>Coffe for single worker</string>
+				<key>illustrationURL</key>
+				<string>https://cdn.oversize.design/assets/illustrations/objects/food/coffee-cup/large.png</string>
+				<key>backgroundColor</key>
+				<string>3FB4FF</string>
+			</dict>
+		</array>
+	</dict>
+	<key>Onboarding</key>
+	<dict>
+		<key>Pages</key>
+		<array>
+			<dict>
+				<key>image</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+				<key>subtitle</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>Apps</key>
+	<array>
+		<dict>
+			<key>Id</key>
+			<string>6443709281</string>
+			<key>Name</key>
+			<string>Scale Down</string>
+			<key>Title</key>
+			<string>Control weight easily, follow the successes of every month</string>
+			<key>Subtitle</key>
+			<string>It is very difficult to reset everything, but if you move in small steps every day, then it is easier to reach the goal. The Scale Down application will help with this, with it the whole process is clearly visible</string>
+			<key>Path</key>
+			<string>scaledown</string>
+		</dict>
+		<dict>
+			<key>Id</key>
+			<string>1477792790</string>
+			<key>Name</key>
+			<string>PIN Wallet</string>
+			<key>Title</key>
+			<string>Allows you to store information about your bank cards</string>
+			<key>Subtitle</key>
+			<string>All data is saved in the phone or is possible synchronization with iCloud</string>
+			<key>Path</key>
+			<string>pinwallet</string>
+		</dict>
+		<dict>
+			<key>Id</key>
+			<string>1552617598</string>
+			<key>Name</key>
+			<string>Dress Weather</string>
+			<key>Title</key>
+			<string>How often are you smell in the rain?</string>
+			<key>Subtitle</key>
+			<string>We will tell you when to take an umbrella</string>
+			<key>Path</key>
+			<string>dressweather</string>
+		</dict>
+	</array>
+</dict>
+</plist>

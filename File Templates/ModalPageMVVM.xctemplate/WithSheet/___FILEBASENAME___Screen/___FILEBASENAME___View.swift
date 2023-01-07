@@ -3,13 +3,14 @@
 import OversizeComponents
 import OversizeCore
 import OversizeLocalizable
+import ___VARIABLE_importService___
 import OversizeServices
 import OversizeUI
 import SwiftUI
 
 struct ___FILEBASENAMEASIDENTIFIER___: View {
     @StateObject var viewModel: ___FILEBASENAMEASIDENTIFIER___Model
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     init() {
         _viewModel = StateObject(wrappedValue: ___FILEBASENAMEASIDENTIFIER___Model())
@@ -51,10 +52,13 @@ struct ___FILEBASENAMEASIDENTIFIER___: View {
                 }
             }))
         }
+        .sheet(item: $viewModel.sheet) { sheet in
+            resolveSheet(sheet: sheet)
+        }
     }
     
     @ViewBuilder
-    private func content(data _: [ ___VARIABLE_productType___]) -> some View {
+    private func content(data: [___VARIABLE_productType___]) -> some View {
         
     }
     

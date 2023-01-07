@@ -1,54 +1,60 @@
-// ___FILEHEADER___
+//
+// Copyright © ___DATE___ ___FULLUSERNAME___
+// ___FILEBASENAMEASIDENTIFIER___
+//
 
 import OversizeCore
 import OversizeServices
+import OversizeCalendarService
+import EventKit
 import SwiftUI
 
 @MainActor
 class ___FILEBASENAMEASIDENTIFIER___: ObservableObject {
-    @Injected(Container.___VARIABLE_productService___) private var ___VARIABLE_productService___: ___VARIABLE_productServiceGlobal___
+    @Injected(Container.calendarService) private var calendarService: CalendarService
     @Published var state = ___FILEBASENAMEASIDENTIFIER___State.initial
+    @Published var sheet: ___FILEBASENAMEASIDENTIFIER___.Sheet? = nil
 
     func fetchData() async {
         state = .loading
         /*
-         let result = await ___VARIABLE_productService___.fetch()
+         let result = await calendarService.fetch()
          switch result {
          case let .success(data):
-             log("✅ ___VARIABLE_productType___ fetched")
+             log("✅ EKEvent fetched")
              state = .result(data)
          case let .failure(error):
-            log("❌ ___VARIABLE_productType___ not fetched (\(error.title))")
+            log("❌ EKEvent not fetched (\(error.title))")
              state = .error(error)
          }
          */
     }
 
-    func save() async -> Result<___VARIABLE_productType___, AppError> {
+    func save() async -> Result<EKEvent, AppError> {
         /*
-         let item = ___VARIABLE_productType___()
-         let result = await ___VARIABLE_productService___.save(item)
+         let item = EKEvent()
+         let result = await calendarService.save(item)
          switch result {
          case let .success(data):
-         log("✅ ___VARIABLE_productType___ saved")
+         log("✅ EKEvent saved")
              return .success(data)
          case let .failure(error):
-         log("❌ ___VARIABLE_productType___ not saved (\(error.title))")
+         log("❌ EKEvent not saved (\(error.title))")
              return .failure(error)
          }
          */
         return .failure(.network(type: .unknown))
     }
 
-    func delete(item _: ___VARIABLE_productType___) async -> Result<___VARIABLE_productType___, AppError> {
+    func delete(item _: EKEvent) async -> Result<EKEvent, AppError> {
         /*
-         let result = await cloudKitService.delet(item)
+         let result = await calendarService.delet(item)
          switch result {
          case let .success(data):
-            log("✅ ___VARIABLE_productType___ deleted")
+            log("✅ EKEvent deleted")
             return .success(data)
          case let .failure(error):
-            log("❌ ___VARIABLE_productType___ not deleted (\(error.title))")
+            log("❌ EKEvent not deleted (\(error.title))")
             return .failure(error)
          }
           */
@@ -59,6 +65,6 @@ class ___FILEBASENAMEASIDENTIFIER___: ObservableObject {
 enum ___FILEBASENAMEASIDENTIFIER___State {
     case initial
     case loading
-    case result([___VARIABLE_productType___])
+    case result([EKEvent])
     case error(AppError)
 }
