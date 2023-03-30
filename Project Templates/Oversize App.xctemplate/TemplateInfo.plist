@@ -443,17 +443,13 @@ let contentView = ContentView().environment(\.managedObjectContext, context)
 					<key>ShellPath</key>
 					<string>/bin/sh</string>
 					<key>ShellScript</key>
-					<string>LOCALIZATION_CRAFT_PATH=&quot;$SRCROOT/Resources/Scripts&quot;
-CONFIG_FILE_CRAFT=&quot;swiftgen.yml&quot;
-
-cd $LOCALIZATION_CRAFT_PATH
-
+					<string>export PATH=&quot;$PATH:/opt/homebrew/bin&quot;
+SWIFT_GEN_CONFIG=&quot;${PROJECT_DIR}/${PROJECT_NAME}/Resources/Scripts/swiftgen.yml&quot;
 if which swiftgen &gt;/dev/null; then
-  swiftgen config run --config &quot;$LOCALIZATION_CRAFT_PATH/$CONFIG_FILE_CRAFT&quot;
+  swiftgen config run --verbose --config &quot;$SWIFT_GEN_CONFIG&quot;
 else
   echo &quot;warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen&quot;
-fi
-</string>
+fi</string>
 				</dict>
 				<dict>
 					<key>Name</key>

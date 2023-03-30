@@ -4,7 +4,6 @@
 //
 
 import CoreData
-import Foundation
 import OversizeCore
 import OversizeCoreData
 import OversizeServices
@@ -33,7 +32,7 @@ public extension ___PACKAGENAME:identifier___CoreDataService {
 
     func update___VARIABLE_CoreDataModelName___(_ item: ___VARIABLE_CoreDataModelName___, name: String? = nil, date: Date? = nil) async -> Result<Bool, AppError> {
         do {
-            var updatItem = item
+            let updatItem = item
             if let name {
                 updatItem.name = name
             }

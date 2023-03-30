@@ -1,4 +1,7 @@
-// ___FILEHEADER___
+//
+// Copyright © ___DATE___ ___FULLUSERNAME___
+// ___FILEBASENAMEASIDENTIFIER___
+//
 
 import OversizeServices
 import SwiftUI
