@@ -1,7 +1,5 @@
-//
-// Copyright © ___FULLUSERNAME___
-// ___FILEBASENAMEASIDENTIFIER___.swift, created on ___DATE___
-//
+// ___FILEHEADER___
+s
 import OversizeUI
 import OversizeKit
 import OversizeLocalizable

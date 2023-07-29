@@ -1,7 +1,4 @@
-//
-// Copyright © ___DATE___ ___FULLUSERNAME___
-// ___FILEBASENAMEASIDENTIFIER___
-//
+// ___FILEHEADER___
 
 import OversizeUI
 import OversizeKit

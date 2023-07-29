@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SupportsSwiftPackage</key>
+	<true/>
+	<key>Kind</key>
+	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
+	<key>Description</key>
+	<string>Service template</string>
+	<key>Summary</key>
+	<string>Service</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>SortOrder</key>
+	<string>1</string>
+	<key>AllowedTypes</key>
+	<array>
+		<string>public.swift-source</string>
+	</array>
+	<key>Platforms</key>
+	<array/>
+	<key>DefaultCompletionName</key>
+	<string>Service</string>
+	<key>MainTemplateFile</key>
+	<string>___FILEBASENAME___Service.swift</string>
+	<key>Image</key>
+	<dict>
+		<key>FileTypeIcon</key>
+		<string>swift</string>
+	</dict>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>seviceType</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Type</string>
+			<key>Description</key>
+			<string>The type of view to use</string>
+			<key>Type</key>
+			<string>popup</string>
+			<key>Default</key>
+			<string>Actor</string>
+			<key>Values</key>
+			<array>
+				<string>Actor</string>
+				<string>Actor Protocol</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Service</string>
+			<key>Description</key>
+			<string>The name of the service to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>serviceVariable</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Service registering name</string>
+			<key>Description</key>
+			<string>Model Variable Single</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Not Persisted</key>
+			<true/>
+			<key>Default</key>
+			<string>service</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>WithFolder</string>
+			<key>Name</key>
+			<string>Also create folder</string>
+			<key>Description</key>
+			<string>Whether to create a service created protocol</string>
+			<key>Type</key>
+			<string>checkbox</string>
+			<key>Default</key>
+			<string>false</string>
+			<key>NotPersisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>accessLevel</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Access level</string>
+			<key>Description</key>
+			<string>The type of view to use</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Default</key>
+			<string>public</string>
+			<key>Values</key>
+			<array>
+				<string>internal</string>
+				<string>private</string>
+				<string>public</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

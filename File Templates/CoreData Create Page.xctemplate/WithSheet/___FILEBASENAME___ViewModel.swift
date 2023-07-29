@@ -1,7 +1,4 @@
-//
-// Copyright © ___FULLUSERNAME___
-// ___FILEBASENAMEASIDENTIFIER___.swift, created on ___DATE___
-//
+// ___FILEHEADER___
 
 import Combine
 import OversizeCore

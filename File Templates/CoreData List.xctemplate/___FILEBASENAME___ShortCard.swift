@@ -1,8 +1,4 @@
-//
-// ___FILEBASENAMEASIDENTIFIER___.swift
-// Copyright © ___FULLUSERNAME___
-// Created on ___DATE___
-//
+// ___FILEHEADER___
 
 import OversizeLocalizable
 import OversizeUI
