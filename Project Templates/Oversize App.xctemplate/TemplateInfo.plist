@@ -5,10 +5,10 @@
 	<key>Kind</key>
 	<string>Xcode.Xcode3.ProjectTemplateUnitKind</string>
 	<key>Identifier</key>
-	<string>com.apple.dt.unit.singleViewApplication.Oversize</string>
+	<string>com.apple.dt.unit.singleViewApplication.oversize</string>
 	<key>Ancestors</key>
 	<array>
-		<string>com.apple.dt.unit.coreDataCocoaTouchApplication.Oversize</string>
+		<string>com.apple.dt.unit.coreDataCocoaTouchApplication.oversize</string>
 		<string>com.apple.dt.unit.sceneLifecycleApplication</string>
 	</array>
 	<key>Concrete</key>
@@ -153,8 +153,8 @@ if let windowScene = scene as? UIWindowScene {
 						<dict>
 							<key>userInterface</key>
 							<string>SwiftUI</string>
-							<key>coreData</key>
-							<string>true</string>
+							<key>storageType</key>
+							<string>Core Data</string>
 							<key>appLifecycle</key>
 							<string>Cocoa</string>
 						</dict>
@@ -388,6 +388,11 @@ let contentView = ContentView().environment(\.managedObjectContext, context)
 			</dict>
 		</dict>
 		<dict>
+			<key>RequiredOptions</key>
+			<dict>
+				<key>userInterface</key>
+				<string>SwiftUI</string>
+			</dict>
 			<key>Identifier</key>
 			<string>lookscreen</string>
 			<key>Name</key>
