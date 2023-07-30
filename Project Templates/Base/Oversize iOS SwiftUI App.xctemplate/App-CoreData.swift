@@ -4,6 +4,7 @@ import Factory
 import OversizeKit
 import OversizeServices
 import OversizeUI
+import SwiftUI
 
 @main
 struct ___PACKAGENAME:identifier___App: App {
@@ -19,7 +20,7 @@ struct ___PACKAGENAME:identifier___App: App {
         WindowGroup {
             NavigationStack(path: $router.path) {
                 MainView()
-                    .navigationDestination(for: Route.self) { destination in
+                    .navigationDestination(for: Screen.self) { destination in
                         router.resolve(pathItem: destination)
                     }
             }

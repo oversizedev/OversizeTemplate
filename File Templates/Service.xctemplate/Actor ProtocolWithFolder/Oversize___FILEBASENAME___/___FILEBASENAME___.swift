@@ -11,5 +11,5 @@ ___VARIABLE_accessLevel___ actor ___FILEBASENAMEASIDENTIFIER___ {
     ___VARIABLE_accessLevel___ init() {}
 }
 
-___VARIABLE_accessLevel___ extension ___FILEBASENAMEASIDENTIFIER___: ___FILEBASENAMEASIDENTIFIER___Protocol {
+extension ___FILEBASENAMEASIDENTIFIER___: ___FILEBASENAMEASIDENTIFIER___Protocol {
 }

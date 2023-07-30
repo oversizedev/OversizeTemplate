@@ -45,6 +45,7 @@ struct ___PACKAGENAME:identifier___App: App {
             .onOpenURL { router.handle($0) }
             .environmentObject(router)
             .environmentObject(appSettingsViewModel)
+            .environment(\.managedObjectContext, persistenceController.persistentContainer.viewContext)
             .onReceive(pub) { output in
                if let userInfo = output.userInfo, let info = userInfo["link"] {
                    let url = URL(string: info as! String)!

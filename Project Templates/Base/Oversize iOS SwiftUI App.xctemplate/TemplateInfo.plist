@@ -231,7 +231,7 @@
 								<key>Path</key>
 								<string>Resources/Scripts/Templates/CoreDataTemplate.stencil</string>
 							</dict>
-							<key>Resources/AppConfig.plist - 3</key>
+							<key>Resources/AppConfig.plist</key>
 							<dict>
 								<key>Group</key>
 								<array>
