@@ -3,29 +3,31 @@
 import SwiftUI
 
 @MainActor
-class Router: ObservableObject {
+public final class Router: ObservableObject {
     
     // Path
-    @Published var path: [Screen] = []
+    @Published var path = NavigationPath()
     
     // Sheets
-    @Published var sheet: Screen?
-    @Published var fullScreenCover: Screen?
-    @Published private(set) var sheetDetents: Set<PresentationDetent> = []
-    @Published private(set) var dragIndicator: Visibility = .hidden
-    @Published private(set) var dismissDisabled: Bool = false
+    @Published public var sheet: Screen?
+    @Published public var fullScreenCover: Screen?
+    @Published public var sheetDetents: Set<PresentationDetent> = []
+    @Published public var dragIndicator: Visibility = .hidden
+    @Published public var dismissDisabled: Bool = false
 
     // Hud
-    @Published var isShowHud: Bool = false
-    @Published var hudText: String = ""
+    @Published public var isShowHud: Bool = false
+    @Published public var hudText: String = ""
 
     // Alert
-    @Published var alert: RootAlert? = nil
+    @Published public var alert: RootAlert? = nil
+    
+    public init() {}
 }
 
 // MARK: - Alert
 
-extension Router {
+public extension Router {
     func presentAlert(_ alert: RootAlert) {
         self.alert = alert
     }
@@ -37,7 +39,7 @@ extension Router {
 
 // MARK: - HUD
 
-extension Router {
+public extension Router {
     func presentHud(_ text: String) {
         hudText = text
         isShowHud = true
@@ -46,14 +48,14 @@ extension Router {
 
 // MARK: - Route
 
-extension Router {
+public extension Router {
     
     func move(_ screen: Screen) {
         path.append(screen)
     }
 
     func backToRoot() {
-        path.removeAll()
+        path.removeLast(path.count)
     }
 
     func back(_ count: Int = 1) {
@@ -66,7 +68,7 @@ extension Router {
 
 // MARK: - Sheets
 
-extension Router {
+public extension Router {
     func present(_ sheet: Screen, fullScreen: Bool = false) {
         if fullScreen {
             if fullScreenCover != nil {
@@ -123,7 +125,7 @@ extension Router {
     }
 }
 
-extension Router {
+public extension Router {
     func handle(_ url: URL) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true), let host = components.host else {
             return
@@ -133,7 +135,8 @@ extension Router {
 
         switch host {
         case "settings":
-            present(.settings)
+            changeTab(.settings)
+            backToRoot()
         case "premium":
             present(.premium)
         default:
@@ -143,7 +146,7 @@ extension Router {
 }
 
 extension Screen: Hashable, Equatable {
-    static func == (lhs: Screen, rhs: Screen) -> Bool {
+    public static func == (lhs: Screen, rhs: Screen) -> Bool {
         if lhs.id == rhs.id {
             return true
         } else {
@@ -151,7 +154,7 @@ extension Screen: Hashable, Equatable {
         }
     }
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

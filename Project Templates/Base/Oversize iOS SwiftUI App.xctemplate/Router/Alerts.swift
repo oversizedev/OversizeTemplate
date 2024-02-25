@@ -1,15 +1,20 @@
 //___FILEHEADER___
 
+import OversizeCore
 import OversizeLocalizable
-import OversizeServices
+import OversizeModels
 import SwiftUI
 
-enum RootAlert: Identifiable {
+public enum RootAlert {
     case dismiss(_ action: () -> Void)
     case delete(_ action: () -> Void)
     case appError(error: AppError)
 
-    var id: String {
+
+}
+
+extension RootAlert: Identifiable {
+    public var id: String {
         switch self {
         case .dismiss:
             return "dismiss"
@@ -19,7 +24,9 @@ enum RootAlert: Identifiable {
             return "appError"
         }
     }
+}
 
+public extension RootAlert {
     var alert: Alert {
         switch self {
         case let .dismiss(action):

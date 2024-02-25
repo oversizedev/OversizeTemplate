@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SupportsSwiftPackage</key>
+	<true/>
+	<key>Kind</key>
+	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
+	<key>Image</key>
+	<dict>
+		<key>FileTypeIcon</key>
+		<string>swift</string>
+	</dict>
+	<key>Platforms</key>
+	<array/>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>View</string>
+			<key>Description</key>
+			<string>The name of the view to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>AppSceen</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>CoreDataModel</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>CoreData Model</string>
+			<key>Description</key>
+			<string>CoreData Model</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Not Persisted</key>
+			<true/>
+			<key>Default</key>
+			<string>Model</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>CoreDataModelVariable</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Variable single</string>
+			<key>Description</key>
+			<string>Model Variable Single</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Not Persisted</key>
+			<true/>
+			<key>Default</key>
+			<string>model</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>CoreDataModelVariableMany</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Variable many</string>
+			<key>Description</key>
+			<string>Model Variable Many</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>Not Persisted</key>
+			<true/>
+			<key>Default</key>
+			<string>models</string>
+		</dict>
+	</array>
+</dict>
+</plist>

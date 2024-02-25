@@ -38,19 +38,4 @@ public enum RootTab: String {
             return "Settings"
         }
     }
-    
-    var image: Image {
-        switch self {
-        case .main:
-            return Image(systemName: "")
-        case .secondary:
-            return Image(systemName: "")
-        case .tertiary:
-            return Image(systemName: "")
-        case .quaternary:
-            return Image(systemName: "")
-        case .settings:
-            return Image(systemName: "")
-        }
-    }
 }

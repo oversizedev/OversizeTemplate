@@ -1,0 +1,7 @@
+xcassets:
+  - inputs: ${PROJECT_DIR}/${PROJECT_NAME}/Database/___VARIABLE_productName:RFC1034Identifier___.xcdatamodeld
+    outputs:
+      - templateName: swift5
+        output: ${PROJECT_DIR}/${PROJECT_NAME}/Models/CoreData.swift
+        params:
+          enumName: Asset

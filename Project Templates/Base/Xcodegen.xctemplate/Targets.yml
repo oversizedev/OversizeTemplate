@@ -1,0 +1,35 @@
+targets:
+  ___VARIABLE_productName:RFC1034Identifier___:
+    type: application
+    platform: iOS
+    deploymentTarget: 16.0
+    sources:
+       - path: ../../___VARIABLE_productName:RFC1034Identifier___
+    configFiles:
+      Debug: Debug.xcconfig
+      Release: Release.xcconfig
+    dependencies:
+      - package: OversizeUI
+      - package: OversizeServices
+      - package: OversizeResources
+      - package: OversizeLocalizable
+      - package: OversizeKit
+        products:
+          - OversizeKit
+          - OversizeNoticeKit
+      - package: OversizeCore
+      - package: OversizeComponents
+#    entitlements:
+#      path: ___VARIABLE_productName:RFC1034Identifier___/___VARIABLE_productName:RFC1034Identifier___.entitlements
+#      properties:
+#        com.apple.developer.icloud-container-identifiers
+    postCompileScripts:
+      - script: |
+                export PATH="$PATH:/opt/homebrew/bin"
+                    SWIFT_GEN_CONFIG="${PROJECT_DIR}/${PROJECT_NAME}/App/swiftgen.yml"
+                if which swiftgen >/dev/null; then
+                    swiftgen config run --verbose --config "$SWIFT_GEN_CONFIG"
+                else
+                    echo "warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen"
+                fi
+        name: SwiftGen

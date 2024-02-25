@@ -27,7 +27,7 @@
 						</dict>
 						<key>Nodes</key>
 						<array>
-							<string>___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
+							<string>Database/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -35,6 +35,10 @@
 							<dict>
 								<key>Path</key>
 								<string>___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
+								<key>Group</key>
+								<array>
+									<string>Database</string>
+								</array>
 								<key>SortOrder</key>
 								<integer>99</integer>
 							</dict>
@@ -227,7 +231,7 @@ func saveContext () {
 								<key>SharedSettings</key>
 								<dict>
 									<key>INFOPLIST_FILE</key>
-									<string>___PACKAGENAME___/Info.plist</string>
+									<string>___PACKAGENAME___/Resources/Info.plist</string>
 									<key>CODE_SIGN_ENTITLEMENTS</key>
 									<string>___PACKAGENAME___/___PACKAGENAMEASIDENTIFIER___.entitlements</string>
 								</dict>

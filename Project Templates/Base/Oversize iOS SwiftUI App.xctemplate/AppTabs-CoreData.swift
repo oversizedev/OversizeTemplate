@@ -17,7 +17,7 @@ struct ___PACKAGENAME:identifier___App: App {
     
     var body: some Scene {
         WindowGroup {
-            TabView(selection: $router.tab) {
+            TabView(selection: tabSelection) {
                 NavigationStack(path: $router.mainPath) {
                     MainView()
                         .navigationDestination(for: Screen.self) { destination in
@@ -26,8 +26,7 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.main)
                 .tabItem {
-                    RootTab.main.image
-                        .renderingMode(.template)
+                    Image.Base.Home.fill.icon()
                     Text(RootTab.main.title)
                 }
 
@@ -39,8 +38,7 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.secondary)
                 .tabItem {
-                    RootTab.secondary.image
-                        .renderingMode(.template)
+                    Image.Base.Home.fill.icon()
                     Text(RootTab.secondary.title)
                 }
 
@@ -52,8 +50,7 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.tertiary)
                 .tabItem {
-                    RootTab.tertiary.image
-                        .renderingMode(.template)
+                    Image.Base.Home.fill.icon()
                     Text(RootTab.tertiary.title)
                 }
 
@@ -65,8 +62,7 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.quaternary)
                 .tabItem {
-                    RootTab.quaternary.image
-                        .renderingMode(.template)
+                    Image.Base.Home.fill.icon()
                     Text(RootTab.quaternary.title)
                 }
 
@@ -80,8 +76,7 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.settings)
                 .tabItem {
-                    Icons.Base.setting.solid
-                        .renderingMode(.template)
+                    Image.Base.Home.fill.icon()
                     Text(RootTab.settings.title)
                 }
             }
@@ -90,18 +85,22 @@ struct ___PACKAGENAME:identifier___App: App {
             }
             .hud(router.hudText, isPresented: $router.isShowHud)
             .sheet(item: $router.sheet) { sheet in
-                router.resolveSheet(pathItem: sheet, detents: router.sheetDetents, dragIndicator: router.dragIndicator, dismissDisabled: router.dismissDisabled)
-                    .hud(router.hudText, isPresented: $router.isShowHud)
-                    .alert(item: $router.alert) { $0.alert }
-                    .environmentObject(appSettingsViewModel)
-                    .systemServices()
+                NavigationStack {
+                    router.resolveSheet(pathItem: sheet, detents: router.sheetDetents, dragIndicator: router.dragIndicator, dismissDisabled: router.dismissDisabled)
+                        .hud(router.hudText, isPresented: $router.isShowHud)
+                        .alert(item: $router.alert) { $0.alert }
+                        .environmentObject(appSettingsViewModel)
+                        .systemServices()
+                }
             }
             .fullScreenCover(item: $router.fullScreenCover) { fullScreenCover in
-                router.resolve(pathItem: fullScreenCover)
-                    .hud(router.hudText, isPresented: $router.isShowHud)
-                    .alert(item: $router.alert) { $0.alert }
-                    .environmentObject(appSettingsViewModel)
-                    .systemServices()
+                NavigationStack {
+                    router.resolve(pathItem: fullScreenCover)
+                        .hud(router.hudText, isPresented: $router.isShowHud)
+                        .alert(item: $router.alert) { $0.alert }
+                        .environmentObject(appSettingsViewModel)
+                        .systemServices()
+                }
             }
             .alert(item: $router.alert) { $0.alert }
             .onOpenURL { router.handle($0) }
@@ -114,6 +113,14 @@ struct ___PACKAGENAME:identifier___App: App {
                     router.handle(url)
                 }
             }
+        }
+    }
+    
+    private var tabSelection: Binding<RootTab> {
+        .init {
+            router.tab
+        } set: { tab in
+            router.tab = tab
         }
     }
 }

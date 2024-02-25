@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Kind</key>
+	<string>Xcode.Xcode3.ProjectTemplateUnitKind</string>
+	<key>Concrete</key>
+	<false/>
+	<key>Identifier</key>
+	<string>app.oversize.plist</string>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>RequiredOptions</key>
+			<dict>
+				<key>userInterface</key>
+				<string>SwiftUI</string>
+			</dict>
+			<key>Identifier</key>
+			<string>lookscreen</string>
+			<key>Name</key>
+			<string>Use Lookscreen</string>
+			<key>Description</key>
+			<string>Whether the application should use the Lookscreen</string>
+			<key>Type</key>
+			<string>checkbox</string>
+			<key>Default</key>
+			<string>false</string>
+			<key>SortOrder</key>
+			<integer>400</integer>
+			<key>Units</key>
+			<dict>
+				<key>true</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>Info.plist:NSFaceIDUsageDescription</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Info.plist:NSFaceIDUsageDescription</key>
+							<string>&lt;key&gt;NSFaceIDUsageDescription&lt;/key&gt;&lt;string&gt;$(PRODUCT_NAME) Authentication with TouchId or FaceID&lt;/string&gt;</string>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>RequiredOptions</key>
+			<dict>
+				<key>userInterface</key>
+				<string>SwiftUI</string>
+			</dict>
+			<key>Identifier</key>
+			<string>locations</string>
+			<key>Name</key>
+			<string>Use Locations</string>
+			<key>Description</key>
+			<string>Whether the application should use the Locations</string>
+			<key>Type</key>
+			<string>checkbox</string>
+			<key>Default</key>
+			<string>false</string>
+			<key>SortOrder</key>
+			<integer>400</integer>
+			<key>Units</key>
+			<dict>
+				<key>true</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>Info.plist:NSLocationWhenInUseUsageDescription</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Info.plist:NSLocationWhenInUseUsageDescription</key>
+							<string>&lt;key&gt;NSLocationWhenInUseUsageDescription&lt;/key&gt;&lt;string&gt;For select location&lt;/string&gt;</string>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>RequiredOptions</key>
+			<dict>
+				<key>userInterface</key>
+				<string>SwiftUI</string>
+			</dict>
+			<key>Identifier</key>
+			<string>contacts</string>
+			<key>Name</key>
+			<string>Use Contacts</string>
+			<key>Description</key>
+			<string>Whether the application should use the Contacts</string>
+			<key>Type</key>
+			<string>checkbox</string>
+			<key>Default</key>
+			<string>false</string>
+			<key>SortOrder</key>
+			<integer>400</integer>
+			<key>Units</key>
+			<dict>
+				<key>true</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>Info.plist:NSContactsUsageDescription</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Info.plist:NSContactsUsageDescription</key>
+							<string>&lt;key&gt;NSContactsUsageDescription&lt;/key&gt;&lt;string&gt;To invite participants from contacts&lt;/string&gt;</string>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>RequiredOptions</key>
+			<dict>
+				<key>userInterface</key>
+				<string>SwiftUI</string>
+			</dict>
+			<key>Identifier</key>
+			<string>calendar</string>
+			<key>Name</key>
+			<string>Use Calendar</string>
+			<key>Description</key>
+			<string>Whether the application should use the Calendar</string>
+			<key>Type</key>
+			<string>checkbox</string>
+			<key>Default</key>
+			<string>false</string>
+			<key>SortOrder</key>
+			<integer>400</integer>
+			<key>Units</key>
+			<dict>
+				<key>true</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>Info.plist:NSCalendarsFullAccessUsageDescription</string>
+							<string>Info.plist:NSCalendarsWriteOnlyAccessUsageDescription</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Info.plist:NSCalendarsFullAccessUsageDescription</key>
+							<string>&lt;key&gt;NSCalendarsFullAccessUsageDescription&lt;/key&gt;&lt;string&gt;To read and edit events&lt;/string&gt;</string>
+							<key>Info.plist:NSCalendarsWriteOnlyAccessUsageDescription</key>
+							<string>&lt;key&gt;NSCalendarsWriteOnlyAccessUsageDescription&lt;/key&gt;&lt;string&gt;To add events&lt;/string&gt;</string>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>RequiredOptions</key>
+			<dict>
+				<key>userInterface</key>
+				<string>SwiftUI</string>
+			</dict>
+			<key>Identifier</key>
+			<string>cameraAndLibrary</string>
+			<key>Name</key>
+			<string>Use Camera and library</string>
+			<key>Description</key>
+			<string>Whether the application should use the Camera</string>
+			<key>Type</key>
+			<string>checkbox</string>
+			<key>Default</key>
+			<string>false</string>
+			<key>SortOrder</key>
+			<integer>400</integer>
+			<key>Units</key>
+			<dict>
+				<key>true</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>Info.plist:NSCameraUsageDescription</string>
+							<string>Info.plist:NSPhotoLibraryUsageDescription</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Info.plist:NSCameraUsageDescription</key>
+							<string>&lt;key&gt;NSCameraUsageDescription&lt;/key&gt;&lt;string&gt;Needs access to your camera to capture photo&lt;/string&gt;</string>
+							<key>Info.plist:NSPhotoLibraryUsageDescription</key>
+							<string>&lt;key&gt;NSPhotoLibraryUsageDescription&lt;/key&gt;&lt;string&gt;Read photos, captures photos and saves them into your photo library&lt;/string&gt;</string>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

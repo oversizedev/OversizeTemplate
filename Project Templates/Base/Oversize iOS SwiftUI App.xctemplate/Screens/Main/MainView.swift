@@ -2,8 +2,10 @@
 
 import Factory
 import OversizeKit
+import OversizeNoticeKit
 import OversizeLocalizable
 import OversizeServices
+import OversizeCore
 import OversizeUI
 import SwiftUI
 
@@ -20,7 +22,22 @@ struct MainView: View {
     }
 
     var body: some View {
-        Text("Hello, App!")
+        Page {
+            VStack(spacing: .zero) {
+                
+                NoticeListView()
+
+                AdView()
+            }
+        }
+        .backgroundSecondary()
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("Home")
+                    .font(.headline)
+                    .onBackgroundHighEmphasisForegroundColor()
+            }
+        }
     }
 
 }

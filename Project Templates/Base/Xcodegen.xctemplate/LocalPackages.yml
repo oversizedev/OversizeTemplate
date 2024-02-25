@@ -1,0 +1,18 @@
+packages:
+  OversizeUI:
+    path: ../../OversizeLibrary/OversizeUI
+  OversizeServices:
+    path: ../../OversizeLibrary/OversizeServices
+  OversizeResources:
+    path: ../../OversizeLibrary/OversizeResources
+  OversizeLocalizable:
+    path: ../../OversizeLibrary/OversizeLocalizable
+  OversizeKit:
+    path: ../../OversizeLibrary/OversizeKit
+  OversizeCore:
+    path: ../../OversizeLibrary/OversizeCore
+  OversizeComponents:
+    path: ../../OversizeLibrary/OversizeComponents
+  Factory:
+    url: https://github.com/hmlongco/Factory.git
+    majorVersion: 2.1.3

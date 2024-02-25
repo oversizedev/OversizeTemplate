@@ -3,34 +3,36 @@
 import SwiftUI
 
 @MainActor
-final class Router: ObservableObject {
+public final class Router: ObservableObject {
     
     // Route and Tabs
-    @Published var mainPath: [Screen] = []
-    @Published var secondaryPath: [Screen] = []
-    @Published var tertiaryPath: [Screen] = []
-    @Published var quaternaryPath: [Screen] = []
-    @Published var settingsPath: [Screen] = []
-    @Published var tab: RootTab = .main
+    @Published public var mainPath = NavigationPath()
+    @Published public var secondaryPath = NavigationPath()
+    @Published public var tertiaryPath = NavigationPath()
+    @Published public var quaternaryPath = NavigationPath()
+    @Published public var settingsPath = NavigationPath()
+    @Published public var tab: RootTab = .main
 
     // Sheets
-    @Published var sheet: Screen?
-    @Published var fullScreenCover: Screen?
-    @Published private(set) var sheetDetents: Set<PresentationDetent> = []
-    @Published private(set) var dragIndicator: Visibility = .hidden
-    @Published private(set) var dismissDisabled: Bool = false
+    @Published public var sheet: Screen?
+    @Published public var fullScreenCover: Screen?
+    @Published public var sheetDetents: Set<PresentationDetent> = []
+    @Published public var dragIndicator: Visibility = .hidden
+    @Published public var dismissDisabled: Bool = false
 
     // Hud
-    @Published var isShowHud: Bool = false
-    @Published var hudText: String = ""
+    @Published public var isShowHud: Bool = false
+    @Published public var hudText: String = ""
 
     // Alert
-    @Published var alert: RootAlert? = nil
+    @Published public var alert: RootAlert? = nil
+    
+    public init() {}
 }
 
 // MARK: - Alert
 
-extension Router {
+public extension Router {
     func presentAlert(_ alert: RootAlert) {
         self.alert = alert
     }
@@ -42,16 +44,15 @@ extension Router {
 
 // MARK: - HUD
 
-extension Router {
+public extension Router {
     func presentHud(_ text: String) {
         hudText = text
         isShowHud = true
     }
 }
-
 // MARK: - Route and Tabs
 
-extension Router {
+public extension Router {
     func changeTab(_ tab: RootTab) {
         self.tab = tab
     }
@@ -71,18 +72,19 @@ extension Router {
         }
     }
 
+    
     func backToRoot() {
         switch tab {
         case .main:
-            mainPath.removeAll()
+            mainPath.removeLast(mainPath.count)
         case .secondary:
-            secondaryPath.removeAll()
+            secondaryPath.removeLast(secondaryPath.count)
         case .tertiary:
-            tertiaryPath.removeAll()
+            tertiaryPath.removeLast(tertiaryPath.count)
         case .quaternary:
-            quaternaryPath.removeAll()
+            quaternaryPath.removeLast(quaternaryPath.count)
         case .settings:
-            settingsPath.removeAll()
+            settingsPath.removeLast(settingsPath.count)
         }
     }
 
@@ -119,7 +121,7 @@ extension Router {
 
 // MARK: - Sheets
 
-extension Router {
+public extension Router {
     func present(_ sheet: Screen, fullScreen: Bool = false) {
         if fullScreen {
             if fullScreenCover != nil {
@@ -176,7 +178,7 @@ extension Router {
     }
 }
 
-extension Router {
+public extension Router {
     func handle(_ url: URL) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true), let host = components.host else {
             return
@@ -197,7 +199,7 @@ extension Router {
 }
 
 extension Screen: Hashable, Equatable {
-    static func == (lhs: Screen, rhs: Screen) -> Bool {
+    public static func == (lhs: Screen, rhs: Screen) -> Bool {
         if lhs.id == rhs.id {
             return true
         } else {
@@ -205,7 +207,7 @@ extension Screen: Hashable, Equatable {
         }
     }
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

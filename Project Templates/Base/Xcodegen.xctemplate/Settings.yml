@@ -1,0 +1,26 @@
+settings:
+  ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
+  ENABLE_USER_SCRIPT_SANDBOXING: YES
+  LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+  ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
+  ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES: AlternateAppIcon1 AlternateAppIcon2 AlternateAppIcon3 AlternateAppIcon4 AlternateAppIcon5 AlternateAppIcon6 AlternateAppIcon7 AlternateAppIcon8
+  ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+  DEVELOPMENT_TEAM: ER582ZK85C
+  GENERATE_INFOPLIST_FILE: YES
+  TARGETED_DEVICE_FAMILY: "1,2"
+  INFOPLIST_FILE: ___VARIABLE_productName:RFC1034Identifier___/App/Info.plist
+  INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+  INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+  INFOPLIST_KEY_UILaunchScreen_Generation: YES
+  INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
+  INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+  INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+  INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+  ENABLE_PREVIEWS: YES
+  DEVELOPMENT_ASSET_PATHS: "\"___VARIABLE_productName:RFC1034Identifier___/Preview Content\""
+  IPHONEOS_DEPLOYMENT_TARGET: 16.0
+  CODE_SIGN_IDENTITY: "iPhone Developer"
+  GCC_C_LANGUAGE_STANDARD: gnu17
+  CLANG_CXX_LANGUAGE_STANDARD: gnu++20
+  SWIFT_EMIT_LOC_STRINGS: YES
+

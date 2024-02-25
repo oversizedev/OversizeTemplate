@@ -11,18 +11,6 @@
 		<string>com.apple.dt.unit.cocoaTouchApplicationBase</string>
 		<string>com.apple.dt.unit.storageType</string>
 	</array>
-	<key>Definitions</key>
-	<dict>
-		<key>Preview Content/Preview Assets.xcassets</key>
-		<dict>
-			<key>SortOrder</key>
-			<integer>100</integer>
-			<key>Path</key>
-			<string>Preview Assets.xcassets</string>
-			<key>Group</key>
-			<string>Preview Content</string>
-		</dict>
-	</dict>
 	<key>Options</key>
 	<array>
 		<dict>
@@ -43,6 +31,15 @@
 								</array>
 								<key>Path</key>
 								<string>Router/Alerts.swift</string>
+							</dict>
+							<key>Router/ResolveRouter.swift</key>
+							<dict>
+								<key>Group</key>
+								<array>
+									<string>Router</string>
+								</array>
+								<key>Path</key>
+								<string>Router/ResolveRouter.swift</string>
 							</dict>
 							<key>Router/Screens.swift</key>
 							<dict>
@@ -116,7 +113,6 @@
 						</dict>
 						<key>Nodes</key>
 						<array>
-							<string>Preview Content/Preview Assets.xcassets</string>
 							<string>Screens/AppSettings/AppSettingsView.swift</string>
 							<string>Screens/AppSettings/AppSettingsViewModel.swift</string>
 							<string>Screens/AppSettings/AppSettingsPageView.swift</string>
@@ -125,6 +121,7 @@
 							<string>Screens/Main/MainView.swift</string>
 							<string>Screens/Main/MainViewModel.swift</string>
 							<string>Router/Alerts.swift</string>
+							<string>Router/ResolveRouter.swift</string>
 							<string>Router/Screens.swift</string>
 						</array>
 						<key>Targets</key>
@@ -132,16 +129,12 @@
 							<dict>
 								<key>SharedSettings</key>
 								<dict>
-									<key>ENABLE_PREVIEWS</key>
-									<string>YES</string>
-									<key>DEVELOPMENT_ASSET_PATHS</key>
-									<string>___PACKAGENAMEPREVIEWCONTENT:quoteIfNeeded___</string>
 									<key>INFOPLIST_KEY_UIApplicationSceneManifest_Generation</key>
 									<string>YES</string>
 									<key>INFOPLIST_KEY_UILaunchScreen_Generation</key>
 									<string>YES</string>
 									<key>INFOPLIST_FILE</key>
-									<string>${PRODUCT_NAME}/Resources/Info.plist</string>
+									<string>___PACKAGENAME___/Resources/Info.plist</string>
 									<key>INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone</key>
 									<string>UIInterfaceOrientationPortrait</string>
 								</dict>
@@ -157,7 +150,7 @@
 						<key>Nodes</key>
 						<array>
 							<string>Screens/Main/MainView.swift</string>
-							<string>Resources/AppConfig.plist</string>
+							<string>App/AppConfig.plist</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -171,14 +164,14 @@
 								<key>Path</key>
 								<string>Screens/Main/MainView.swift</string>
 							</dict>
-							<key>Resources/AppConfig.plist</key>
+							<key>App/AppConfig.plist</key>
 							<dict>
 								<key>Group</key>
 								<array>
-									<string>Resources</string>
+									<string>App</string>
 								</array>
 								<key>Path</key>
-								<string>Resources/AppConfig.plist</string>
+								<string>App/AppConfig.plist</string>
 							</dict>
 						</dict>
 					</dict>
@@ -191,12 +184,12 @@
 						<key>Nodes</key>
 						<array>
 							<string>Screens/Main/MainView.swift</string>
-							<string>Resources/AppConfig.plist</string>
-							<string>Resources/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
-							<string>Services/CoreData/Models/ItemExtension.swift</string>
-							<string>Services/CoreData/Service/PersistenceController.swift</string>
-							<string>Resources/Generated/CoreData.swift</string>
-							<string>Resources/Scripts/Templates/CoreDataTemplate.stencil</string>
+							<string>App/AppConfig.plist</string>
+							<string>Database/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
+							<string>Models/ItemExtension.swift</string>
+							<string>Database/PersistenceController.swift</string>
+							<string>Models/CoreData.swift</string>
+							<string>Resources/Templates/CoreDataTemplate.stencil</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -210,66 +203,60 @@
 								<key>Path</key>
 								<string>Screens/Main/MainViewCoreData.swift</string>
 							</dict>
-							<key>Resources/Generated/CoreData.swift</key>
+							<key>Models/CoreData.swift</key>
 							<dict>
 								<key>Group</key>
 								<array>
-									<string>Resources</string>
-									<string>Generated</string>
-								</array>
-								<key>Path</key>
-								<string>Resources/Generated/CoreData.swift</string>
-							</dict>
-							<key>Resources/Scripts/Templates/CoreDataTemplate.stencil</key>
-							<dict>
-								<key>Group</key>
-								<array>
-									<string>Resources</string>
-									<string>Scripts</string>
-									<string>Templates</string>
-								</array>
-								<key>Path</key>
-								<string>Resources/Scripts/Templates/CoreDataTemplate.stencil</string>
-							</dict>
-							<key>Resources/AppConfig.plist</key>
-							<dict>
-								<key>Group</key>
-								<array>
-									<string>Resources</string>
-								</array>
-								<key>Path</key>
-								<string>Resources/AppConfigCoreData.plist</string>
-							</dict>
-							<key>Resources/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</key>
-							<dict>
-								<key>Group</key>
-								<array>
-									<string>Resources</string>
-								</array>
-								<key>Path</key>
-								<string>Resources/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
-							</dict>
-							<key>Services/CoreData/Models/ItemExtension.swift</key>
-							<dict>
-								<key>Group</key>
-								<array>
-									<string>Services</string>
-									<string>CoreData</string>
 									<string>Models</string>
 								</array>
 								<key>Path</key>
-								<string>Services/CoreData/Models/ItemExtension.swift</string>
+								<string>Models/CoreData.swift</string>
 							</dict>
-							<key>Services/CoreData/Service/PersistenceController.swift</key>
+							<key>Resources/Templates/CoreDataTemplate.stencil</key>
 							<dict>
 								<key>Group</key>
 								<array>
-									<string>Services</string>
-									<string>CoreData</string>
-									<string>Service</string>
+									<string>Resources</string>
+									<string>Templates</string>
 								</array>
 								<key>Path</key>
-								<string>Services/CoreData/Service/PersistenceController.swift</string>
+								<string>Resources/Templates/CoreDataTemplate.stencil</string>
+							</dict>
+							<key>App/AppConfig.plist</key>
+							<dict>
+								<key>Group</key>
+								<array>
+									<string>App</string>
+								</array>
+								<key>Path</key>
+								<string>App/AppConfigCoreData.plist</string>
+							</dict>
+							<key>Database/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</key>
+							<dict>
+								<key>Group</key>
+								<array>
+									<string>Database</string>
+								</array>
+								<key>Path</key>
+								<string>Database/___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
+							</dict>
+							<key>Models/ItemExtension.swift</key>
+							<dict>
+								<key>Group</key>
+								<array>
+									<string>Models</string>
+								</array>
+								<key>Path</key>
+								<string>Models/ItemExtension.swift</string>
+							</dict>
+							<key>Database/PersistenceController.swift</key>
+							<dict>
+								<key>Group</key>
+								<array>
+									<string>Database</string>
+								</array>
+								<key>Path</key>
+								<string>Database/PersistenceController.swift</string>
 							</dict>
 						</dict>
 					</dict>
@@ -281,18 +268,16 @@
 						</dict>
 						<key>Nodes</key>
 						<array>
-							<string>Services/SwiftData/Models/Item.swift</string>
+							<string>Models/Item.swift</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
-							<key>Services/SwiftData/Models/Item.swift</key>
+							<key>Models/Item.swift</key>
 							<dict>
 								<key>Path</key>
-								<string>Services/SwiftData/Models/Item-SwiftData.swift</string>
+								<string>Models/Item-SwiftData.swift</string>
 								<key>Group</key>
 								<array>
-									<string>Services</string>
-									<string>SwiftData</string>
 									<string>Models</string>
 								</array>
 								<key>SortOrder</key>
