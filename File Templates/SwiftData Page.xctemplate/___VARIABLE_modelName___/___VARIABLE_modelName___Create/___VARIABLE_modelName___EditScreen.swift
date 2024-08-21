@@ -1,22 +1,30 @@
 // ___FILEHEADER___
 
-import Database
-import Env
+import ___VARIABLE_modelPackage___
+import ___VARIABLE_environmentPackage___
 import OversizeComponents
 import OversizeCore
 import OversizeKit
+import OversizeRouter
 import OversizeLocalizable
 import OversizePhotoComponents
+import OversizeRouter
 import OversizeUI
 import SwiftUI
 
 public struct ___VARIABLE_modelName___EditScreen: View {
-    @Environment(\.router) private var router
+    
+    /// Global
+    @Environment(Router<___VARIABLE_routerDestinationType___>.self) var router
+    @Environment(AlertRouter.self) var alertRouter
+    @Environment(HUDRouter.self) var hud
     @Environment(\.modelContext) private var context
 
+    /// Local
     @State private var viewModel: ___VARIABLE_modelName___EditViewModel
     @FocusState private var focusedField: FocusField?
 
+    /// Init
     public init(_ mode: ___VARIABLE_modelName___EditViewModel.EditMode = .create) {
         viewModel = .init(mode)
     }
@@ -144,11 +152,11 @@ private extension ___VARIABLE_modelName___EditScreen {
 private extension ___VARIABLE_modelName___EditScreen {
     private func onTapCancel() {
         if viewModel.isEmptyForm {
-            router(.backOrDismiss)
+            router.backOrDismiss()
         } else {
-            router(.presentAlert(.dismiss {
-                router(.backOrDismiss)
-            }))
+            alertRouter.present(.dismiss {
+                router.backOrDismiss()
+            })
         }
     }
 
@@ -165,9 +173,9 @@ private extension ___VARIABLE_modelName___EditScreen {
 
     private func onChangeEmptyState(_: Bool, _ newValue: Bool) {
         if newValue {
-            router(.dismissDisabled(false))
+            router.dismissDisabled(false)
         } else {
-            router(.dismissDisabled(true))
+            router.dismissDisabled(true)
         }
     }
 
@@ -184,12 +192,12 @@ private extension ___VARIABLE_modelName___EditScreen {
     private func save() {
         guard let url = viewModel.url else {
             focusedField = .url
-            router(.presentHUD("Error in url", style: .destructive))
+            hud.present("Error in url", style: .destructive)
             return
         }
 
         guard viewModel.isValidForm else {
-            router(.presentHUD("Errors in the fields", style: .destructive))
+            hud.present("Errors in the fields", style: .destructive)
             return
         }
         switch viewModel.mode {
@@ -206,8 +214,8 @@ private extension ___VARIABLE_modelName___EditScreen {
                 isArchive: false
             )
             context.insert(___VARIABLE_modelVariableName___)
-            router(.presentHUD("___VARIABLE_modelName___ saved", style: .success))
-            router(.backOrDismiss)
+            hud.present("___VARIABLE_modelName___ saved", style: .success)
+           
         case let .edit(___VARIABLE_modelVariableName___):
             ___VARIABLE_modelVariableName___.name = viewModel.name
             ___VARIABLE_modelVariableName___.colorData = .init(color: viewModel.color)
@@ -218,9 +226,9 @@ private extension ___VARIABLE_modelName___EditScreen {
             }
             ___VARIABLE_modelVariableName___.date = viewModel.date
             ___VARIABLE_modelVariableName___.url = url
-            router(.presentHUD("___VARIABLE_modelName___ edited", style: .success))
-            router(.backOrDismiss)
+            hud.present("___VARIABLE_modelName___ edited", style: .success)
         }
+        router.backOrDismiss()
     }
 }
 

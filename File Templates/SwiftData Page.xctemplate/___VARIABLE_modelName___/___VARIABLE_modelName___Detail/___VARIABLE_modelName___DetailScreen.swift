@@ -1,21 +1,31 @@
  // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
+import ___VARIABLE_environmentPackage___
 import OversizeCore
 import OversizeLocalizable
+import OversizeRouter
 import OversizeUI
 import SwiftData
 import SwiftUI
+import OversizeRouter
 
 public struct ___VARIABLE_modelName___DetailScreen: View {
-    @Environment(\.modelContext) private var context
-    @Environment(\.router) private var router
+    
+    /// Global
+    @Environment(Router<___VARIABLE_routerDestinationType___>.self) var router: Router
+    @Environment(AlertRouter.self) var alertRouter
+    @Environment(HUDRouter.self) var hud: HUDRouter
+    @Environment(\.modelContext) private var context: ModelContext
+    
+    /// Local
     private var viewModel: ___VARIABLE_modelName___DetailViewModel
     
+    /// Init
     public init(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
         viewModel = .init(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
     }
-    
+
     public var body: some View {
         Page(
             viewModel.___VARIABLE_modelVariableName___.name,
@@ -119,14 +129,14 @@ public extension ___VARIABLE_modelName___DetailScreen {
     }
 
     private func editAction() {
-        router(.present(.___VARIABLE_modelVariableName___Edit(viewModel.___VARIABLE_modelVariableName___)))
+        router.present(.___VARIABLE_modelVariableName___Edit(viewModel.___VARIABLE_modelVariableName___))
     }
 
     private func deleteAction() {
-        router(.presentAlert(.delete {
+        alertRouter.present(.delete {
             context.delete(viewModel.___VARIABLE_modelVariableName___)
-            router(.presentHUD("Deleted"))
-        }))
+            hud.present("Deleted", style: .delete)
+        })
     }
 
     private func onViewAction() {

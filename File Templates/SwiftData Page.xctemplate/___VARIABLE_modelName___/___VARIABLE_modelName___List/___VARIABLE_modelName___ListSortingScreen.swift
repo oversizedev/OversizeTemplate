@@ -1,13 +1,15 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
+import ___VARIABLE_environmentPackage___
 import OversizeLocalizable
 import OversizeUI
 import SwiftData
 import SwiftUI
+import OversizeRouter
 
 public struct ___VARIABLE_modelName___ListSortingScreen: View {
-    @Environment(\.router) private var router
+    @Environment(Router<___VARIABLE_routerDestinationType___>.self) var router
     @Binding private var sort: [SortDescriptor<___VARIABLE_modelName___>]
 
     @State private var orderSelection: SortOrder = .forward
@@ -76,7 +78,7 @@ public struct ___VARIABLE_modelName___ListSortingScreen: View {
 
 public extension ___VARIABLE_modelName___ListSortingScreen {
     private func onTapClose() {
-        router(.dismiss)
+        router.dismiss()
     }
 
     private func onSelectFilter() {

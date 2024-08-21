@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import Observation
 import OversizeCore
 import OversizeUI

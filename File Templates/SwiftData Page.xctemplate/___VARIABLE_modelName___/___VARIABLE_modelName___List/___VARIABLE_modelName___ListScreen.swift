@@ -1,28 +1,29 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
+import ___VARIABLE_environmentPackage___
 import OversizeComponents
 import OversizeCore
 import OversizeResources
+import OversizeRouter
 import OversizeUI
 import SwiftData
 import SwiftUI
 
 public struct ___VARIABLE_modelName___ListScreen: View {
-    @Environment(\.router) private var router
+    
+    /// Global
+    @Environment(Router<___VARIABLE_routerDestinationType___>.self) var router
+    @Environment(AlertRouter.self) var alertRouter
+    @Environment(HUDRouter.self) var hud
+    @Environment(\.modelContext) private var context: ModelContext
 
-    @Environment(\.modelContext)
-    private var context: ModelContext
+    /// Local
+    @State private var viewModel: ___VARIABLE_modelName___ListViewModel = .init()
+    @AppStorage("___VARIABLE_modelName___ListScreen.IsCompactMode") private var isCompactRow: Bool = false
+    @AppStorage("___VARIABLE_modelName___ListScreen.___VARIABLE_modelName___ListType") private var listType: ___VARIABLE_modelName___ListType = .list
 
-    @State
-    private var viewModel: ___VARIABLE_modelName___ListViewModel = .init()
-
-    @AppStorage("___VARIABLE_modelName___ListScreen.IsCompactMode")
-    private var isCompactRow: Bool = false
-
-    @AppStorage("___VARIABLE_modelName___ListScreen.___VARIABLE_modelName___ListType")
-    private var listType: ___VARIABLE_modelName___ListType = .list
-
+    /// Init
     public init() {}
 
     public var body: some View {
@@ -120,7 +121,7 @@ public struct ___VARIABLE_modelName___ListScreen: View {
 
 public extension ___VARIABLE_modelName___ListScreen {
     private func createAction() {
-        router(.present(.___VARIABLE_modelVariableName___Create))
+        router.present(.___VARIABLE_modelVariableName___Create)
     }
 
     private func searchAction() {
@@ -134,38 +135,38 @@ public extension ___VARIABLE_modelName___ListScreen {
     private func favoriteAction(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
         ___VARIABLE_modelVariableName___.isFavorite.toggle()
         if ___VARIABLE_modelVariableName___.isFavorite {
-            router(.presentHUD("Added to favorites"))
+            hud.present("Added to favorites", style: .favorite)
         } else {
-            router(.presentHUD("Removed from favorites"))
+            hud.present("Removed from favorites", style: .unfavorite)
         }
     }
 
     private func archiveAction(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
         ___VARIABLE_modelVariableName___.isArchive.toggle()
         if ___VARIABLE_modelVariableName___.isArchive {
-            router(.presentHUD("Archived"))
+            hud.present("Archived", style: .archive)
         } else {
-            router(.presentHUD("Unarchived"))
+            hud.present("Unarchived", style: .unarchive)
         }
     }
 
     private func filterAction() {
-        router(.present(.___VARIABLE_modelPluralVariableName___ListSorting(sort: $viewModel.sort), detents: [.height(380)]))
+        router.present(.___VARIABLE_modelPluralVariableName___ListSorting(sort: $viewModel.sort), detents: [.height(380)])
     }
 
     private func editAction(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        router(.present(.___VARIABLE_modelVariableName___Edit(___VARIABLE_modelVariableName___)))
+        router.present(.___VARIABLE_modelVariableName___Edit(___VARIABLE_modelVariableName___))
     }
 
     private func detailAction(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        router(.move(.___VARIABLE_modelVariableName___Detail(___VARIABLE_modelVariableName___)))
+        router.move(.___VARIABLE_modelVariableName___Detail(___VARIABLE_modelVariableName___))
     }
 
     private func deleteAction(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        router(.presentAlert(.delete {
+        alertRouter.present(.delete {
             context.delete(___VARIABLE_modelVariableName___)
-            router(.presentHUD("Deleted"))
-        }))
+            hud.present("Deleted", style: .delete)
+        })
     }
 }
 

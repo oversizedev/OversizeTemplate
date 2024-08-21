@@ -1,6 +1,9 @@
-/*
-// Screens
-public enum Screen: Routable {
+// ___FILEHEADER___
+
+import SwiftUI
+import OversizeRouter
+
+public enum ___VARIABLE_routerDestinationType___: Routable {
     case ___VARIABLE_modelPluralVariableName___List
     case ___VARIABLE_modelPluralVariableName___ListSorting(sort: Binding<[SortDescriptor<___VARIABLE_modelName___>]>)
     case ___VARIABLE_modelVariableName___Create
@@ -9,8 +12,8 @@ public enum Screen: Routable {
     case ___VARIABLE_modelVariableName___SplitDetail(___VARIABLE_modelName___?)
 }
 
-public extension Screen {
-    public var id: String {
+public extension ___VARIABLE_routerDestinationType___ {
+    var id: String {
         switch self {
         case .___VARIABLE_modelPluralVariableName___List:
             "___VARIABLE_modelPluralVariableName___List"
@@ -19,20 +22,20 @@ public extension Screen {
         case .___VARIABLE_modelVariableName___Create:
             "___VARIABLE_modelVariableName___Create"
         case let .___VARIABLE_modelVariableName___Edit(___VARIABLE_modelVariableName___):
-            "___VARIABLE_modelVariableName___Edit"
+            "___VARIABLE_modelVariableName___Edit.\(___VARIABLE_modelVariableName___.id.uuidString)"
         case let .___VARIABLE_modelVariableName___Detail(___VARIABLE_modelVariableName___):
-            "___VARIABLE_modelVariableName___Detail"
+            "___VARIABLE_modelVariableName___Detail.\(___VARIABLE_modelVariableName___.id.uuidString)"
         case let .___VARIABLE_modelVariableName___SplitDetail(___VARIABLE_modelVariableName___):
-            "___VARIABLE_modelVariableName___SplitDetail" + (___VARIABLE_modelVariableName___?.id.uuidString ?? "empty")
+            "___VARIABLE_modelVariableName___SplitDetail.\(___VARIABLE_modelVariableName___?.id.uuidString ?? "empty")"
         }
     }
 }
 
 // Resolve Router
-extension Screen {
+extension ___VARIABLE_routerDestinationType___ {
     @ViewBuilder
     func view() -> some View {
-        switch pathItem {
+        switch self {
         case .___VARIABLE_modelPluralVariableName___List:
             ___VARIABLE_modelName___ListScreen()
         case .___VARIABLE_modelVariableName___Create:
@@ -48,4 +51,3 @@ extension Screen {
         }
     }
 }
-*/

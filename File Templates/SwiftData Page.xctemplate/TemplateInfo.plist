@@ -77,6 +77,54 @@
 			<key>Default</key>
 			<string>items</string>
 		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>modelPackage</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Model Package</string>
+			<key>Description</key>
+			<string>The name of the model to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>Database</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>environmentPackage</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Env Package</string>
+			<key>Description</key>
+			<string>The name of the environment package</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>Environment</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>routerDestinationType</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Router Destination</string>
+			<key>Description</key>
+			<string>The name of the destination</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>Screen</string>
+		</dict>
 	</array>
 </dict>
 </plist>

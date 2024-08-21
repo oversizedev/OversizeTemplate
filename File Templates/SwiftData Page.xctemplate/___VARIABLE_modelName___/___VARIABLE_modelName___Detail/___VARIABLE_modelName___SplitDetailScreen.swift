@@ -1,14 +1,16 @@
  // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
+import ___VARIABLE_environmentPackage___
 import OversizeCore
 import OversizeLocalizable
 import OversizeUI
+import OversizeRouter
 import SwiftData
 import SwiftUI
 
 public struct ___VARIABLE_modelName___SplitDetailScreen: View {
-    @Environment(\.router) private var router
+    @Environment(Router<Screen>.self) var router
     private let ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___?
 
     public init(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___?) {
