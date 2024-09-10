@@ -4,13 +4,14 @@ import SwiftUI
 
 @MainActor
 public final class Router: ObservableObject {
-    
     // Route and Tabs
     @Published public var mainPath = NavigationPath()
     @Published public var secondaryPath = NavigationPath()
     @Published public var tertiaryPath = NavigationPath()
     @Published public var quaternaryPath = NavigationPath()
     @Published public var settingsPath = NavigationPath()
+    @Published public var sheetPath = NavigationPath()
+    @Published public var fullScreenCoverPath = NavigationPath()
     @Published public var tab: RootTab = .main
 
     // Sheets
@@ -26,7 +27,7 @@ public final class Router: ObservableObject {
 
     // Alert
     @Published public var alert: RootAlert? = nil
-    
+
     public init() {}
 }
 
@@ -50,6 +51,7 @@ public extension Router {
         isShowHud = true
     }
 }
+
 // MARK: - Route and Tabs
 
 public extension Router {
@@ -58,62 +60,76 @@ public extension Router {
     }
 
     func move(_ screen: Screen) {
-        switch tab {
-        case .main:
-            mainPath.append(screen)
-        case .secondary:
-            secondaryPath.append(screen)
-        case .tertiary:
-            tertiaryPath.append(screen)
-        case .quaternary:
-            quaternaryPath.append(screen)
-        case .settings:
-            settingsPath.append(screen)
+        if sheet != nil {
+            sheetPath.append(screen)
+        } else {
+            switch tab {
+            case .main:
+                mainPath.append(screen)
+            case .secondary:
+                secondaryPath.append(screen)
+            case .tertiary:
+                tertiaryPath.append(screen)
+            case .quaternary:
+                quaternaryPath.append(screen)
+            case .settings:
+                settingsPath.append(screen)
+            }
         }
     }
 
-    
     func backToRoot() {
-        switch tab {
-        case .main:
-            mainPath.removeLast(mainPath.count)
-        case .secondary:
-            secondaryPath.removeLast(secondaryPath.count)
-        case .tertiary:
-            tertiaryPath.removeLast(tertiaryPath.count)
-        case .quaternary:
-            quaternaryPath.removeLast(quaternaryPath.count)
-        case .settings:
-            settingsPath.removeLast(settingsPath.count)
+        if sheet != nil {
+            sheetPath.removeLast(sheetPath.count)
+        } else {
+            switch tab {
+            case .main:
+                mainPath.removeLast(mainPath.count)
+            case .secondary:
+                secondaryPath.removeLast(secondaryPath.count)
+            case .tertiary:
+                tertiaryPath.removeLast(tertiaryPath.count)
+            case .quaternary:
+                quaternaryPath.removeLast(quaternaryPath.count)
+            case .settings:
+                settingsPath.removeLast(settingsPath.count)
+            }
         }
     }
 
     func back(_ count: Int = 1) {
-        switch tab {
-        case .main:
-            let pathCount = mainPath.count - count
+        if sheet != nil {
+            let pathCount = sheetPath.count - count
             if pathCount > -1 {
-                mainPath.removeLast(count)
+                sheetPath.removeLast(count)
             }
-        case .secondary:
-            let pathCount = secondaryPath.count - count
-            if pathCount > -1 {
-                secondaryPath.removeLast(count)
-            }
-        case .tertiary:
-            let pathCount = tertiaryPath.count - count
-            if pathCount > -1 {
-                tertiaryPath.removeLast(count)
-            }
-        case .quaternary:
-            let pathCount = quaternaryPath.count - count
-            if pathCount > -1 {
-                quaternaryPath.removeLast(count)
-            }
-        case .settings:
-            let pathCount = settingsPath.count - count
-            if pathCount > -1 {
-                settingsPath.removeLast(count)
+        } else {
+            switch tab {
+            case .main:
+                let pathCount = mainPath.count - count
+                if pathCount > -1 {
+                    mainPath.removeLast(count)
+                }
+            case .secondary:
+                let pathCount = secondaryPath.count - count
+                if pathCount > -1 {
+                    secondaryPath.removeLast(count)
+                }
+            case .tertiary:
+                let pathCount = tertiaryPath.count - count
+                if pathCount > -1 {
+                    tertiaryPath.removeLast(count)
+                }
+            case .quaternary:
+                let pathCount = quaternaryPath.count - count
+                if pathCount > -1 {
+                    quaternaryPath.removeLast(count)
+                }
+            case .settings:
+                let pathCount = settingsPath.count - count
+                if pathCount > -1 {
+                    settingsPath.removeLast(count)
+                }
             }
         }
     }
@@ -159,6 +175,10 @@ public extension Router {
         dismissDisabled = isDismissDisabled
     }
 
+    func changeSheetDenets(detents: Set<PresentationDetent>) {
+        sheetDetents = detents
+    }
+
     private func restSheet() {
         if sheet != nil {
             sheet = nil
@@ -201,9 +221,9 @@ public extension Router {
 extension Screen: Hashable, Equatable {
     public static func == (lhs: Screen, rhs: Screen) -> Bool {
         if lhs.id == rhs.id {
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 

@@ -18,17 +18,5 @@ extension Router {
             WebView(url: url)
         }
     }
-
-    func resolveSheet(
-        pathItem: Screen,
-        detents: Set<PresentationDetent>,
-        dragIndicator: Visibility = .automatic,
-        dismissDisabled: Bool
-    ) -> some View {
-        resolve(pathItem: pathItem)
-            .presentationDetents(detents)
-            .presentationDragIndicator(dragIndicator)
-            .interactiveDismissDisabled(dismissDisabled)
-    }
 }
 

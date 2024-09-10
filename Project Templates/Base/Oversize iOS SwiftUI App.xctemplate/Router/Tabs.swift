@@ -9,7 +9,7 @@ public enum RootTab: String {
     case quaternary
     case settings
 
-    var id: String {
+    public var id: String {
         switch self {
         case .main:
             return "home"
@@ -24,7 +24,7 @@ public enum RootTab: String {
         }
     }
 
-    var title: String {
+    public var title: String {
         switch self {
         case .main:
             return "Home"

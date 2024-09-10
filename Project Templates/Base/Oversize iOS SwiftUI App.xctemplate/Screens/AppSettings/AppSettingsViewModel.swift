@@ -4,4 +4,7 @@ import Foundation
 import SwiftUI
 
 @MainActor
-class AppSettingsViewModel: ObservableObject {}
+public class AppSettingsViewModel: ObservableObject {
+    public init() {}
+    
+}

@@ -5,6 +5,7 @@ import OversizeKit
 import OversizeServices
 import OversizeUI
 import SwiftUI
+import TipKit
 
 @main
 struct ___PACKAGENAME:identifier___App: App {
@@ -15,6 +16,12 @@ struct ___PACKAGENAME:identifier___App: App {
     var persistenceController = PersistenceController.shared
     let pub = NotificationCenter.default.publisher(for: NSNotification.Name("Deeplink"))
     
+    init() {
+        if #available(iOS 17.0, *) {
+            try? Tips.configure()
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             TabView(selection: tabSelection) {
@@ -26,7 +33,7 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.main)
                 .tabItem {
-                    Image.Base.Home.fill.icon()
+                    Image.Home.Home.fill.icon()
                     Text(RootTab.main.title)
                 }
 
@@ -38,19 +45,16 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.secondary)
                 .tabItem {
-                    Image.Base.Home.fill.icon()
+                    Image.Base.Chart.fill.icon()
                     Text(RootTab.secondary.title)
                 }
 
                 NavigationStack(path: $router.tertiaryPath) {
                     EmptyView()
-                        .navigationDestination(for: Screen.self) { destination in
-                            router.resolve(pathItem: destination)
-                        }
                 }
                 .tag(RootTab.tertiary)
                 .tabItem {
-                    Image.Base.Home.fill.icon()
+                    Image.Base.Plus.Square.fill.icon()
                     Text(RootTab.tertiary.title)
                 }
 
@@ -62,7 +66,7 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.quaternary)
                 .tabItem {
-                    Image.Base.Home.fill.icon()
+                    Image.Base.Clock.fill.icon()
                     Text(RootTab.quaternary.title)
                 }
 
@@ -76,7 +80,7 @@ struct ___PACKAGENAME:identifier___App: App {
                 }
                 .tag(RootTab.settings)
                 .tabItem {
-                    Image.Base.Home.fill.icon()
+                    Image.Base.Setting.fill.icon()
                     Text(RootTab.settings.title)
                 }
             }
@@ -84,23 +88,28 @@ struct ___PACKAGENAME:identifier___App: App {
                 OnboardingView()
             }
             .hud(router.hudText, isPresented: $router.isShowHud)
-            .sheet(item: $router.sheet) { sheet in
-                NavigationStack {
-                    router.resolveSheet(pathItem: sheet, detents: router.sheetDetents, dragIndicator: router.dragIndicator, dismissDisabled: router.dismissDisabled)
-                        .hud(router.hudText, isPresented: $router.isShowHud)
-                        .alert(item: $router.alert) { $0.alert }
-                        .environmentObject(appSettingsViewModel)
-                        .systemServices()
+            .sheet(
+                item: $router.sheet,
+                content: { sheet in
+                    NavigationStack(path: $router.sheetPath) {
+                        router.resolve(pathItem: sheet)
+                            .navigationDestination(for: Screen.self) { destination in
+                                router.resolve(pathItem: destination)
+                            }
+                    }
+                    .presentationDetents(router.sheetDetents)
+                    .presentationDragIndicator(router.dragIndicator)
+                    .interactiveDismissDisabled(router.dismissDisabled)
+                    .environmentObject(appSettingsViewModel)
+                    .environment(\.managedObjectContext, persistenceController.persistentContainer.viewContext)
+                    .systemServices()
                 }
-            }
+            )
             .fullScreenCover(item: $router.fullScreenCover) { fullScreenCover in
-                NavigationStack {
-                    router.resolve(pathItem: fullScreenCover)
-                        .hud(router.hudText, isPresented: $router.isShowHud)
-                        .alert(item: $router.alert) { $0.alert }
-                        .environmentObject(appSettingsViewModel)
-                        .systemServices()
-                }
+                router.resolve(pathItem: fullScreenCover)
+                    .environmentObject(appSettingsViewModel)
+                    .systemServices()
+                    .environment(\.managedObjectContext, persistenceController.persistentContainer.viewContext)
             }
             .alert(item: $router.alert) { $0.alert }
             .onOpenURL { router.handle($0) }
@@ -115,12 +124,17 @@ struct ___PACKAGENAME:identifier___App: App {
             }
         }
     }
-    
+
     private var tabSelection: Binding<RootTab> {
         .init {
             router.tab
         } set: { tab in
-            router.tab = tab
+            switch tab {
+            case .tertiary:
+                router.present(.settings, detents: [.height(365)], dismissDisabled: true)
+            default:
+                router.tab = tab
+            }
         }
     }
 }

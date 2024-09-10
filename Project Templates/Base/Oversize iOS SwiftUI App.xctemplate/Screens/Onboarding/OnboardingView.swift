@@ -5,13 +5,15 @@ import OversizeUI
 import SwiftUI
 import Factory
 
-struct OnboardingView: View {
+public struct OnboardingView: View {
     @Injected(\.appStateService) var appStateService: AppStateService
     @Environment(\.screenSize) var screenSize: ScreenSize
     @Environment(\.verticalSizeClass) var verticalSizeClass: UserInterfaceSizeClass?
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
+    
+    public init() {}
 
-    var body: some View {
+    public var body: some View {
         if horizontalSizeClass == .compact, verticalSizeClass == .regular {
             phoneRegular
         } else if horizontalSizeClass == .regular, verticalSizeClass == .compact {

@@ -116,13 +116,17 @@
 						<key>Nodes</key>
 						<array>
 							<string>../project.yml</string>
+							<string>../projectProd.yml</string>
 							<string>App/Debug.xcconfig</string>
 							<string>App/Release.xcconfig</string>
 							<string>App/Packages.yml</string>
+							<string>App/LocalPackages.yml</string>
 							<string>App/Settings.yml</string>
 							<string>App/Targets.yml</string>
-							<string>Packages/createPackages.sh</string>
-							<string>Packages/main.swift</string>
+							<string>../createPackages.sh</string>
+							<string>../build.sh</string>
+							<string>../build-prod.sh</string>
+							<string>../ci_scripts/ci_post_clone.sh</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -130,6 +134,15 @@
 							<dict>
 								<key>Path</key>
 								<string>project.yml</string>
+								<key>Group</key>
+								<array>
+									<string>App</string>
+								</array>
+							</dict>
+							<key>../projectProd.yml</key>
+							<dict>
+								<key>Path</key>
+								<string>projectProd.yml</string>
 								<key>Group</key>
 								<array>
 									<string>App</string>
@@ -162,6 +175,15 @@
 									<string>App</string>
 								</array>
 							</dict>
+							<key>App/LocalPackages.yml</key>
+							<dict>
+								<key>Path</key>
+								<string>LocalPackages.yml</string>
+								<key>Group</key>
+								<array>
+									<string>App</string>
+								</array>
+							</dict>
 							<key>App/Settings.yml</key>
 							<dict>
 								<key>Path</key>
@@ -171,7 +193,7 @@
 									<string>App</string>
 								</array>
 							</dict>
-							<key>Targets.yml</key>
+							<key>App/Targets.yml</key>
 							<dict>
 								<key>Path</key>
 								<string>Targets.yml</string>
@@ -180,22 +202,40 @@
 									<string>App</string>
 								</array>
 							</dict>
-							<key>Packages/createPackages.sh</key>
+							<key>../createPackages.sh</key>
 							<dict>
 								<key>Path</key>
 								<string>createPackages.sh</string>
 								<key>Group</key>
 								<array>
-									<string>Packages</string>
+									<string>App</string>
 								</array>
 							</dict>
-							<key>Packages/main.swift</key>
+							<key>../build.sh</key>
 							<dict>
 								<key>Path</key>
-								<string>main.swift</string>
+								<string>build.sh</string>
 								<key>Group</key>
 								<array>
-									<string>Packages</string>
+									<string>App</string>
+								</array>
+							</dict>
+							<key>../build-prod.sh</key>
+							<dict>
+								<key>Path</key>
+								<string>build-prod.sh</string>
+								<key>Group</key>
+								<array>
+									<string>App</string>
+								</array>
+							</dict>
+							<key>../ci_scripts/ci_post_clone.sh</key>
+							<dict>
+								<key>Path</key>
+								<string>ci_post_clone.sh</string>
+								<key>Group</key>
+								<array>
+									<string>ci_scripts</string>
 								</array>
 							</dict>
 						</dict>

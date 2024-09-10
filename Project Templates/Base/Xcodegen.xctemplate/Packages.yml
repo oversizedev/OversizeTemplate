@@ -20,6 +20,12 @@ packages:
   OversizeComponents:
     url: https://github.com/oversizedev/OversizeComponents.git
     majorVersion: 1.2.0
+  Database:
+    path: Packages/Database
+  Env:
+    path: Packages/Env
+  App:
+    path: Packages/App
   Factory:
     url: https://github.com/hmlongco/Factory.git
     majorVersion: 2.1.3

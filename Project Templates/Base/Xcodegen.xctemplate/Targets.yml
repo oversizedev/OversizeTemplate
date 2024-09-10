@@ -8,6 +8,21 @@ targets:
     configFiles:
       Debug: Debug.xcconfig
       Release: Release.xcconfig
+    settings:
+      INFOPLIST_FILE: ___VARIABLE_productName:RFC1034Identifier___/App/Info.plist
+      INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen.storyboard
+      INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+      INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+      INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+      INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+      INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+      INFOPLIST_KEY_NSFaceIDUsageDescription: Auth in app
+#      INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.medical
+#      INFOPLIST_KEY_NSHealthShareUsageDescription: The app needs access to your Health data to track blood pressure and heart rate for sync
+#      INFOPLIST_KEY_NSHealthUpdateUsageDescription: The app needs access to your Health data to save blood pressure and heart rate
+    scheme:
+      gatherCoverageData: true
     dependencies:
       - package: OversizeUI
       - package: OversizeServices
@@ -19,17 +34,18 @@ targets:
           - OversizeNoticeKit
       - package: OversizeCore
       - package: OversizeComponents
-#    entitlements:
-#      path: ___VARIABLE_productName:RFC1034Identifier___/___VARIABLE_productName:RFC1034Identifier___.entitlements
-#      properties:
-#        com.apple.developer.icloud-container-identifiers
-    postCompileScripts:
-      - script: |
-                export PATH="$PATH:/opt/homebrew/bin"
-                    SWIFT_GEN_CONFIG="${PROJECT_DIR}/${PROJECT_NAME}/App/swiftgen.yml"
-                if which swiftgen >/dev/null; then
-                    swiftgen config run --verbose --config "$SWIFT_GEN_CONFIG"
-                else
-                    echo "warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen"
-                fi
-        name: SwiftGen
+      - package: Database
+      - package: Env
+      - package: App
+      - sdk: StoreKit.framework
+    entitlements:
+      path: ../App/___VARIABLE_productName:RFC1034Identifier___.entitlements
+      properties:
+        aps-environment: development
+#        com.apple.developer.default-data-protection: NSFileProtectionComplete
+#        com.apple.developer.icloud-container-identifiers: [iCloud.com.oversize.BloodPressure]
+#        com.apple.developer.icloud-services: [CloudKit]
+#        com.apple.developer.healthkit: true
+#        com.apple.developer.healthkit.access: []
+#        com.apple.security.app-sandbox: true
+#        com.apple.security.files.user-selected.read-only: true

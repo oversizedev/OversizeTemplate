@@ -1,13 +1,16 @@
 //___FILEHEADER___
 
 import Factory
+import OversizeCore
 import OversizeKit
 import OversizeLocalizable
+import OversizeNoticeKit
 import OversizeServices
 import OversizeUI
 import SwiftUI
+import TipKit
 
-struct MainView: View {
+public struct MainView: View {
     
     @Injected(\.appStateService) var appStateService: AppStateService
     @StateObject var viewModel: MainViewModel
@@ -16,12 +19,26 @@ struct MainView: View {
     @EnvironmentObject var router: Router
     @EnvironmentObject var appSettins: AppSettingsViewModel
 
-    init() {
+    public init() {
         _viewModel = StateObject(wrappedValue: MainViewModel())
     }
 
-    var body: some View {
-        Text("Hello, App!")
+
+    public var body: some View {
+        VStack(alignment: .leading, spacing: .zero) {
+            NoticeListView()
+                .padding(.horizontal, .xxSmall)
+                .surfaceRadius(.xLarge)
+                .padding(.bottom, .xxSmall)
+                .padding(.top, .xxSmall)
+
+            AdView()
+                .padding(.horizontal, .xxSmall)
+                .surfaceRadius(.xLarge)
+                .padding(.vertical, 2)
+
+        }
+        .padding(.bottom, .xxSmall)
     }
 
 }

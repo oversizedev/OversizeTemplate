@@ -3,10 +3,12 @@
 import OversizeUI
 import SwiftUI
 
-struct AppSettingsView: View {
+public struct AppSettingsView: View {
     @EnvironmentObject var viewModel: AppSettingsViewModel
 
-    var body: some View {
+    public init() {}
+
+    public var body: some View {
         Group {
             NavigationLink(destination: AppSettingsPageView()) {
                 Row("Option") {

@@ -1,18 +1,24 @@
 packages:
   OversizeUI:
-    path: ../../OversizeLibrary/OversizeUI
+    path: ../OversizeLibrary/OversizeUI
   OversizeServices:
-    path: ../../OversizeLibrary/OversizeServices
+    path: ../OversizeLibrary/OversizeServices
   OversizeResources:
-    path: ../../OversizeLibrary/OversizeResources
+    path: ../OversizeLibrary/OversizeResources
   OversizeLocalizable:
-    path: ../../OversizeLibrary/OversizeLocalizable
+    path: ../OversizeLibrary/OversizeLocalizable
   OversizeKit:
-    path: ../../OversizeLibrary/OversizeKit
+    path: ../OversizeLibrary/OversizeKit
   OversizeCore:
-    path: ../../OversizeLibrary/OversizeCore
+    path: ../OversizeLibrary/OversizeCore
   OversizeComponents:
-    path: ../../OversizeLibrary/OversizeComponents
+    path: ../OversizeLibrary/OversizeComponents
+  Database:
+    path: Packages/Database
+  Env:
+    path: Packages/Env
+  App:
+    path: Packages/App
   Factory:
     url: https://github.com/hmlongco/Factory.git
     majorVersion: 2.1.3
