@@ -11,8 +11,8 @@ struct ___VARIABLE_modelName___Cell: View {
 
     init(
         _ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___,
-        action: (() -> Void)? = nil)
-    {
+        action: (() -> Void)? = nil
+    ) {
         self.___VARIABLE_modelVariableName___ = ___VARIABLE_modelVariableName___
         self.action = action
     }

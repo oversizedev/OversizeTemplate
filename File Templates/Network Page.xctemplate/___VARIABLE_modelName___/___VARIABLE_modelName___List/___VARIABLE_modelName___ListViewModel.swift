@@ -1,8 +1,8 @@
 // ___FILEHEADER___
 
-import Factory
-import Observation
 import ___VARIABLE_modelPackage___
+import FactoryKit
+import Observation
 import OversizeCore
 import OversizeKit
 import OversizeModels
@@ -15,10 +15,11 @@ extension ___VARIABLE_modelName___ListViewModel {
         case onAppear
         case onRefresh
         case onTapSearch
-        case onChangeSearchTerm(oldValue: String, newValue: String)
+        case onTapCreate___VARIABLE_modelName___
+        case onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
         case onTapDelete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
         case onTapDisplayType(_ displayType: ___VARIABLE_modelName___ListDisplayType)
-        case onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
+        case onChangeSearchTerm(oldValue: String, newValue: String)
     }
 }
 
@@ -28,7 +29,7 @@ public actor ___VARIABLE_modelName___ListViewModel {
 
     /// ViewState
     public var state: ___VARIABLE_modelName___ListViewState
-    
+
     /// Initialization
     public init(state: ___VARIABLE_modelName___ListViewState) {
         self.state = state
@@ -45,11 +46,13 @@ public actor ___VARIABLE_modelName___ListViewModel {
         case let .onChangeSearchTerm(oldValue: oldValue, newValue: newValue):
             await onChangeSearchTerm(oldValue: oldValue, newValue: newValue)
         case let .onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
-            await delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+            await delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         case let .onTapDisplayType(displayType):
             await onTapDisplayType(displayType)
         case let .onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
             await onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
+        case .onTapCreate___VARIABLE_modelName___:
+            await onCreate()
         }
     }
 }
@@ -67,24 +70,43 @@ public extension ___VARIABLE_modelName___ListViewModel {
 
     func onChangeSearchTerm(oldValue _: String, newValue _: String) async {}
 
-    func onTapSearch() async {}
-
-
-    func onTapDisplayType(_: ___VARIABLE_modelName___ListViewState.DisplayType) async {
+    func onTapSearch() async {
         await state.update {
-            $0.storage.isCompactRow.toggle()
+            $0.isSearch.toggle()
+        }
+    }
+
+    func onCreate() async {
+        await state.update {
+            $0.destination = .create
+        }
+    }
+
+    func onTapDisplayType(_ displayType: ___VARIABLE_modelName___ListDisplayType) async {
+        await state.update {
+            $0.storage.displayType = displayType
         }
     }
 
     func onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        await state.update { _ in }
+        await state.update {
+            $0.destination = .details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+        }
+    }
+
+    private func delete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
+        await state.update {
+            $0.alert = .delete {
+                logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
+            }
+        }
     }
 }
 
 // MARK: - Data Fetching
 
 extension ___VARIABLE_modelName___ListViewModel {
-    private func fetchData(force: Bool = false) async {
+    private func fetchData(force _: Bool = false) async {
         let result = await fetch___VARIABLE_modelName___()
         switch result {
         case let .success(___VARIABLE_modelPluralVariableName___):
@@ -99,10 +121,8 @@ extension ___VARIABLE_modelName___ListViewModel {
     }
 
     private func fetch___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
-        .failure(AppError.network(type: .unknown))
-    }
-
-    func delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async -> Result<___VARIABLE_modelName___, AppError> {
-        .failure(AppError.network(type: .unknown))
+        .success([
+            .init(id: UUID(), name: "___VARIABLE_modelName___ 1"),
+        ])
     }
 }

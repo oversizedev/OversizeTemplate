@@ -7,34 +7,70 @@ import OversizeModels
 import OversizeUI
 import SwiftUI
 
-@MainActor
-@Observable
-public final class ___VARIABLE_modelName___EditViewModel {
-    /// Edit mode
-    public let mode: EditMode
-    public var state: LoadingViewState<StateModel> = .idle
-    public var isSaving: Bool = false
+extension ___VARIABLE_modelName___EditViewModel {
+    enum InputEvent {
+        case onAppear
+        case onTapSave
+        case onFocusField(___VARIABLE_modelName___EditViewState.FocusField?)
+    }
+}
 
-    /// Forms
-    public var name: String = .init()
-    public var note: String = .init()
-    public var color: Color = .blue
-    public var url: URL?
-    public var date: Date?
-    #if os(macOS)
-    public var image: NSImage?
-    #else
-    public var image: UIImage?
-    #endif
-
-    /// Page
-    public var headerVisibleRatio: CGFloat = .zero
-    public var offset: CGPoint = .zero
+public actor ___VARIABLE_modelName___EditViewModel {
+    /// ViewState
+    public var state: ___VARIABLE_modelName___EditViewState
 
     /// Initialization
-    public init(_ mode: EditMode) {
-        self.mode = mode
-        setFields(mode: mode)
+    public init(state: ___VARIABLE_modelName___EditViewState) {
+        self.state = state
+    }
+
+    func handleEvent(_ event: InputEvent) async {
+        switch event {
+        case .onAppear:
+            await onAppear()
+        case .onTapSave:
+            await onSave()
+        case let .onFocusField(field):
+            await onFocusField(field)
+        }
+    }
+}
+
+// MARK: - User Actions
+
+public extension ___VARIABLE_modelName___EditViewModel {
+    func onAppear() async {
+        if await state.___VARIABLE_modelVariableName___State.result == nil {
+            await fetchData()
+        }
+        await onFocusField(.name)
+    }
+
+    func onFocusField(_ field: ___VARIABLE_modelName___EditViewState.FocusField?) async {
+        await state.update {
+            $0.focusedField = field
+        }
+    }
+
+    func onSave() async {
+        guard await !state.isEmptyForm else {
+            return
+        }
+        await state.update {
+            $0.isSaving = true
+        }
+        
+        let result = await create___VARIABLE_modelName___()
+        switch result {
+        case .success:
+            // Handle success - navigate back, show success message
+            break
+        case .failure:
+            // Handle error
+            await state.update {
+                $0.isSaving = false
+            }
+        }
     }
 }
 
@@ -45,91 +81,22 @@ public extension ___VARIABLE_modelName___EditViewModel {
         let result = await fetch___VARIABLE_modelName___()
         switch result {
         case let .success(___VARIABLE_modelVariableName___):
-            state = .result(.init(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___))
-            setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+            await state.update {
+                $0.___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
+                $0.setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+            }
         case let .failure(error):
-            state = .error(error)
+            await state.update {
+                $0.___VARIABLE_modelVariableName___State = .error(error)
+            }
         }
     }
 
     func fetch___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
-        guard case let .editId(id) = mode
-        else { return .failure(AppError.network(type: .unknown)) }
-        return .failure(AppError.network(type: .unknown))
+        .failure(AppError.network(type: .unknown))
     }
     
     func create___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
-        guard case let .editId(id) = mode
-        else { return .failure(AppError.network(type: .unknown)) }
-        return .failure(AppError.network(type: .unknown))
-    }
-}
-
-public extension ___VARIABLE_modelName___EditViewModel {
-    /// Checks
-    var isEmptyForm: Bool {
-        name.isEmpty && note.isEmpty && url == nil
-    }
-
-    var isValidForm: Bool {
-        !name.isEmpty && url != nil
-    }
-
-    /// View
-    var title: String {
-        switch mode {
-        case .create:
-            "Create ___VARIABLE_modelVariableName___"
-        case .edit, .editId:
-            "Edit ___VARIABLE_modelVariableName___"
-        }
-    }
-}
-
-// MARK: - Init Fields
-
-private extension ___VARIABLE_modelName___EditViewModel {
-    private func setFields(mode: EditMode) {
-        switch mode {
-        case let .edit(___VARIABLE_modelVariableName___):
-            state = .result(.init(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___))
-            setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
-        case let .editId(id):
-            Task {
-                await fetchData()
-            }
-        case .create:
-            break
-        }
-    }
-
-    func setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-//        name = .init()
-//        color = Color.blue
-//        note = .init()
-//        url = nil
-//        #if os(macOS)
-//        image = NSImage()
-//        #else
-//        image = UIImage()
-//        #endif
-//        date = Date()
-    }
-}
-
-// MARK: - EditMode types
-
-public extension ___VARIABLE_modelName___EditViewModel {
-    enum EditMode {
-        case create, edit(___VARIABLE_modelName___), editId(String)
-    }
-
-    struct StateModel {
-        public let ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___
-    }
-
-    /// FocusFields
-    enum FocusField: Hashable {
-        case name, note, url
+        .failure(AppError.network(type: .unknown))
     }
 }

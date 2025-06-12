@@ -6,6 +6,7 @@ import OversizeComponents
 import OversizeCore
 import OversizeKit
 import OversizeLocalizable
+import OversizeNavigation
 import OversizeResources
 import OversizeRouter
 import OversizeUI
@@ -13,12 +14,6 @@ import SwiftData
 import SwiftUI
 
 public struct ___VARIABLE_modelName___ListScreen: View {
-    
-    // Environments
-    @Environment(Router<___VARIABLE_routerDestinationType___>.self) var router
-    @Environment(AlertRouter.self) var alertRouter
-    @Environment(HUDRouter.self) var hud
-
     // States
     @State var viewState: ___VARIABLE_modelName___ListViewState
     let reducer: ___VARIABLE_modelName___ListReducer
@@ -30,58 +25,50 @@ public struct ___VARIABLE_modelName___ListScreen: View {
     }
 
     public var body: some View {
-        Page("List") {
+        NavigationPageView("List") {
             stateView(viewState.___VARIABLE_modelPluralVariableName___State)
+        } background: {
+            Color.backgroundPrimary
+        } emptyContent: {
+            emptyContent
         }
-        .backgroundSecondary()
-        #if os(iOS)
+        .emptyContent(viewState.isEmptyContent)
+        .toolbar(content: toolbarContent)
+        .toolbarTitleDisplayMode(.inline)
         .searchable(
-            text: $viewModel.searchTerm,
-            isSearch: $viewModel.isSearch
+            text: $viewState.searchTerm,
+            isPresented: $viewState.isSearch,
+            placement: .navigationBarDrawer(displayMode: .automatic)
         )
-        #elseif os(macOS)
-        .searchable(text: $viewModel.searchTerm)
-        #endif
+        .alert(item: $viewState.alert) { $0.alert }
+        .task(priority: .background) { reducer.callAsFunction(.onAppear) }
+        .refreshable(action: { reducer.callAsFunction(.onRefresh) })
+        .navigationTo($viewState.destination)
         .onChange(of: viewState.searchTerm) {
             reducer.callAsFunction(.onChangeSearchTerm(oldValue: $0, newValue: $1))
         }
-        .task(priority: .background) { reducer.callAsFunction(.onAppear) }
-        .refreshable(action: { reducer.callAsFunction(.onRefresh) })
     }
 
     @ViewBuilder
     private func stateView(_ state: LoadingViewState<[___VARIABLE_modelName___]>) -> some View {
         switch state {
         case .idle, .loading:
-            ___VARIABLE_modelName___PlaceholderView(displayType: viewModel.displayType)
+            ___VARIABLE_modelName___PlaceholderView(displayType: viewState.storage.displayType)
         case let .result(___VARIABLE_modelPluralVariableName___):
-            if ___VARIABLE_modelPluralVariableName___.isEmpty {
-                if viewModel.searchTerm.isEmpty {
-                    ___VARIABLE_modelName___EmptyView(action: {})
-                } else {
-                    ContentView(
-                        image: Illustration.Objects.search,
-                        title: "Nothing found",
-                        subtitle: "Try changing your search")
-                        .multilineTextAlignment(.center)
-                }
-
-            } else {
-                content(model, displayType: displayType)
-            }
+            content(___VARIABLE_modelPluralVariableName___)
         case let .error(error):
             ErrorView(error)
         }
     }
 
     @ViewBuilder
-    private func content(_ ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelName___) -> some View {
-        switch displayType {
+    private func content(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) -> some View {
+        switch viewState.storage.displayType {
         case .list:
             LazyVStack(spacing: .zero) {
                 ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
-                    ___VARIABLE_modelName___Row(___VARIABLE_modelVariableName___, isCompact: viewModel.isCompactRow) {
-                        reducer.callAsFunction(.onTapDetailFile(___VARIABLE_modelVariableName___))
+                    ___VARIABLE_modelName___Row(___VARIABLE_modelVariableName___, isCompact: viewState.storage.isCompactRow) {
+                        reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                     }
                     .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                 }
@@ -90,7 +77,7 @@ public struct ___VARIABLE_modelName___ListScreen: View {
             LazyVGrid(columns: [.init(.adaptive(minimum: 320), spacing: 12)], spacing: 12) {
                 ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
                     ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___) {
-                        reducer.callAsFunction(.onTapDetailFile(___VARIABLE_modelVariableName___))
+                        reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                     }
                     .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                 }
@@ -98,21 +85,84 @@ public struct ___VARIABLE_modelName___ListScreen: View {
         }
     }
 
-    @ToolbarContentBuilder
-    private func toolbarContent() -> some ToolbarContent {
-        ToolbarItemGroup(placement: .primaryAction) {
-            Picker("Filter", selection: $viewState.storage.displayType) {
-                ForEach(___VARIABLE_modelName___ListDisplayType.allCases) { type in
-                    type.icon.icon()
-                        .tag(type)
-                }
-            }
-            .pickerStyle(.segmented)
+    @ViewBuilder
+    private var emptyContent: some View {
+        if viewState.searchTerm.isEmpty {
+            ___VARIABLE_modelName___EmptyView(action: { reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___) })
+        } else {
+            ContentView(
+                image: Illustration.Objects.search,
+                title: "Nothing found",
+                subtitle: "Try changing your search"
+            )
+            .multilineTextAlignment(.center)
         }
     }
 
+    #if os(macOS) || os(visionOS) || os(tvOS)
+        @ToolbarContentBuilder
+        private func toolbarContent() -> some ToolbarContent {
+            ToolbarItemGroup(placement: .primaryAction) {
+                Picker("Display", selection: $viewState.storage.displayType) {
+                    ForEach(___VARIABLE_modelName___ListDisplayType.allCases) { type in
+                        type.icon.icon()
+                            .tag(type)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+                Button {
+                    reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
+                } label: {
+                    Image.Base.plus.icon()
+                }
+            }
+        }
+    #endif
+
+    #if os(iOS) || os(watchOS)
+        @ToolbarContentBuilder
+        private func toolbarContent() -> some ToolbarContent {
+            ToolbarItemGroup(placement: .primaryAction) {
+                Button {
+                    reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
+                } label: {
+                    Image.Base.plus.icon()
+                }
+
+                Menu {
+                    Picker("Display", selection: $viewState.storage.displayType) {
+                        ForEach(___VARIABLE_modelName___ListDisplayType.allCases) { type in
+                            Label {
+                                Text(type.title)
+                            } icon: {
+                                type.icon
+                            }
+                            .tag(type)
+                        }
+                    }
+                    .pickerStyle(.menu)
+
+                    Button {
+                        reducer.callAsFunction(.onTapSearch)
+                    } label: {
+                        Label {
+                            Text(L10n.Button.search)
+                        } icon: {
+                            Image.Base.search.icon()
+                        }
+                    }
+
+                } label: {
+                    Image.Base.more.icon()
+                }
+            }
+        }
+
+    #endif
+
     private func contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
-        Button(role: .destructive, action: {  reducer.callAsFunction(.onTapDeleteFile(___VARIABLE_modelVariableName___)) }) {
+        Button(role: .destructive, action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)) }) {
             Label {
                 Text(L10n.Button.delete)
             } icon: {
@@ -122,9 +172,20 @@ public struct ___VARIABLE_modelName___ListScreen: View {
     }
 }
 
-//#Preview("List") {
-//    ___VARIABLE_modelName___ListScreen()
-//}
+public extension ___VARIABLE_modelName___ListScreen {
+    static func build() -> some View {
+        let viewState = ___VARIABLE_modelName___ListViewState()
+        let viewModel = ___VARIABLE_modelName___ListViewModel(state: viewState)
+        let reducer = ___VARIABLE_modelName___ListReducer(viewModel: viewModel)
+        return ___VARIABLE_modelName___ListScreen(viewState: viewState, reducer: reducer)
+    }
+}
+
+#Preview("List") {
+    NavigationStack {
+        ___VARIABLE_modelName___ListScreen.build()
+    }
+}
 
 #Preview("Placeholders") {
     ___VARIABLE_modelName___PlaceholderView(displayType: .list)

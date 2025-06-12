@@ -15,8 +15,8 @@ struct ___VARIABLE_modelName___Row: View {
         _ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___,
         isSelected: Bool = false,
         isCompact: Bool = false,
-        action: (() -> Void)? = nil)
-    {
+        action: (() -> Void)? = nil
+    ) {
         self.___VARIABLE_modelVariableName___ = ___VARIABLE_modelVariableName___
         self.isSelected = isSelected
         self.isCompact = isCompact
@@ -27,9 +27,10 @@ struct ___VARIABLE_modelName___Row: View {
         Row(
             "Title",
             subtitle: isCompact ? nil : "Subtitle",
-            action: action)
+            action: action
+        )
         #if os(macOS)
-            .rowTextColor(isSelected ? Color.onPrimary : Color.onSurfacePrimary)
+        .rowTextColor(isSelected ? Color.onPrimary : Color.onSurfacePrimary)
         #endif
     }
 }

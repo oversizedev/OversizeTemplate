@@ -1,55 +1,54 @@
 // ___FILEHEADER___
 
-/*
+import ___VARIABLE_modelPackage___
+import NavigatorUI
 import SwiftUI
-import OversizeRouter
 
-public enum ___VARIABLE_routerDestinationType___: Routable {
-   case ___VARIABLE_modelPluralVariableName___List
-   case ___VARIABLE_modelVariableName___Create
-   case ___VARIABLE_modelVariableName___Edit(___VARIABLE_modelName___)
-   case ___VARIABLE_modelVariableName___EditId(String)
-   case ___VARIABLE_modelVariableName___Detail(___VARIABLE_modelName___)
-   case ___VARIABLE_modelVariableName___DetailId(String)
+public enum ___VARIABLE_modelName___Destinations {
+    case list
+    case details(id: String)
+    case details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
+    case create
+    case edit(id: String)
+    case edit___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
 }
 
-public extension ___VARIABLE_routerDestinationType___ {
-   var id: String {
-       switch self {
-       case .___VARIABLE_modelPluralVariableName___List:
-           "___VARIABLE_modelPluralVariableName___List"
-       case .___VARIABLE_modelVariableName___Create:
-           "___VARIABLE_modelVariableName___Create"
-       case .___VARIABLE_modelVariableName___Edit:
-           "___VARIABLE_modelVariableName___Edit"
-       case .___VARIABLE_modelVariableName___EditId:
-           "___VARIABLE_modelVariableName___Edit"
-       case .___VARIABLE_modelVariableName___Detail:
-           "___VARIABLE_modelVariableName___Detail"
-       case .___VARIABLE_modelVariableName___DetailId:
-           "___VARIABLE_modelVariableName___Detail"
-       }
-   }
+extension ___VARIABLE_modelName___Destinations: NavigationDestination {
+    public var body: some View {
+        switch self {
+        case .list:
+            ___VARIABLE_modelName___ListScreen.build()
+        case let .details(id):
+            ___VARIABLE_modelName___DetailScreen.build(id: id)
+        case let .details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___):
+            ___VARIABLE_modelName___DetailScreen.build(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+        case .create:
+            ___VARIABLE_modelName___EditScreen.build()
+        case let .edit(id: id):
+            ___VARIABLE_modelName___EditScreen.buildEdit(id: id)
+        case let .edit___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___):
+            ___VARIABLE_modelName___EditScreen.buildEdit(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+        }
+    }
+
+    public var method: NavigationMethod {
+        switch self {
+        case .create, .edit, .edit___VARIABLE_modelName___:
+            .managedSheet
+        default:
+            .push
+        }
+    }
 }
 
-// Resolve Router
-extension ___VARIABLE_routerDestinationType___ {
-   @ViewBuilder
-   func view() -> some View {
-       switch self {
-       case .___VARIABLE_modelPluralVariableName___List:
-           ___VARIABLE_modelName___ListScreen()
-       case .___VARIABLE_modelVariableName___Create:
-           ___VARIABLE_modelName___EditScreen(.create)
-       case let .___VARIABLE_modelVariableName___Edit(___VARIABLE_modelVariableName___):
-           ___VARIABLE_modelName___EditScreen(.edit(___VARIABLE_modelVariableName___))
-       case let .___VARIABLE_modelVariableName___EditId(id):
-           ___VARIABLE_modelName___EditScreen(.editId(id))
-       case let .___VARIABLE_modelVariableName___Detail(___VARIABLE_modelVariableName___):
-           ___VARIABLE_modelName___DetailScreen(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
-       case let .___VARIABLE_modelVariableName___DetailId(id):
-           ___VARIABLE_modelName___DetailScreen(id: id)
-       }
-   }
+public struct ___VARIABLE_modelName___RootView: View {
+    public init() {}
+
+    public var body: some View {
+        ManagedNavigationStack {
+            ___VARIABLE_modelName___ListScreen.build()
+                .navigationDestinationAutoReceive(___VARIABLE_modelName___Destinations.self)
+        }
+        .systemServices()
+    }
 }
-*/

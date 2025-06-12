@@ -7,28 +7,35 @@ import OversizeModels
 import OversizeUI
 import SwiftUI
 
-@MainActor
-@Observable
-public final class ___VARIABLE_modelName___DetailViewModel {
-    public struct StateModel {
-        public let ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___
+extension ___VARIABLE_modelName___DetailViewModel {
+    enum InputEvent {
+        case onAppear
+        case onRefresh
+        case onTapEdit___VARIABLE_modelName___
+        case onTapDelete___VARIABLE_modelName___
     }
+}
 
-    /// User Interface
-    public var state: LoadingViewState<StateModel> = .idle
-
-    private let ___VARIABLE_modelVariableName___Id: String
-    public var headerVisibleRatio: CGFloat = .zero
-    public var offset: CGPoint = .zero
+public actor ___VARIABLE_modelName___DetailViewModel {
+    /// ViewState
+    public var state: ___VARIABLE_modelName___DetailViewState
 
     /// Initialization
-    public init(id: String) {
-        ___VARIABLE_modelVariableName___Id = id
+    public init(state: ___VARIABLE_modelName___DetailViewState) {
+        self.state = state
     }
 
-    public init(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id
-        state = .result(.init(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___))
+    func handleEvent(_ event: InputEvent) async {
+        switch event {
+        case .onAppear:
+            await onAppear()
+        case .onRefresh:
+            await onRefresh()
+        case .onTapDelete___VARIABLE_modelName___:
+            await delete___VARIABLE_modelName___()
+        case .onTapEdit___VARIABLE_modelName___:
+            await onEdit()
+        }
     }
 }
 
@@ -36,19 +43,27 @@ public final class ___VARIABLE_modelName___DetailViewModel {
 
 public extension ___VARIABLE_modelName___DetailViewModel {
     func onAppear() async {
-        if state.result == nil {
+        if await state.___VARIABLE_modelVariableName___State.result == nil {
             await fetchData()
         }
     }
 
     func onRefresh() async {
-        await fetchData()
+        await fetchData(force: true)
     }
 
-    func onScroll(_ offset: CGPoint, _ headerVisibleRatio: CGFloat) {
-        DispatchQueue.main.async {
-            self.offset = offset
-            self.headerVisibleRatio = headerVisibleRatio
+    func onEdit() async {
+        await state.update {
+            $0.destination = .edit(id: $0.___VARIABLE_modelVariableName___Id)
+        }
+    }
+
+    private func delete___VARIABLE_modelName___() async {
+        await state.update { viewState in
+            viewState.alert = .delete {
+                logDeleted("___VARIABLE_modelName___")
+                viewState.isDismissed = true
+            }
         }
     }
 }
@@ -56,21 +71,21 @@ public extension ___VARIABLE_modelName___DetailViewModel {
 // MARK: - Data Fetching
 
 public extension ___VARIABLE_modelName___DetailViewModel {
-    func fetchData() async {
+    private func fetchData(force _: Bool = false) async {
         let result = await fetch___VARIABLE_modelName___()
         switch result {
         case let .success(___VARIABLE_modelVariableName___):
-            state = .result(.init(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___))
+            await state.update {
+                $0.___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
+            }
         case let .failure(error):
-            state = .error(error)
+            await state.update {
+                $0.___VARIABLE_modelVariableName___State = .error(error)
+            }
         }
     }
 
-    func fetch___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
-        .failure(AppError.network(type: .unknown))
-    }
-
-    func delete___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
+    private func fetch___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
         .failure(AppError.network(type: .unknown))
     }
 }
