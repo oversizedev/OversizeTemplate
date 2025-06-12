@@ -10,35 +10,47 @@ import OversizeUI
 import SwiftData
 import SwiftUI
 
-public struct ___VARIABLE_modelName___StateModel {
-    public let ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]
+extension ___VARIABLE_modelName___ListViewModel {
+    enum InputEvent {
+        case onAppear
+        case onRefresh
+        case onTapSearch
+        case onChangeSearchTerm(oldValue: String, newValue: String)
+        case onTapDelete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
+        case onTapDisplayType(_ displayType: ___VARIABLE_modelName___ListDisplayType)
+        case onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
+    }
 }
 
-@MainActor
-@Observable
-public final class ___VARIABLE_modelName___ListViewModel {
+public actor ___VARIABLE_modelName___ListViewModel {
     /// Services
-    // @ObservationIgnored @Injected(\.service) var service
+    /// @Injected(\.service) var service
 
-    /// User Interface
-    public var state: LoadingViewState<___VARIABLE_modelName___StateModel> = .idle
-    public var searchTerm: String = ""
-    public var isSearch: Bool = false
-
-    /// App Storage
-    private let storage = Storage()
-    public var isCompactRow: Bool {
-        didSet { storage.isCompactRow = isCompactRow }
-    }
-
-    public var displayType: DisplayType {
-        didSet { storage.displayType = displayType }
-    }
-
+    /// ViewState
+    public var state: ___VARIABLE_modelName___ListViewState
+    
     /// Initialization
-    public init() {
-        isCompactRow = storage.isCompactRow
-        displayType = storage.displayType
+    public init(state: ___VARIABLE_modelName___ListViewState) {
+        self.state = state
+    }
+
+    func handleEvent(_ event: InputEvent) async {
+        switch event {
+        case .onAppear:
+            await onAppear()
+        case .onRefresh:
+            await onRefresh()
+        case .onTapSearch:
+            await onTapSearch()
+        case let .onChangeSearchTerm(oldValue: oldValue, newValue: newValue):
+            await onChangeSearchTerm(oldValue: oldValue, newValue: newValue)
+        case let .onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
+            await delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+        case let .onTapDisplayType(displayType):
+            await onTapDisplayType(displayType)
+        case let .onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
+            await onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
+        }
     }
 }
 
@@ -50,30 +62,39 @@ public extension ___VARIABLE_modelName___ListViewModel {
     }
 
     func onRefresh() async {
-        await fetchData()
+        await fetchData(force: true)
     }
 
-    func onChangeSearchTerm(_: String, _: String) {}
+    func onChangeSearchTerm(oldValue _: String, newValue _: String) async {}
 
-    func onTapSearch() {
-        isSearch.toggle()
+    func onTapSearch() async {}
+
+
+    func onTapDisplayType(_: ___VARIABLE_modelName___ListViewState.DisplayType) async {
+        await state.update {
+            $0.storage.isCompactRow.toggle()
+        }
     }
 
-    func onTapCompactRow() {
-        isCompactRow.toggle()
+    func onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
+        await state.update { _ in }
     }
 }
 
 // MARK: - Data Fetching
 
 extension ___VARIABLE_modelName___ListViewModel {
-    private func fetchData() async {
+    private func fetchData(force: Bool = false) async {
         let result = await fetch___VARIABLE_modelName___()
         switch result {
         case let .success(___VARIABLE_modelPluralVariableName___):
-            state = .result(.init(___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___))
+            await state.update {
+                $0.___VARIABLE_modelPluralVariableName___State = .result(___VARIABLE_modelPluralVariableName___)
+            }
         case let .failure(error):
-            state = .error(error)
+            await state.update {
+                $0.___VARIABLE_modelPluralVariableName___State = .error(error)
+            }
         }
     }
 
@@ -83,41 +104,5 @@ extension ___VARIABLE_modelName___ListViewModel {
 
     func delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async -> Result<___VARIABLE_modelName___, AppError> {
         .failure(AppError.network(type: .unknown))
-    }
-}
-
-// MARK: - Supporting Types
-
-extension ___VARIABLE_modelName___ListViewModel {
-    public enum DisplayType: String, CaseIterable, Identifiable {
-        case list, grid
-
-        public var title: String {
-            rawValue.capitalizingFirstLetter()
-        }
-
-        public var id: String {
-            rawValue
-        }
-
-        public var icon: Image {
-            switch self {
-            case .list:
-                Image.GridsAndLayout.List.mini
-            case .grid:
-                Image.GridsAndLayout.Grid.mini
-            }
-        }
-    }
-
-    enum Keys {
-        public static let isCompactMode = "___VARIABLE_modelName___ListScreen.IsCompactMode"
-        public static let displayType = "___VARIABLE_modelName___ListScreen.DisplayType"
-    }
-
-    class Storage {
-        @AppStorage(Keys.isCompactMode) public var isCompactRow: Bool = false
-        @AppStorage(Keys.displayType) public var displayType: DisplayType =
-            .grid
     }
 }

@@ -4,9 +4,9 @@ import OversizeUI
 import SwiftUI
 
 struct ___VARIABLE_modelName___PlaceholderView: View {
-    let displayType: ___VARIABLE_modelName___ListViewModel.DisplayType
+    let displayType: ___VARIABLE_modelName___ListDisplayType
 
-    init(displayType: ___VARIABLE_modelName___ListViewModel.DisplayType) {
+    init(displayType: ___VARIABLE_modelName___ListDisplayType) {
         self.displayType = displayType
     }
 

@@ -16,7 +16,7 @@ public struct ___VARIABLE_modelName___EditScreen: View {
     @Environment(Router<Screen>.self) var router
     @Environment(AlertRouter.self) var alertRouter
     @Environment(HUDRouter.self) var hud
-    @Environment(\.modelContext) private var context
+    @Environment(\.platform) private var platform
 
     /// Local
     @State private var viewModel: ___VARIABLE_modelName___EditViewModel
@@ -188,46 +188,36 @@ private extension ___VARIABLE_modelName___EditScreen {
 
 private extension ___VARIABLE_modelName___EditScreen {
     private func save() {
-//        guard let url = viewModel.url else {
-//            focusedField = .url
-//            hud.present("Error in url", style: .destructive)
-//            return
-//        }
-//
-//        guard viewModel.isValidForm else {
-//            hud.present("Errors in the fields", style: .destructive)
-//            return
-//        }
-//        switch viewModel.mode {
-//        case .create:
-//            let ___VARIABLE_modelName___ = ___VARIABLE_modelName___(
-//                id: UUID(),
-//                name: viewModel.name,
-//                url: url,
-//                color: viewModel.color,
-//                date: viewModel.date,
-//                image: viewModel.image?.jpegData(compressionQuality: 1.0),
-//                note: viewModel.note,
-//                isFavorite: false,
-//                isArchive: false
-//            )
-//            context.insert(___VARIABLE_modelName___)
-//            hud.present("___VARIABLE_modelName___ saved", style: .success)
-//
-//        case let .edit(___VARIABLE_modelName___):
-//            ___VARIABLE_modelName___.name = viewModel.name
-//            ___VARIABLE_modelName___.colorData = .init(color: viewModel.color)
-//            ___VARIABLE_modelName___.note = viewModel.note
-//            ___VARIABLE_modelName___.url = url
-//            if let data = viewModel.image?.jpegData(compressionQuality: 1.0),
-//            ___VARIABLE_modelName___.imageData != data {
-//                ___VARIABLE_modelName___.imageData = data
-//            }
-//            ___VARIABLE_modelName___.date = viewModel.date
-//            ___VARIABLE_modelName___.url = url
-//            hud.present("___VARIABLE_modelName___ edited", style: .success)
-//        }
-        router.backOrDismiss()
+        guard viewModel.isValidForm else {
+            hud.present("Error in form", style: .destructive)
+            return
+        }
+        Task {
+            viewModel.isSaving = true
+            if platform != .macOS {
+                hud.presentLoader()
+            }
+            let result = await viewModel.create___VARIABLE_modelName___()
+            switch result {
+            case let .success(___VARIABLE_modelVariableName___):
+                if platform != .macOS {
+                    hud.hideLoader("___VARIABLE_modelName___ created", status: .success)
+                } else {
+                    hud.present("___VARIABLE_modelName___ created", style: .success)
+                }
+                viewModel.isSaving = false
+                router.backOrDismiss()
+            case let .failure(error):
+                viewModel.isSaving = false
+                if platform == .macOS {
+                    alertRouter.present(.appError(error: error))
+                } else {
+                    hud.hideLoader(
+                        "Error creating ___VARIABLE_modelName___ created",
+                        status: .failure)
+                }
+            }
+        }
     }
 }
 

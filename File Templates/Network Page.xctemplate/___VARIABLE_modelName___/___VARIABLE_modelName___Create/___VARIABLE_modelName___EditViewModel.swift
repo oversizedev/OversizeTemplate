@@ -13,6 +13,7 @@ public final class ___VARIABLE_modelName___EditViewModel {
     /// Edit mode
     public let mode: EditMode
     public var state: LoadingViewState<StateModel> = .idle
+    public var isSaving: Bool = false
 
     /// Forms
     public var name: String = .init()
@@ -56,6 +57,12 @@ public extension ___VARIABLE_modelName___EditViewModel {
         else { return .failure(AppError.network(type: .unknown)) }
         return .failure(AppError.network(type: .unknown))
     }
+    
+    func create___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
+        guard case let .editId(id) = mode
+        else { return .failure(AppError.network(type: .unknown)) }
+        return .failure(AppError.network(type: .unknown))
+    }
 }
 
 public extension ___VARIABLE_modelName___EditViewModel {
@@ -72,9 +79,9 @@ public extension ___VARIABLE_modelName___EditViewModel {
     var title: String {
         switch mode {
         case .create:
-            "Create link"
+            "Create ___VARIABLE_modelVariableName___"
         case .edit, .editId:
-            "Edit link"
+            "Edit ___VARIABLE_modelVariableName___"
         }
     }
 }
