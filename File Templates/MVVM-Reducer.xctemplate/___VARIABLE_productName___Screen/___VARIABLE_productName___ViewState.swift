@@ -2,18 +2,38 @@
 
 import SwiftUI
 
-@MainActor
-@Observable
-public final class ___FILEBASENAMEASIDENTIFIER___: Sendable {
+// MARK: - ViewState Protocol
 
-    /// Initialization
-    public init() {}
+public protocol ViewStateProtocol: ObservableObject {
+    associatedtype Input
+    func update(_ input: Input)
 }
 
-// MARK: - User Actions
+// MARK: - ViewState Input
 
-public extension ___FILEBASENAMEASIDENTIFIER___ {
-    func update(_ handler: @Sendable @MainActor (___VARIABLE_productName___ViewState) -> Void) async {
-        await MainActor.run { handler(self) }
+public enum ___VARIABLE_productName___ViewStateInput {
+    case loading(Bool)
+    case error(String?)
+}
+
+// MARK: - ViewState
+
+@MainActor
+public final class ___FILEBASENAMEASIDENTIFIER___: ViewStateProtocol, ObservableObject {
+    
+    @Published public var isLoading: Bool = false
+    @Published public var errorMessage: String?
+    
+    /// Initialization
+    public init() {}
+    
+    /// Update method conforming to ViewStateProtocol
+    public func update(_ input: ___VARIABLE_productName___ViewStateInput) {
+        switch input {
+        case .loading(let isLoading):
+            self.isLoading = isLoading
+        case .error(let message):
+            self.errorMessage = message
+        }
     }
 }

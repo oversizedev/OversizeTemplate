@@ -7,9 +7,9 @@
 	<key>Kind</key>
 	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
 	<key>Description</key>
-	<string>A SwiftUI custom view with preview and library content provider</string>
+	<string>A SwiftUI view following Sunlight architecture with MVVM-Reducer pattern including ViewState, ViewModel, Reducer, Router, and Module components</string>
 	<key>Summary</key>
-	<string>SwiftUI View</string>
+	<string>Sunlight MVVM-Reducer Architecture</string>
 	<key>SortOrder</key>
 	<string>1</string>
 	<key>AllowedTypes</key>
@@ -19,7 +19,7 @@
 	<key>Platforms</key>
 	<array/>
 	<key>DefaultCompletionName</key>
-	<string>SwiftUIView</string>
+	<string>SunlightMVVMView</string>
 	<key>MainTemplateFile</key>
 	<string>___VARIABLE_productName___Screen.swift</string>
 	<key>Image</key>
@@ -35,9 +35,9 @@
 			<key>Required</key>
 			<true/>
 			<key>Name</key>
-			<string>View:</string>
+			<string>Module Name:</string>
 			<key>Description</key>
-			<string>The name of the view to create</string>
+			<string>The name of the module to create (will generate Screen, ViewModel, ViewState, Reducer, Router, and Module files)</string>
 			<key>Type</key>
 			<string>text</string>
 			<key>NotPersisted</key>
