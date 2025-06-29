@@ -16,7 +16,7 @@ struct ___FILEBASENAMEASIDENTIFIER___: View {
     }
 
     var body: some View {
-        PageView(viewModel.___VARIABLE_CoreDataModelVariable___.name.valueOrEmpty) {
+        LayoutView(viewModel.___VARIABLE_CoreDataModelVariable___.name.valueOrEmpty) {
             content(viewModel.___VARIABLE_CoreDataModelVariable___)
         }
         .leadingBar { leadingBar }

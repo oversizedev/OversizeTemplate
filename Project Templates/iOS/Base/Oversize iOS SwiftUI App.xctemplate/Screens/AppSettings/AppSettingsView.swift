@@ -10,7 +10,7 @@ public struct AppSettingsView: View {
 
     public var body: some View {
         Group {
-            NavigationLink(destination: AppSettingsPageView()) {
+            NavigationLink(destination: AppSettingsLayoutView()) {
                 Row("Option") {
                     Image(systemName: "")
                 }

@@ -17,7 +17,7 @@ struct ___FILEBASENAMEASIDENTIFIER___: View {
     }
 
     var body: some View {
-        PageView(title) {
+        LayoutView(title) {
             content()
         }
         .leadingBar {

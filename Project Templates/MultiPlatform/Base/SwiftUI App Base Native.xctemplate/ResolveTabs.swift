@@ -7,7 +7,7 @@ import App
 import Env
 import Foundation
 import OversizeKit
-import OversizeRouter
+import OversizeNavigation
 import SwiftUI
 
 extension MainTab: @retroactive TabableView {

@@ -5,7 +5,7 @@
 
 import Env
 import Foundation
-import OversizeRouter
+import OversizeNavigation
 import SwiftUI
 
 public struct RootView: View {

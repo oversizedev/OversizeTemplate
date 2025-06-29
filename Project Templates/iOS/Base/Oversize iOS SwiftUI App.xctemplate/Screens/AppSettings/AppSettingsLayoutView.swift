@@ -3,15 +3,15 @@
 import OversizeUI
 import SwiftUI
 
-struct AppSettingsPageView: View {
-    @StateObject var viewModel: AppSettingsPageViewModel
+struct AppSettingsLayoutView: View {
+    @StateObject var viewModel: AppSettingsLayoutViewModel
 
     init() {
-        _viewModel = StateObject(wrappedValue: AppSettingsPageViewModel())
+        _viewModel = StateObject(wrappedValue: AppSettingsLayoutViewModel())
     }
 
     var body: some View {
-        PageView("Option") {
+        LayoutView("Option") {
             SectionView {
                 VStack(spacing: .zero) {
                     Row("Default option") {
@@ -27,8 +27,8 @@ struct AppSettingsPageView: View {
     }
 }
 
-struct AppSettingsPageView_ViewPreviews: PreviewProvider {
+struct AppSettingsLayoutView_ViewPreviews: PreviewProvider {
     static var previews: some View {
-        AppSettingsPageView()
+        AppSettingsLayoutView()
     }
 }
