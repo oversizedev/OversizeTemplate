@@ -30,6 +30,3 @@ sed -i '' 's/let dependencies: \[PackageDescription.Package.Dependency\] = remot
 
 echo "Set OversizeServices dependencies"
 sed -i '' 's/let dependencies: \[PackageDescription.Package.Dependency\] = remoteDependencies/let dependencies: \[PackageDescription.Package.Dependency\] = localDependencies/' "../Packages/OversizeServices/Package.swift"
-
-echo "Set OversizeNavigation dependencies"
-sed -i '' 's/let dependencies: \[PackageDescription.Package.Dependency\] = remoteDependencies/let dependencies: \[PackageDescription.Package.Dependency\] = localDependencies/' "../Packages/OversizeNavigation/Package.swift"

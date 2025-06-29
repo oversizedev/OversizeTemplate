@@ -1,4 +1,7 @@
-//___FILEHEADER___
+//
+// Copyright © 2024 Alexander Romanov
+// ResolveRouter.swift, created on 04.07.2024
+//
 
 import App
 import Env

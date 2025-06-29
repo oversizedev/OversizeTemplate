@@ -19,9 +19,6 @@ packages:
     path: ../Packages/Env
   App:
     path: ../Packages/App
-  FactoryKit:
+  Factory:
     url: https://github.com/hmlongco/Factory.git
     majorVersion: 2.1.3
-  NavigatorUI:
-    url: https://github.com/hmlongco/Navigator.git
-    majorVersion: 1.0.0

@@ -1,31 +1,25 @@
 # Create Swift files in App package
 rm -rf Packages/Env/Sources/Env/Env.swift
-touch Packages/Env/Sources/Env/RootTabs.swift
-cat <<EOF >Packages/Env/Sources/Env/RootTabs.swift
+touch Packages/Env/Sources/Env/MainTabs.swift
+cat <<EOF >Packages/Env/Sources/Env/MainTabs.swift
 //
 // Copyright © $(date +%Y) Alexander Romanov
 // Tabs.swift, created on $(date +%d.%m.%Y)
 //
 
-import OversizeUI
 import OversizeResources
+import OversizeRouter
 import SwiftUI
 
-public enum RootTabs: Int, Codable {
+public enum MainTab: Tabable {
+    public static let allCases: [MainTab] = [MainTab.main, MainTab.settings]
+
     case main
     case settings
 }
 
-extension RootTabs: Identifiable {
-    public static var tabs: [RootTabs] {
-        [.main, .settings]
-    }
-
-    public static var sidebar: [RootTabs] {
-        [.main, .settings]
-    }
-
-    public var icon: Image {
+public extension MainTab {
+    var icon: Image {
         switch self {
         case .main:
             Image.GridsAndLayout.grid
@@ -34,7 +28,7 @@ extension RootTabs: Identifiable {
         }
     }
 
-    public var title: String {
+    var title: String {
         switch self {
         case .main:
             .init("Main")
@@ -43,30 +37,37 @@ extension RootTabs: Identifiable {
         }
     }
 
-    public var id: String {
-        "\(self)"
+    var id: String {
+        switch self {
+        case .main:
+            "main"
+        case .settings:
+            "settings"
+        }
     }
 }
-
 EOF
 
 touch Packages/Env/Sources/Env/Screens.swift
 cat <<EOF >Packages/Env/Sources/Env/Screens.swift
 //
 // Copyright © $(date +%Y) Alexander Romanov
-// Screens.swift, created on $(date +%d.%m.%Y)
+// AccountListRouter.swift, created on $(date +%d.%m.%Y)
 //
 
+import OversizeRouter
 import SwiftUI
 
-public enum Screen: Int {
+public enum Screen: Routable {
     case main
 }
 
-extension Screen: Identifiable {
-    public var id: String {
-        "\(self)"
+public extension Screen {
+    var id: String {
+        switch self {
+        case .main:
+            "main"
+        }
     }
 }
-
 EOF

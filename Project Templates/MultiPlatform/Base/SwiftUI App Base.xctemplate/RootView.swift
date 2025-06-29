@@ -1,20 +1,32 @@
-//
-// Copyright © 2025 Alexander Romanov
-// MainView.swift, created on 27.04.2025
-//
+//___FILEHEADER___
 
 import Env
-import Foundation
+import NavigatorUI
 import OversizeRouter
 import SwiftUI
 
-public struct RootView: View {
-    public init() {}
-
-    public var body: some View {
-        RoutingView<Text, Screen> {
-            Text("Root")
+struct RootTabView: View {
+    @SceneStorage("AppState.SelectedRootTab") var selectedTab: RootTab = .main
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            ForEach(MainTab.tabs) { tab in
+                tab
+                    .tabItem {
+                        Label {
+                            Text(tab.title)
+                        } icon: {
+                            tab.icon
+                        }
+                    }
+                    .tag(tab)
+            }
         }
-        .systemServices()
+        .onNavigationReceive { (tab: MainTab) in
+            if tab == selectedTab {
+                return .immediately
+            }
+            selectedTab = tab
+            return .after(0.7)
+        }
     }
 }

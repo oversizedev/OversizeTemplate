@@ -34,10 +34,7 @@ targets:
           ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     scheme:
       gatherCoverageData: true
-      #storeKitConfiguration: ___VARIABLE_bundleIdentifierPrefix:bundleIdentifier___/Resources/StoreKit.storekit
     dependencies:
-      - package: NavigatorUI
-      - package: FactoryKit
       - package: OversizeUI
       - package: OversizeServices
       - package: OversizeResources
@@ -53,7 +50,7 @@ targets:
       - package: App
       - sdk: StoreKit.framework
     entitlements:
-      path: ../___VARIABLE_productName:RFC1034Identifier___/Resources/___VARIABLE_productName:RFC1034Identifier___.entitlements
+      path: ../App/___VARIABLE_productName:RFC1034Identifier___.entitlements
       properties:
         aps-environment: development
         # com.apple.developer.default-data-protection: NSFileProtectionComplete

@@ -24,12 +24,14 @@ targets:
     scheme:
       gatherCoverageData: true
     dependencies:
-      - package: FactoryKit
-      - package: NavigatorUI
       - package: OversizeUI
       - package: OversizeServices
       - package: OversizeResources
       - package: OversizeLocalizable
+      - package: OversizeKit
+        products:
+          - OversizeKit
+          - OversizeNoticeKit
       - package: OversizeCore
       - package: OversizeComponents
       - package: Database

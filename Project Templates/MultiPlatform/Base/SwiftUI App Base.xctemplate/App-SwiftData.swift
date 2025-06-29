@@ -5,23 +5,64 @@ import SwiftData
 
 @main
 struct ___PACKAGENAME:identifier___App: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    @Injected(\.appStateService) var appStateService: AppStateService
+    
+    init() {
+        try? Tips.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ApplicationRootView()
+                .naviagtionBarAppearenceConfiguration()
+                .appLaunch {
+                    VStack {
+                        Text("Welcome")
+                        Button("Complete") {
+                            appStateService.completedOnbarding()
+                        }
+                    }
+                }
         }
-        .modelContainer(sharedModelContainer)
     }
 }
+
+struct ApplicationRootView: View {
+    @SceneStorage("appRootType") var appRootType: AppRootType = UIDevice.current.userInterfaceIdiom == .pad ? .split : .tabbed
+
+    var body: some View {
+        appRootType
+            .onNavigationOpenURL()
+            .onNavigationReceive { (_: ToogleAppRootType) in
+                appRootType = appRootType == .split ? .tabbed : .split
+                return .auto
+            }
+    }
+
+    func applicationNavigator() -> Navigator {
+        let configuration: NavigationConfiguration = .init(
+            restorationKey: nil,
+            executionDelay: 0.3,
+            verbosity: .info
+        )
+        return Navigator(configuration: configuration)
+    }
+}
+
+enum AppRootType: Int {
+    case tabbed
+    case split
+}
+
+extension AppRootType: NavigationDestination {
+    var body: some View {
+        switch self {
+        case .tabbed:
+            RootTabView()
+        case .split:
+            RootSplitView()
+        }
+    }
+}
+
+struct ToogleAppRootType: Hashable {}

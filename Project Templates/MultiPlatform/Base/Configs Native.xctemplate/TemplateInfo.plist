@@ -7,7 +7,7 @@
 	<key>Concrete</key>
 	<false/>
 	<key>Identifier</key>
-	<string>app.oversize.configs</string>
+	<string>app.oversize.configs.native</string>
 	<key>CFBundleIdentifier</key>
 	<string></string>
 	<key>Options</key>

@@ -1,25 +1,29 @@
-//
-// Copyright © 2025 Alexander Romanov
-// ResolveTabs.swift, created on 27.04.2025
-//
+//___FILEHEADER___
 
 import App
 import Env
 import Foundation
+import NavigatorUI
 import OversizeKit
 import OversizeRouter
 import SwiftUI
 
-extension MainTab: @retroactive TabableView {
-    public func view() -> some View {
-        switch self {
+extension RootTabs: @retroactive NavigationDestination {
+    public var body: some View {
+        RootTabsViewBuilder(destination: self)
+    }
+}
+
+private struct RootTabsViewBuilder: View {
+    let destination: RootTabs
+    var body: some View {
+        switch destination {
         case .main:
-            RoutingView<Text, Screen> {
-                Text("Root")
-            }
-            .systemServices()
+            EmptyView()
         case .settings:
-            SettingsRoutingView()
+            SettingsNavigationStack {
+                EmptyView()
+            }
         }
     }
 }
