@@ -4,11 +4,10 @@ import ___VARIABLE_modelPackage___
 import ___VARIABLE_environmentPackage___
 import OversizeCore
 import OversizeLocalizable
-import OversizeRouter
+import OversizeNavigation
 import OversizeUI
 import SwiftData
 import SwiftUI
-import OversizeRouter
 
 public struct ___VARIABLE_modelName___DetailScreen: View {
     

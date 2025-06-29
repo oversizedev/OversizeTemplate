@@ -1,7 +1,7 @@
 // ___FILEHEADER___
 
 import SwiftUI
-import OversizeRouter
+import OversizeNavigation
 
 public enum ___VARIABLE_routerDestinationType___: Routable {
     case ___VARIABLE_modelPluralVariableName___List

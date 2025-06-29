@@ -6,7 +6,7 @@ import OversizeCore
 import OversizeKit
 import OversizeLocalizable
 import OversizeNavigation
-import OversizeRouter
+import OversizeNavigation
 import OversizeUI
 import SwiftUI
 
@@ -38,7 +38,7 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
     }
 
     public var body: some View {
-        NavigationCoverPageView("___VARIABLE_modelName___ Detail") {
+        NavigationLayoutView("___VARIABLE_modelName___ Detail") {
             stateView(viewState.___VARIABLE_modelVariableName___State)
         } cover: {
             cover

@@ -7,7 +7,7 @@ import OversizeCore
 import OversizeKit
 import OversizeLocalizable
 import OversizePhotoComponents
-import OversizeRouter
+import OversizeNavigation
 import OversizeUI
 import SwiftUI
 
@@ -49,7 +49,7 @@ public struct ___VARIABLE_modelName___EditScreen: View {
     }
 
     public var body: some View {
-        NavigationPageView(
+        NavigationLayoutView(
             viewState.title,
             content: content
         )

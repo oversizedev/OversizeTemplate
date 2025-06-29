@@ -2,7 +2,7 @@
 
 import Env
 import NavigatorUI
-import OversizeRouter
+import OversizeNavigation
 import SwiftUI
 
 struct RootTabView: View {

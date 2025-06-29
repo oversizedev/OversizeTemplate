@@ -5,7 +5,7 @@ import ___VARIABLE_environmentPackage___
 import OversizeCore
 import OversizeLocalizable
 import OversizeUI
-import OversizeRouter
+import OversizeNavigation
 import SwiftData
 import SwiftUI
 

@@ -8,7 +8,7 @@ import OversizeKit
 import OversizeLocalizable
 import OversizeNavigation
 import OversizeResources
-import OversizeRouter
+import OversizeNavigation
 import OversizeUI
 import SwiftData
 import SwiftUI
@@ -25,7 +25,7 @@ public struct ___VARIABLE_modelName___ListScreen: View {
     }
 
     public var body: some View {
-        NavigationPageView("List") {
+        NavigationLayoutView("List") {
             stateView(viewState.___VARIABLE_modelPluralVariableName___State)
         } background: {
             Color.backgroundPrimary

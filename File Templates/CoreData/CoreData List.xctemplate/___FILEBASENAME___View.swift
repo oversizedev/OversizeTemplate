@@ -24,7 +24,7 @@ struct ___FILEBASENAMEASIDENTIFIER___: View {
     }
 
     var body: some View {
-        PageView("___VARIABLE_CoreDataModel___") {
+        LayoutView("___VARIABLE_CoreDataModel___") {
             switch viewModel.state {
             case .result:
             ___VARIABLE_productName:identifier___ListsView(sorting: viewModel.sortingType,

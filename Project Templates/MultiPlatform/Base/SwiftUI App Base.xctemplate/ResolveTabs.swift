@@ -5,7 +5,7 @@ import Env
 import Foundation
 import NavigatorUI
 import OversizeKit
-import OversizeRouter
+import OversizeNavigation
 import SwiftUI
 
 extension RootTabs: @retroactive NavigationDestination {

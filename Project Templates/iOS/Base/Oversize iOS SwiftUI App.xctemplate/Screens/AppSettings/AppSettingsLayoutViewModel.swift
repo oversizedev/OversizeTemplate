@@ -3,6 +3,6 @@
 import SwiftUI
 
 @MainActor
-class AppSettingsPageViewModel: ObservableObject {
+class AppSettingsLayoutViewModel: ObservableObject {
     @AppStorage("AppState.Option") var option: String = ""
 }

@@ -6,7 +6,7 @@ import OversizeLocalizable
 import OversizeUI
 import SwiftData
 import SwiftUI
-import OversizeRouter
+import OversizeNavigation
 
 public struct ___VARIABLE_modelName___ListSortingScreen: View {
     @Environment(Router<___VARIABLE_routerDestinationType___>.self) var router

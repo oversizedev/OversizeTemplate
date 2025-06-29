@@ -8,7 +8,7 @@ import Observation
 import OversizeCore
 import OversizeKit
 import OversizeModels
-import OversizeRouter
+import OversizeNavigation
 import SwiftData
 import SwiftUI
 
