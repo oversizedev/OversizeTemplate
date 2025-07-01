@@ -228,7 +228,6 @@
 						<key>Nodes</key>
 						<array>
 							<string>___PACKAGENAME:identifier___App.swift</string>
-							<string>Item.swift</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -238,13 +237,6 @@
 								<string>App-SwiftData.swift</string>
 								<key>SortOrder</key>
 								<integer>10</integer>
-							</dict>
-							<key>Item.swift</key>
-							<dict>
-								<key>Path</key>
-								<string>Item-SwiftData.swift</string>
-								<key>SortOrder</key>
-								<integer>30</integer>
 							</dict>
 						</dict>
 						<key>Targets</key>
@@ -279,6 +271,20 @@
 					</dict>
 				</array>
 			</dict>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>modelName</string>
+			<key>Name</key>
+			<string>Model name:</string>
+			<key>NotPersisted</key>
+			<false/>
+			<key>SortOrder</key>
+			<integer>210</integer>
+			<key>Type</key>
+			<string>text</string>
+			<key>Default</key>
+			<string>DataModel</string>
 		</dict>
 	</array>
 	<key>Nodes</key>

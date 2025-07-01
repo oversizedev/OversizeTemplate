@@ -1,11 +1,18 @@
 //___FILEHEADER___
 
-import SwiftUI
 import SwiftData
+import SwiftUI
+import FactoryKit
+import OversizeServices
+import NavigatorUI
+import TipKit
+import Database
+
 
 @main
 struct ___PACKAGENAME:identifier___App: App {
     @Injected(\.appStateService) var appStateService: AppStateService
+    @Injected(\.modelContainerService) private var sharedModelContainer
     
     init() {
         try? Tips.configure()
@@ -14,15 +21,16 @@ struct ___PACKAGENAME:identifier___App: App {
     var body: some Scene {
         WindowGroup {
             ApplicationRootView()
-                .naviagtionBarAppearenceConfiguration()
+                .navigationBarAppearanceConfiguration()
                 .appLaunch {
                     VStack {
                         Text("Welcome")
                         Button("Complete") {
-                            appStateService.completedOnbarding()
+                            appStateService.completedOnboarding()
                         }
                     }
                 }
+                .modelContainer(sharedModelContainer)
         }
     }
 }

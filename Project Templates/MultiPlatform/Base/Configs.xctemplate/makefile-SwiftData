@@ -19,6 +19,7 @@ init:
 	@chmod +x $(PROJECT_ROOT)/scripts/init_packages_swiftdata_files.sh
 	@$(PROJECT_ROOT)/scripts/init_packages.sh
 	@$(PROJECT_ROOT)/scripts/init_packages_files.sh
+	@$(PROJECT_ROOT)/scripts/init_packages_swiftdata_files.sh
 	@$(MAKE) gen
 	@$(MAKE) build
 	@$(MAKE) rerun

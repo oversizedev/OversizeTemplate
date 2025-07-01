@@ -3,10 +3,9 @@
 import App
 import Env
 import OversizeKit
-import OversizeRouter
 import SwiftUI
 
-extension Screen: @retroactive RoutableView {
+extension Screen {
     public func view() -> some View {
         switch self {
         case .main:

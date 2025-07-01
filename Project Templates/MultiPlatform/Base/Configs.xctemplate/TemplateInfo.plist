@@ -14,6 +14,40 @@
 	<array>
 		<dict>
 			<key>Identifier</key>
+			<string>storageType</string>
+			<key>Units</key>
+			<dict>
+				<key>SwiftData</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>../scripts/init_packages_swiftdata_files.sh</string>
+							<string>../makefile</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>../makefile</key>
+							<dict>
+								<key>Path</key>
+								<string>makefile-SwiftData</string>
+							</dict>
+							<key>../scripts/init_packages_swiftdata_files.sh</key>
+							<dict>
+								<key>Path</key>
+								<string>init_packages_swiftdata_files.sh</string>
+								<key>Group</key>
+								<array>
+									<string>scripts</string>
+								</array>
+							</dict>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>Identifier</key>
 			<string>app-platform</string>
 			<key>Units</key>
 			<dict>

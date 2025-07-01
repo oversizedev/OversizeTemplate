@@ -1,7 +1,10 @@
 //___FILEHEADER___
 
 import SwiftUI
-import SwiftData
+import FactoryKit
+import OversizeServices
+import NavigatorUI
+import TipKit
 
 @main
 struct ___PACKAGENAME:identifier___App: App {
@@ -14,12 +17,12 @@ struct ___PACKAGENAME:identifier___App: App {
     var body: some Scene {
         WindowGroup {
             ApplicationRootView()
-                .naviagtionBarAppearenceConfiguration()
+                .navigationBarAppearanceConfiguration()
                 .appLaunch {
                     VStack {
                         Text("Welcome")
                         Button("Complete") {
-                            appStateService.completedOnbarding()
+                            appStateService.completedOnboarding()
                         }
                     }
                 }

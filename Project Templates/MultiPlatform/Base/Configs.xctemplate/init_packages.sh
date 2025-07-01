@@ -17,14 +17,17 @@ import PackageDescription
 
 let commonDependencies: [PackageDescription.Package.Dependency] = [
     .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10")),
+    .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
 ]
 
 let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
     .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
+    .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
 ]
 
 let localDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
     .package(name: "OversizeCore", path: "../../../Packages/OversizeCore"),
+    .package(name: "OversizeModels", path: "../../../Packages/OversizeModels"),
 ]
 
 let dependencies: [PackageDescription.Package.Dependency] = remoteDependencies
@@ -50,6 +53,8 @@ let package = Package(
             name: "Database",
             dependencies: [
                 .product(name: "OversizeCore", package: "OversizeCore"),
+                .product(name: "FactoryKit", package: "Factory"),
+                .product(name: "OversizeModels", package: "OversizeModels"),
             ]
         ),
         .testTarget(
@@ -74,12 +79,12 @@ cat <<EOF >Package.swift
 import Foundation
 import PackageDescription
 
-let commonDependencies: [PackageDescription.Package.Dependency] = [\
+let commonDependencies: [PackageDescription.Package.Dependency] = [
     .package(name: "Database", path: "../Database"),
     .package(name: "Env", path: "../Env"),
     .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
     .package(url: "https://github.com/fatbobman/ObservableDefaults.git", .upToNextMinor(from: "0.6.2")),
-    .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10")),
+    .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10"))
 ]
 
 let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
@@ -91,6 +96,7 @@ let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependen
     .package(url: "https://github.com/oversizedev/OversizeUI.git", .upToNextMajor(from: "3.0.2")),
     .package(url: "https://github.com/oversizedev/OversizeServices.git", .upToNextMajor(from: "1.4.0")),
     .package(url: "https://github.com/oversizedev/OversizeNavigation.git", .upToNextMajor(from: "0.3.0")),
+    .package(url: "https://github.com/oversizedev/OversizeComponents.git", .upToNextMajor(from: "2.0.0")),
 ]
 
 let localDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
@@ -102,9 +108,10 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeUI", path: "../../../Packages/OversizeUI"),
     .package(name: "OversizeServices", path: "../../../Packages/OversizeServices"),
     .package(name: "OversizeNavigation", path: "../../../Packages/OversizeNavigation"),
+    .package(name: "OversizeComponents", path: "../../../OversizeComponents"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = remoteDependencies
+let dependencies: [PackageDescription.Package.Dependency] = localDependencies
 
 let package = Package(
     name: "App",
@@ -140,6 +147,7 @@ let package = Package(
                 .product(name: "OversizeNoticeKit", package: "OversizeKit"),
                 .product(name: "OversizeNavigation", package: "OversizeNavigation"),
                 .product(name: "ObservableDefaults", package: "ObservableDefaults"),
+                .product(name: "OversizePhotoComponents", package: "OversizeComponents"),
             ]
         ),
         .testTarget(
