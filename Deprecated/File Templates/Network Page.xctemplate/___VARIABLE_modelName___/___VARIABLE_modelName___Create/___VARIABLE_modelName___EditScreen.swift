@@ -1,6 +1,5 @@
 // ___FILEHEADER___
 
-import OversizeAppStoreKit
 import ___VARIABLE_modelPackage___
 import OversizeComponents
 import OversizeCore

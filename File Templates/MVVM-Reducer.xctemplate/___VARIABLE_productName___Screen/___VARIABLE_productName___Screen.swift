@@ -18,6 +18,15 @@ public struct ___FILEBASENAMEASIDENTIFIER___: View {
     }
 }
 
+public extension ___FILEBASENAMEASIDENTIFIER___ {
+    static func build() -> some View {
+        let viewState = ___VARIABLE_productName___ViewState()
+        let viewModel = ___VARIABLE_productName___ViewModel(state: viewState)
+        let reducer = ___VARIABLE_productName___Reducer(viewModel: viewModel)
+        return ___FILEBASENAMEASIDENTIFIER___(viewState: viewState, reducer: reducer)
+    }
+}
+
 #Preview {
-    ___FILEBASENAMEASIDENTIFIER___()
+    ___FILEBASENAMEASIDENTIFIER___.build()
 }

@@ -19,9 +19,11 @@
 	<key>Platforms</key>
 	<array/>
 	<key>DefaultCompletionName</key>
-	<string>SwiftUIView</string>
+	<string>___VARIABLE_productName___Screen</string>
 	<key>MainTemplateFile</key>
 	<string>___VARIABLE_productName___Screen.swift</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
 	<key>Image</key>
 	<dict>
 		<key>FileTypeIcon</key>
