@@ -90,7 +90,7 @@ public extension ___VARIABLE_modelName___ListViewModel {
 
     func onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update {
-            $0.destination = .___VARIABLE_modelVariableName___Details(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+            $0.destination = .___VARIABLE_modelVariableName___Details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
         }
     }
 
