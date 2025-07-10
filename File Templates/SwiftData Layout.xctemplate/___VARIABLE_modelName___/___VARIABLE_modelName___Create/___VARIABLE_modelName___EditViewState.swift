@@ -32,7 +32,7 @@ public final class ___VARIABLE_modelName___EditViewState: Sendable {
 
     /// Constants
     public let mode: EditMode
-    public let ___VARIABLE_modelVariableName___Id: String
+    public let ___VARIABLE_modelVariableName___Id: UUID
 
     /// Checks
     var isEmptyForm: Bool {
@@ -58,13 +58,13 @@ public final class ___VARIABLE_modelName___EditViewState: Sendable {
         self.mode = mode
         switch mode {
         case let .edit(___VARIABLE_modelVariableName___):
-            ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id.uuidString
+            ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id
             ___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
             setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
         case let .editId(id):
             ___VARIABLE_modelVariableName___Id = id
         case .create:
-            ___VARIABLE_modelVariableName___Id = UUID().uuidString
+            ___VARIABLE_modelVariableName___Id = UUID()
         }
     }
 }
@@ -90,7 +90,7 @@ public extension ___VARIABLE_modelName___EditViewState {
 
 public extension ___VARIABLE_modelName___EditViewState {
     enum EditMode {
-        case create, edit(___VARIABLE_modelName___), editId(String)
+        case create, edit(___VARIABLE_modelName___), editId(UUID)
     }
 
     /// FocusFields

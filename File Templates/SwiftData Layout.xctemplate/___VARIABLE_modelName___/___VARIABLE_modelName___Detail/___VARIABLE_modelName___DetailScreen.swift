@@ -11,7 +11,7 @@ import OversizeUI
 import SwiftUI
 
 public extension ___VARIABLE_modelName___DetailScreen {
-    static func build(id: String) -> some View {
+    static func build(id: UUID) -> some View {
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___Id: id)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
         let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)

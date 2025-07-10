@@ -26,15 +26,15 @@ public final class ___VARIABLE_modelName___DetailViewState: Sendable {
     public var isDismissed: Bool = false
 
     // Static
-    public let ___VARIABLE_modelVariableName___Id: String
+    public let ___VARIABLE_modelVariableName___Id: UUID
 
     // Initialization
-    public init(___VARIABLE_modelVariableName___Id: String) {
+    public init(___VARIABLE_modelVariableName___Id: UUID) {
         self.___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___Id
     }
 
     public init(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id.uuidString
+        ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id
         ___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
     }
 }

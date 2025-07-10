@@ -54,7 +54,7 @@ public extension ___VARIABLE_modelName___DetailViewModel {
 
     func onEdit() async {
         await state.update {
-            $0.destination = .edit(id: $0.___VARIABLE_modelVariableName___Id)
+            $0.destination = .___VARIABLE_modelVariableName___Edit(id: $0.___VARIABLE_modelVariableName___Id)
         }
     }
 
