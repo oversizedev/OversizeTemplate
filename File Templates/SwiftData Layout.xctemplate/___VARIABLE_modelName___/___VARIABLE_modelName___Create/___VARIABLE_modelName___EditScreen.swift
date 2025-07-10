@@ -18,7 +18,7 @@ extension ___VARIABLE_modelName___EditScreen {
         return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
     }
 
-    static func buildEdit(id: String) -> some View {
+    static func buildEdit(id: UUID) -> some View {
         let viewState = ___VARIABLE_modelName___EditViewState(.editId(id))
         let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
         let reducer = ___VARIABLE_modelName___EditReducer(viewModel: viewModel)

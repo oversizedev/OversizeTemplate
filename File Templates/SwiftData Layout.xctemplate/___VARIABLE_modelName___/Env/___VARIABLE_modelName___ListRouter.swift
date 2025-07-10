@@ -6,10 +6,10 @@ import SwiftUI
 
 public enum ___VARIABLE_modelName___Destinations {
     case list
-    case details(id: String)
+    case details(id: UUID)
     case details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
     case create
-    case edit(id: String)
+    case edit(id: UUID)
     case edit___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
 }
 
