@@ -7,9 +7,9 @@
 	<key>Kind</key>
 	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
 	<key>Description</key>
-	<string>A complete MealProduct SwiftData layout with CRUD functionality for FoodDiary app</string>
+	<string>A SwiftUI custom view with SwiftData layout and CRUD functionality</string>
 	<key>Summary</key>
-	<string>MealProduct SwiftData Layout</string>
+	<string>SwiftData Layout</string>
 	<key>SortOrder</key>
 	<string>2</string>
 	<key>AllowedTypes</key>
@@ -19,15 +19,96 @@
 	<key>Platforms</key>
 	<array/>
 	<key>DefaultCompletionName</key>
-	<string>MealProduct</string>
+	<string>View</string>
 	<key>MainTemplateFile</key>
-	<string>MealProductEditScreen.swift</string>
+	<string>___VARIABLE_modelName___EditScreen.swift</string>
 	<key>Image</key>
 	<dict>
 		<key>FileTypeIcon</key>
 		<string>swift</string>
 	</dict>
 	<key>Options</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>modelName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>lItem</string>
+			<key>Description</key>
+			<string>The name of the model to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>Model</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>modelVariableName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Model variable</string>
+			<key>Description</key>
+			<string>The name of the model variable to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>item</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>modelPluralVariableName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Model plural variable</string>
+			<key>Description</key>
+			<string>The name of the model plural variable to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>items</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>modelPackage</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Model Package</string>
+			<key>Description</key>
+			<string>The name of the model to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>Database</string>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>routerDestinationType</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Router Destination</string>
+			<key>Description</key>
+			<string>The name of the destination</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Default</key>
+			<string>Screen</string>
+		</dict>
+	</array>
 </dict>
 </plist>
