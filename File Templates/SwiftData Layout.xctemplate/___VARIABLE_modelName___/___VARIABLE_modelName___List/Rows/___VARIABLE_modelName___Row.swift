@@ -25,8 +25,8 @@ struct ___VARIABLE_modelName___Row: View {
 
     var body: some View {
         Row(
-            "Title",
-            subtitle: isCompact ? nil : "Subtitle",
+            ___VARIABLE_modelVariableName___.name ?? "Untitled",
+            subtitle: isCompact ? nil : ___VARIABLE_modelVariableName___.note,
             action: action
         )
         #if os(macOS)

@@ -23,9 +23,6 @@ public final class ___VARIABLE_modelName___ListViewState: Sendable {
     public var isSearch: Bool = false
     public var destination: ___VARIABLE_modelName___Destinations?
     public var alert: AppAlert?
-    public var isEmptyContent: Bool {
-        ___VARIABLE_modelPluralVariableName___State.result?.isEmpty ?? true
-    }
 
     /// Initialization
     public init() {}

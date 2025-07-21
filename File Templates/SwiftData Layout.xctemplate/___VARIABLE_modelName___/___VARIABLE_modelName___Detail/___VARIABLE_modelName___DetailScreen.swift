@@ -67,7 +67,10 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
 
     private var cover: some View {
         VStack {
-            Text("___VARIABLE_modelName___ Cover")
+            Text("___VARIABLE_modelName___")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
@@ -87,19 +90,18 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
             Row(___VARIABLE_modelVariableName___.name ?? "Untitled")
             
             // Add more content based on your model properties
-            LazyVStack(spacing: 0) {
-                ForEach(1 ... 10, id: \.self) { item in
-                    Button {} label: {
-                        VStack(spacing: 0) {
-                            Text("Item \(item)")
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                        }
-                        .clipShape(Rectangle())
-                    }
-                }
+            if let note = ___VARIABLE_modelVariableName___.note, !note.isEmpty {
+                Row("Notes", subtitle: note)
             }
+            
+            // Add additional model properties here as needed
+            // if let url = ___VARIABLE_modelVariableName___.url {
+            //     Row("URL", subtitle: url.absoluteString)
+            // }
+            // 
+            // if let date = ___VARIABLE_modelVariableName___.date {
+            //     Row("Date", subtitle: DateFormatter.localizedString(from: date, dateStyle: .medium, timeStyle: .none))
+            // }
         }
     }
 

@@ -19,7 +19,7 @@ struct ___VARIABLE_modelName___Cell: View {
 
     var body: some View {
         VStack {
-            Text("Title")
+            Text(___VARIABLE_modelVariableName___.name ?? "Untitled")
                 .padding()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
