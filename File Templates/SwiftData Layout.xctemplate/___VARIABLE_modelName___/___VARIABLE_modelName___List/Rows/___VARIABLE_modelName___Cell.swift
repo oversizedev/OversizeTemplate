@@ -18,11 +18,44 @@ struct ___VARIABLE_modelName___Cell: View {
     }
 
     var body: some View {
-        VStack {
-            Text("Title")
-                .padding()
+        VStack(spacing: .xxSmall) {
+            HStack {
+                VStack(alignment: .leading, spacing: .xxxSmall) {
+                    Text(___VARIABLE_modelVariableName___.name)
+                        .headline(.medium)
+                        .foregroundColor(.onSurfacePrimary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                    
+                    if let note = ___VARIABLE_modelVariableName___.note, !note.isEmpty {
+                        Text(note)
+                            .footnote()
+                            .foregroundColor(.onSurfaceSecondary)
+                            .lineLimit(3)
+                            .multilineTextAlignment(.leading)
+                    }
+                }
+                Spacer()
+                
+                Circle()
+                    .fill(___VARIABLE_modelVariableName___.color)
+                    .frame(width: 12, height: 12)
+            }
+            
+            HStack {
+                Text(___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .omitted))
+                    .caption(.medium)
+                    .foregroundColor(.onSurfaceSecondary)
+                
+                Spacer()
+                
+                if ___VARIABLE_modelVariableName___.isFavorite {
+                    Image.Base.star.icon(.accent, size: .small)
+                }
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.medium)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background {
             RoundedRectangle(cornerRadius: .medium)
                 .fill(Color.surfaceSecondary)

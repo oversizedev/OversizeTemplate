@@ -21,7 +21,7 @@
 	<key>DefaultCompletionName</key>
 	<string>View</string>
 	<key>MainTemplateFile</key>
-	<string>___VARIABLE_productName___EditScreen.swift</string>
+	<string>___VARIABLE_modelName___/___VARIABLE_modelName___Create/___VARIABLE_modelName___EditScreen.swift</string>
 	<key>Image</key>
 	<dict>
 		<key>FileTypeIcon</key>
