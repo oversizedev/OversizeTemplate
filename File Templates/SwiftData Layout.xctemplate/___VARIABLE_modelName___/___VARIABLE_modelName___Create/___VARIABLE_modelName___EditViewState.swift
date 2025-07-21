@@ -77,12 +77,22 @@ public extension ___VARIABLE_modelName___EditViewState {
     }
 
     func setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        // Uncomment and modify based on your model properties
-        // name = ___VARIABLE_modelVariableName___.name ?? ""
-        // note = ___VARIABLE_modelVariableName___.note ?? ""
-        // color = Color(___VARIABLE_modelVariableName___.color ?? "blue")
+        // Set fields based on model properties
+        name = ___VARIABLE_modelVariableName___.name
+        note = ___VARIABLE_modelVariableName___.note ?? ""
+        color = ___VARIABLE_modelVariableName___.color
+        date = ___VARIABLE_modelVariableName___.date
+        // Add more fields as needed based on your model properties
         // url = ___VARIABLE_modelVariableName___.url
-        // date = ___VARIABLE_modelVariableName___.date
+        #if os(macOS)
+        if let imageData = ___VARIABLE_modelVariableName___.imageData {
+            image = NSImage(data: imageData)
+        }
+        #else
+        if let imageData = ___VARIABLE_modelVariableName___.imageData {
+            image = UIImage(data: imageData)
+        }
+        #endif
     }
 }
 

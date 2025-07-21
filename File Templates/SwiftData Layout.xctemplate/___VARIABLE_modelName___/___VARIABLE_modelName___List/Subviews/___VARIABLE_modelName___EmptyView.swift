@@ -14,11 +14,11 @@ struct ___VARIABLE_modelName___EmptyView: View {
 
     var body: some View {
         ContentView(
-            image: nil,
-            title: "No items",
-            subtitle: "Add the first item",
+            image: Illustration.Objects.document,
+            title: "No ___VARIABLE_modelPluralVariableName___",
+            subtitle: "Add your first ___VARIABLE_modelVariableName___ to get started",
             primaryButton: .primary(
-                "Add item",
+                "Add ___VARIABLE_modelName___",
                 action: {
                     action()
                 }))
