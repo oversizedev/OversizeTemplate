@@ -43,6 +43,20 @@
 			<key>NotPersisted</key>
 			<true/>
 		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>title</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Title:</string>
+			<key>Description</key>
+			<string>Page title</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+		</dict>
 	</array>
 </dict>
 </plist>

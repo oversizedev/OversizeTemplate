@@ -49,6 +49,6 @@ public struct ___VARIABLE_modelName___RootView: View {
             ___VARIABLE_modelName___ListScreen.build()
                 .navigationDestinationAutoReceive(___VARIABLE_modelName___Destinations.self)
         }
-        .systemServices()
+        .coreServices()
     }
 }

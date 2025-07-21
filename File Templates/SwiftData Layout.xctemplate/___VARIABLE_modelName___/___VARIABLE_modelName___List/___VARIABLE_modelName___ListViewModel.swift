@@ -122,7 +122,7 @@ extension ___VARIABLE_modelName___ListViewModel {
 
     private func fetch___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
         .success([
-            .init(id: UUID(), name: "___VARIABLE_modelName___ 1"),
+            .init(id: UUID(), name: "___VARIABLE_modelName___ 1", color: Color.red, date: Date()),
         ])
     }
 }
