@@ -12,7 +12,7 @@ public final class ___VARIABLE_modelName___: Identifiable, Equatable, @unchecked
     @Attribute(.externalStorage)
     public var imageData: Data?
 
-    // MARK: Basic Properties
+    // MARK: - Basic Properties
 
     public var name: String
     public var colorData: ColorData
@@ -22,7 +22,7 @@ public final class ___VARIABLE_modelName___: Identifiable, Equatable, @unchecked
     public var isArchive: Bool
     public var viewCount: Int
 
-    // MARK: Initializer
+    // MARK: - Initializer
 
     public init(
         id: UUID = UUID(),
@@ -37,13 +37,13 @@ public final class ___VARIABLE_modelName___: Identifiable, Equatable, @unchecked
     ) {
         self.id = id
         self.name = name
-        colorData = .init(color: color)
+        self.colorData = .init(color: color)
         self.date = date
         self.note = note
         self.isFavorite = isFavorite
         self.isArchive = isArchive
         self.viewCount = viewCount
-        imageData = image
+        self.imageData = image
     }
 }
 
