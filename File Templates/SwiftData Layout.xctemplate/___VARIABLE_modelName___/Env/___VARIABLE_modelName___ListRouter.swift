@@ -6,11 +6,13 @@ import SwiftUI
 
 public enum ___VARIABLE_modelName___Destinations {
     case ___VARIABLE_modelPluralVariableName___List
+    case ___VARIABLE_modelPluralVariableName___Archive
+    case ___VARIABLE_modelPluralVariableName___Favorites
     case ___VARIABLE_modelVariableName___Details(id: UUID)
     case ___VARIABLE_modelVariableName___Details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
-    case ___VARIABLE_modelVariableName___create
-    case ___VARIABLE_modelVariableName___Edit(id: UUID)
-    case ___VARIABLE_modelVariableName___Edit___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
+    case ___VARIABLE_modelVariableName___create(callback: (___VARIABLE_modelName___) -> Void = { _ in })
+    case ___VARIABLE_modelVariableName___Edit(id: UUID, callback: (___VARIABLE_modelName___) -> Void = { _ in })
+    case ___VARIABLE_modelVariableName___Edit___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, callback: (___VARIABLE_modelName___) -> Void = { _ in })
 }
 
 extension ___VARIABLE_modelName___Destinations: NavigationDestination {
@@ -18,16 +20,20 @@ extension ___VARIABLE_modelName___Destinations: NavigationDestination {
         switch self {
         case .___VARIABLE_modelPluralVariableName___List:
             ___VARIABLE_modelName___ListScreen.build()
+        case .___VARIABLE_modelPluralVariableName___Archive:
+            ___VARIABLE_modelName___ListScreen.buildArchive()
+        case .___VARIABLE_modelPluralVariableName___Favorites:
+            ___VARIABLE_modelName___ListScreen.buildFavorites()
         case let .___VARIABLE_modelVariableName___Details(id):
             ___VARIABLE_modelName___DetailScreen.build(id: id)
         case let .___VARIABLE_modelVariableName___Details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___):
             ___VARIABLE_modelName___DetailScreen.build(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
-        case .___VARIABLE_modelVariableName___create:
-            ___VARIABLE_modelName___EditScreen.build()
-        case let .___VARIABLE_modelVariableName___Edit(id: id):
-            ___VARIABLE_modelName___EditScreen.buildEdit(id: id)
-        case let .___VARIABLE_modelVariableName___Edit___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___):
-            ___VARIABLE_modelName___EditScreen.buildEdit(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+        case let .___VARIABLE_modelVariableName___create(callback):
+            ___VARIABLE_modelName___EditScreen.build(callback: callback)
+        case let .___VARIABLE_modelVariableName___Edit(id: id, callback):
+            ___VARIABLE_modelName___EditScreen.buildEdit(id: id, callback: callback)
+        case let .___VARIABLE_modelVariableName___Edit___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___, callback):
+            ___VARIABLE_modelName___EditScreen.buildEdit(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___, callback: callback)
         }
     }
 
@@ -49,6 +55,6 @@ public struct ___VARIABLE_modelName___RootView: View {
             ___VARIABLE_modelName___ListScreen.build()
                 .navigationDestinationAutoReceive(___VARIABLE_modelName___Destinations.self)
         }
-        .systemServices()
+        .coreServices()
     }
 }
