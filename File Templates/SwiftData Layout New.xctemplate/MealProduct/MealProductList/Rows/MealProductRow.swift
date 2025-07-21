@@ -25,12 +25,20 @@ struct MealProductRow: View {
 
     var body: some View {
         Row(
-            "Title",
-            subtitle: isCompact ? nil : "Subtitle",
+            mealProduct.name,
+            subtitle: isCompact ? nil : subtitle,
             action: action
         )
         #if os(macOS)
         .rowTextColor(isSelected ? Color.onPrimary : Color.onSurfacePrimary)
         #endif
+    }
+    
+    private var subtitle: String {
+        if mealProduct.calories > 0 {
+            return "\(Int(mealProduct.calories)) kcal • \(mealProduct.category)"
+        } else {
+            return mealProduct.category
+        }
     }
 }

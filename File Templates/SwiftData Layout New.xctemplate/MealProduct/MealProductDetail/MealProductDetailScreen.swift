@@ -66,15 +66,31 @@ public struct MealProductDetailScreen: View {
     }
 
     private var cover: some View {
-        VStack {
-            Text("MealProduct Cover")
+        VStack(spacing: .medium) {
+            if let image = viewState.mealProductState.result?.image {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 200)
+                    .clipped()
+            } else {
+                VStack {
+                    Image.Base.photo.icon(.large)
+                        .foregroundColor(.onSurfaceSecondary)
+                    
+                    Text("No Image")
+                        .caption(.medium)
+                        .foregroundColor(.onSurfaceSecondary)
+                }
+                .frame(height: 200)
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity)
         .background {
             LinearGradient(
                 colors: [
                     Color.surfacePrimary,
-                    Color.blue,
+                    viewState.mealProductState.result?.color ?? .blue,
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -83,22 +99,94 @@ public struct MealProductDetailScreen: View {
     }
 
     private func content(_ mealProduct: MealProduct) -> some View {
-        LeadingVStack {
-            Row(mealProduct.name ?? "Untitled")
+        LeadingVStack(spacing: .medium) {
+            // Basic Information
+            VStack(alignment: .leading, spacing: .small) {
+                Row(mealProduct.name)
+                    .headline(.large)
+                
+                if let brand = mealProduct.brand {
+                    Row("Brand", subtitle: brand)
+                }
+                
+                Row("Category", subtitle: mealProduct.category)
+                Row("Serving Size", subtitle: mealProduct.servingSize)
+                
+                if let note = mealProduct.note, !note.isEmpty {
+                    Row("Notes", subtitle: note)
+                }
+            }
+            .surfaceContentMargins()
+            .surface(backgroundColor: .surfaceSecondary)
             
-            // Add more content based on your model properties
-            LazyVStack(spacing: 0) {
-                ForEach(1 ... 10, id: \.self) { item in
-                    Button {} label: {
-                        VStack(spacing: 0) {
-                            Text("Item \(item)")
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                        }
-                        .clipShape(Rectangle())
+            // Nutrition Information
+            GroupBox("Nutrition Information") {
+                VStack(spacing: .small) {
+                    Row("Calories", trailing: {
+                        Text("\(Int(mealProduct.calories)) kcal")
+                            .subheadline(.medium)
+                    })
+                    
+                    Divider()
+                    
+                    Row("Protein", trailing: {
+                        Text("\(mealProduct.protein, specifier: "%.1f")g")
+                            .subheadline(.medium)
+                    })
+                    
+                    Row("Carbohydrates", trailing: {
+                        Text("\(mealProduct.carbs, specifier: "%.1f")g")
+                            .subheadline(.medium)
+                    })
+                    
+                    Row("Fat", trailing: {
+                        Text("\(mealProduct.fat, specifier: "%.1f")g")
+                            .subheadline(.medium)
+                    })
+                    
+                    if let fiber = mealProduct.fiber, fiber > 0 {
+                        Row("Fiber", trailing: {
+                            Text("\(fiber, specifier: "%.1f")g")
+                                .subheadline(.medium)
+                        })
+                    }
+                    
+                    if let sugar = mealProduct.sugar, sugar > 0 {
+                        Row("Sugar", trailing: {
+                            Text("\(sugar, specifier: "%.1f")g")
+                                .subheadline(.medium)
+                        })
+                    }
+                    
+                    if let sodium = mealProduct.sodium, sodium > 0 {
+                        Row("Sodium", trailing: {
+                            Text("\(sodium, specifier: "%.1f")mg")
+                                .subheadline(.medium)
+                        })
                     }
                 }
+            }
+            .surfaceContentMargins()
+            .surface(backgroundColor: .surfaceSecondary)
+            
+            // Additional Information
+            if mealProduct.viewCount > 0 || mealProduct.isFavorite {
+                VStack(alignment: .leading, spacing: .small) {
+                    if mealProduct.isFavorite {
+                        Row("Favorite", trailing: {
+                            Image.Base.heart.icon(.accent)
+                        })
+                    }
+                    
+                    if mealProduct.viewCount > 0 {
+                        Row("View Count", trailing: {
+                            Text("\(mealProduct.viewCount)")
+                                .subheadline(.medium)
+                        })
+                    }
+                }
+                .surfaceContentMargins()
+                .surface(backgroundColor: .surfaceSecondary)
             }
         }
     }

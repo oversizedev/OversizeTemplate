@@ -64,7 +64,23 @@ public struct MealProductEditScreen: View {
         VStack(spacing: .small) {
             titleField
 
+            categoryField
+            
+            servingSizeField
+            
+            brandField
+
             noteField
+            
+            GroupBox("Nutrition Information") {
+                VStack(spacing: .small) {
+                    caloriesField
+                    
+                    macroFields
+                    
+                    optionalNutritionFields
+                }
+            }
 
             #if !os(tvOS)
                 urlField
@@ -92,7 +108,119 @@ private extension MealProductEditScreen {
             .textFieldStyle(.placeholder("Name", text: $viewState.name))
             .focused($focusedField, equals: .name)
             .submitLabel(.continue)
-            .onSubmit { focusedField = .note }
+            .onSubmit { focusedField = .category }
+    }
+    
+    private var categoryField: some View {
+        TextField("Category", text: $viewState.category)
+            .textFieldStyle(.placeholder("Category (e.g., Dairy, Meat, Vegetables)", text: $viewState.category))
+            .focused($focusedField, equals: .category)
+            .submitLabel(.continue)
+            .onSubmit { focusedField = .servingSize }
+    }
+    
+    private var servingSizeField: some View {
+        TextField("Serving Size", text: $viewState.servingSize)
+            .textFieldStyle(.placeholder("Serving Size (e.g., 100g, 1 cup)", text: $viewState.servingSize))
+            .focused($focusedField, equals: .servingSize)
+            .submitLabel(.continue)
+            .onSubmit { focusedField = .brand }
+    }
+    
+    private var brandField: some View {
+        TextField("Brand", text: Binding(
+            get: { viewState.brand ?? "" },
+            set: { viewState.brand = $0.isEmpty ? nil : $0 }
+        ))
+        .textFieldStyle(.placeholder("Brand (optional)", text: Binding(
+            get: { viewState.brand ?? "" },
+            set: { _ in }
+        )))
+        .focused($focusedField, equals: .brand)
+        .submitLabel(.continue)
+        .onSubmit { focusedField = .note }
+    }
+    
+    private var caloriesField: some View {
+        HStack {
+            Text("Calories")
+            Spacer()
+            TextField("0", value: $viewState.calories, format: .number)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 80)
+                .keyboardType(.decimalPad)
+        }
+    }
+    
+    private var macroFields: some View {
+        VStack(spacing: .small) {
+            HStack {
+                Text("Protein (g)")
+                Spacer()
+                TextField("0", value: $viewState.protein, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 80)
+                    .keyboardType(.decimalPad)
+            }
+            
+            HStack {
+                Text("Carbs (g)")
+                Spacer()
+                TextField("0", value: $viewState.carbs, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 80)
+                    .keyboardType(.decimalPad)
+            }
+            
+            HStack {
+                Text("Fat (g)")
+                Spacer()
+                TextField("0", value: $viewState.fat, format: .number)
+                    .textFieldStyle(.roundedBorder)
+                    .frame(width: 80)
+                    .keyboardType(.decimalPad)
+            }
+        }
+    }
+    
+    private var optionalNutritionFields: some View {
+        VStack(spacing: .small) {
+            HStack {
+                Text("Fiber (g)")
+                Spacer()
+                TextField("0", value: Binding(
+                    get: { viewState.fiber ?? 0 },
+                    set: { viewState.fiber = $0 == 0 ? nil : $0 }
+                ), format: .number)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 80)
+                .keyboardType(.decimalPad)
+            }
+            
+            HStack {
+                Text("Sugar (g)")
+                Spacer()
+                TextField("0", value: Binding(
+                    get: { viewState.sugar ?? 0 },
+                    set: { viewState.sugar = $0 == 0 ? nil : $0 }
+                ), format: .number)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 80)
+                .keyboardType(.decimalPad)
+            }
+            
+            HStack {
+                Text("Sodium (mg)")
+                Spacer()
+                TextField("0", value: Binding(
+                    get: { viewState.sodium ?? 0 },
+                    set: { viewState.sodium = $0 == 0 ? nil : $0 }
+                ), format: .number)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 80)
+                .keyboardType(.decimalPad)
+            }
+        }
     }
 
     private var noteField: some View {

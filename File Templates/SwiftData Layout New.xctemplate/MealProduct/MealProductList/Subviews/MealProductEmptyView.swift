@@ -15,10 +15,10 @@ struct MealProductEmptyView: View {
     var body: some View {
         ContentView(
             image: nil,
-            title: "No items",
-            subtitle: "Add the first item",
+            title: "No meal products",
+            subtitle: "Add your first meal product to get started",
             primaryButton: .primary(
-                "Add item",
+                "Add Meal Product",
                 action: {
                     action()
                 }))
