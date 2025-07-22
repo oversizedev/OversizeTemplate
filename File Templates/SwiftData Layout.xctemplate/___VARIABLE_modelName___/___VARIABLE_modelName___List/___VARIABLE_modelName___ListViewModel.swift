@@ -148,7 +148,8 @@ public extension ___VARIABLE_modelName___ListViewModel {
             }
         }
         
-        if !await state.isSearch {
+        let isSearch = await state.isSearch
+        if !isSearch {
             await fetchData()
         }
     }
@@ -204,7 +205,8 @@ public extension ___VARIABLE_modelName___ListViewModel {
     }
 
     func onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        if await state.isSelectionMode {
+        let isSelectionMode = await state.isSelectionMode
+        if isSelectionMode {
             await onTapSelectItem(___VARIABLE_modelVariableName___)
         } else {
             await state.update {
@@ -307,7 +309,8 @@ public extension ___VARIABLE_modelName___ListViewModel {
 
     func onTapBatchDelete() async {
         let selectedIds = await state.selectedItems
-        guard let allItems = await state.___VARIABLE_modelPluralVariableName___State.result else { return }
+        let allItemsState = await state.___VARIABLE_modelPluralVariableName___State
+        guard let allItems = allItemsState.result else { return }
         let selectedItems = allItems.filter { selectedIds.contains($0.id) }
         
         await state.update {
@@ -333,7 +336,8 @@ public extension ___VARIABLE_modelName___ListViewModel {
 
     func onTapBatchFavorite(_ isFavorite: Bool) async {
         let selectedIds = await state.selectedItems
-        guard let allItems = await state.___VARIABLE_modelPluralVariableName___State.result else { return }
+        let allItemsState = await state.___VARIABLE_modelPluralVariableName___State
+        guard let allItems = allItemsState.result else { return }
         let selectedItems = allItems.filter { selectedIds.contains($0.id) }
         
         let result = await storageService.batchToggleFavorite___VARIABLE_modelName___(selectedItems, isFavorite: isFavorite)
@@ -353,7 +357,8 @@ public extension ___VARIABLE_modelName___ListViewModel {
 
     func onTapBatchArchive(_ isArchive: Bool) async {
         let selectedIds = await state.selectedItems
-        guard let allItems = await state.___VARIABLE_modelPluralVariableName___State.result else { return }
+        let allItemsState = await state.___VARIABLE_modelPluralVariableName___State
+        guard let allItems = allItemsState.result else { return }
         let selectedItems = allItems.filter { selectedIds.contains($0.id) }
         
         let result = await storageService.batchToggleArchive___VARIABLE_modelName___(selectedItems, isArchive: isArchive)
@@ -409,7 +414,8 @@ public extension ___VARIABLE_modelName___ListViewModel {
 extension ___VARIABLE_modelName___ListViewModel {
     private func fetchData(force: Bool = false) async {
         // Set loading state if forced or if currently idle
-        if force || await state.___VARIABLE_modelPluralVariableName___State.isIdle {
+        let itemsStateIsIdle = await state.___VARIABLE_modelPluralVariableName___State.isIdle
+        if force || itemsStateIsIdle {
             await state.update {
                 $0.___VARIABLE_modelPluralVariableName___State = .loading
             }

@@ -59,7 +59,8 @@ public actor ___VARIABLE_modelName___DetailViewModel {
 
 public extension ___VARIABLE_modelName___DetailViewModel {
     func onAppear() async {
-        if await state.___VARIABLE_modelVariableName___State.result == nil {
+        let resultState = await state.___VARIABLE_modelVariableName___State
+        if resultState.result == nil {
             await fetchData()
         }
     }
@@ -69,7 +70,8 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     func onEdit() async {
-        guard await state.canEdit else { return }
+        let canEdit = await state.canEdit
+        guard canEdit else { return }
         
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Edit(id: $0.___VARIABLE_modelVariableName___Id) { [weak self] updated___VARIABLE_modelName___ in
@@ -83,7 +85,8 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     func onDelete() async {
-        guard await state.canDelete else { return }
+        let canDelete = await state.canDelete
+        guard canDelete else { return }
         
         await state.update {
             $0.showDeleteConfirmation()
@@ -91,7 +94,8 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     func onConfirmDelete() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else { return }
+        let itemState = await state.___VARIABLE_modelVariableName___State
+        guard let ___VARIABLE_modelVariableName___ = itemState.result else { return }
 
         await state.update {
             $0.setProcessing(true)
@@ -116,8 +120,10 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     func onDuplicate() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result,
-              await state.canToggleActions else { return }
+        let itemState = await state.___VARIABLE_modelVariableName___State
+        let canToggleActions = await state.canToggleActions
+        guard let ___VARIABLE_modelVariableName___ = itemState.result,
+              canToggleActions else { return }
 
         await state.update {
             $0.setProcessing(true)
@@ -140,8 +146,10 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     func onToggleFavorite() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result,
-              await state.canToggleActions else { return }
+        let itemState = await state.___VARIABLE_modelVariableName___State
+        let canToggleActions = await state.canToggleActions
+        guard let ___VARIABLE_modelVariableName___ = itemState.result,
+              canToggleActions else { return }
 
         await state.update {
             $0.setProcessing(true)
@@ -164,8 +172,10 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     func onToggleArchive() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result,
-              await state.canToggleActions else { return }
+        let itemState = await state.___VARIABLE_modelVariableName___State
+        let canToggleActions = await state.canToggleActions
+        guard let ___VARIABLE_modelVariableName___ = itemState.result,
+              canToggleActions else { return }
 
         await state.update {
             $0.setProcessing(true)
@@ -192,7 +202,8 @@ public extension ___VARIABLE_modelName___DetailViewModel {
 
 public extension ___VARIABLE_modelName___DetailViewModel {
     private func fetchData(force: Bool = false) async {
-        if force || await state.___VARIABLE_modelVariableName___State.isIdle {
+        let itemStateIsIdle = await state.___VARIABLE_modelVariableName___State.isIdle
+        if force || itemStateIsIdle {
             await state.update {
                 $0.___VARIABLE_modelVariableName___State = .loading
             }

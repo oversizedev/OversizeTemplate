@@ -77,7 +77,8 @@ public actor ___VARIABLE_modelName___EditViewModel {
 
 public extension ___VARIABLE_modelName___EditViewModel {
     func onAppear() async {
-        switch await state.mode {
+        let mode = await state.mode
+        switch mode {
         case .editId:
             await fetchData()
         case .create, .edit:
@@ -123,7 +124,8 @@ public extension ___VARIABLE_modelName___EditViewModel {
     func onSave() async {
         await onValidateAll()
         
-        guard await state.isValidForm else {
+        let isValidForm = await state.isValidForm
+        guard isValidForm else {
             return
         }
 
@@ -154,7 +156,8 @@ public extension ___VARIABLE_modelName___EditViewModel {
     }
 
     func onConfirmDelete() async {
-        guard case let .edit(___VARIABLE_modelVariableName___) = await state.mode else { return }
+        let mode = await state.mode
+        guard case let .edit(___VARIABLE_modelVariableName___) = mode else { return }
 
         await state.update {
             $0.isDeleting = true
@@ -178,7 +181,8 @@ public extension ___VARIABLE_modelName___EditViewModel {
     }
 
     func onDuplicate() async {
-        guard case let .edit(___VARIABLE_modelVariableName___) = await state.mode else { return }
+        let mode = await state.mode
+        guard case let .edit(___VARIABLE_modelVariableName___) = mode else { return }
 
         let result = await storageService.duplicate___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         
@@ -254,14 +258,13 @@ public extension ___VARIABLE_modelName___EditViewModel {
     }
 
     func save___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
-        let currentState = await state
-        let mode = currentState.mode
-        let ___VARIABLE_modelVariableName___Id = currentState.___VARIABLE_modelVariableName___Id
-        let name = currentState.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let note = currentState.note.isEmpty ? nil : currentState.note
-        let color = currentState.color
-        let date = currentState.date
-        let imageData = currentState.imageData
+        let mode = await state.mode
+        let ___VARIABLE_modelVariableName___Id = await state.___VARIABLE_modelVariableName___Id
+        let name = await state.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let note = await state.note.isEmpty ? nil : await state.note
+        let color = await state.color
+        let date = await state.date
+        let imageData = await state.imageData
 
         switch mode {
         case .create:
@@ -282,7 +285,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
                 return .failure(error)
             }
             
-        case .edit(let ___VARIABLE_modelVariableName___), .editId:
+        case .edit(let ___VARIABLE_modelVariableName___):
             // For edit mode, validate name uniqueness excluding current item
             let validationResult = await storageService.validate___VARIABLE_modelName___(
                 name: name,
@@ -291,31 +294,40 @@ public extension ___VARIABLE_modelName___EditViewModel {
             
             switch validationResult {
             case .success:
-                if case .edit(let existing___VARIABLE_modelName___) = mode {
+                return await storageService.update___VARIABLE_modelName___(
+                    ___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___,
+                    name: name,
+                    color: color,
+                    date: date,
+                    image: imageData,
+                    note: note
+                )
+            case .failure(let error):
+                return .failure(error)
+            }
+        case .editId:
+            // For editId case, fetch the item first
+            let fetchResult = await storageService.fetch___VARIABLE_modelName___(id: ___VARIABLE_modelVariableName___Id)
+            switch fetchResult {
+            case .success(let ___VARIABLE_modelVariableName___):
+                // Validate name uniqueness excluding current item
+                let validationResult = await storageService.validate___VARIABLE_modelName___(
+                    name: name,
+                    excludingId: ___VARIABLE_modelVariableName___Id
+                )
+                
+                switch validationResult {
+                case .success:
                     return await storageService.update___VARIABLE_modelName___(
-                        ___VARIABLE_modelVariableName___: existing___VARIABLE_modelName___,
+                        ___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___,
                         name: name,
                         color: color,
                         date: date,
                         image: imageData,
                         note: note
                     )
-                } else {
-                    // For editId case, fetch the item first
-                    let fetchResult = await storageService.fetch___VARIABLE_modelName___(id: ___VARIABLE_modelVariableName___Id)
-                    switch fetchResult {
-                    case .success(let ___VARIABLE_modelVariableName___):
-                        return await storageService.update___VARIABLE_modelName___(
-                            ___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___,
-                            name: name,
-                            color: color,
-                            date: date,
-                            image: imageData,
-                            note: note
-                        )
-                    case .failure(let error):
-                        return .failure(error)
-                    }
+                case .failure(let error):
+                    return .failure(error)
                 }
             case .failure(let error):
                 return .failure(error)
