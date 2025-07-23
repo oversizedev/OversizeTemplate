@@ -79,13 +79,12 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         }
     }
 
-    public func delete___VARIABLE_modelName___(_ account: ___VARIABLE_modelName___) {
-        context.delete(account)
+    public func delete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
+        context.delete(___VARIABLE_modelVariableName___)
         do {
             try context.save()
-
         } catch {
-            logError("Error deleting account:", error: error)
+            logError("Error deleting ___VARIABLE_modelVariableName___:", error: error)
         }
     }
 

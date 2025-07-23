@@ -1,6 +1,7 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import FactoryKit
 import OversizeCore
 import OversizeKit
 import OversizeModels
@@ -17,6 +18,9 @@ extension ___VARIABLE_modelName___DetailViewModel {
 }
 
 public actor ___VARIABLE_modelName___DetailViewModel {
+    /// Services
+    @Injected(\.___VARIABLE_modelVariableName___StorageService) var storageService
+    
     /// ViewState
     public var state: ___VARIABLE_modelName___DetailViewState
 
@@ -59,10 +63,17 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     private func delete___VARIABLE_modelName___() async {
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else { return }
+        
         await state.update { viewState in
             viewState.alert = .delete {
-                logDeleted("___VARIABLE_modelName___")
-                viewState.isDismissed = true
+                Task {
+                    await storageService.delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
+                    logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
+                    await MainActor.run {
+                        viewState.isDismissed = true
+                    }
+                }
             }
         }
     }
@@ -86,6 +97,6 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     private func fetch___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
-        .failure(AppError.network(type: .unknown))
+        await storageService.fetch___VARIABLE_modelName___(id: await state.___VARIABLE_modelVariableName___Id)
     }
 }

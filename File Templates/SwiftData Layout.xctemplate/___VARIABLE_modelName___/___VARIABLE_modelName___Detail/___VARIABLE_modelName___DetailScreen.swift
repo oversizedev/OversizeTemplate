@@ -66,40 +66,125 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
     }
 
     private var cover: some View {
-        VStack {
-            Text("___VARIABLE_modelName___ Cover")
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background {
-            LinearGradient(
-                colors: [
-                    Color.surfacePrimary,
-                    Color.blue,
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+        if case let .result(___VARIABLE_modelVariableName___) = viewState.___VARIABLE_modelVariableName___State {
+            VStack {
+                if let image = ___VARIABLE_modelVariableName___.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    VStack(spacing: .medium) {
+                        Circle()
+                            .fill(___VARIABLE_modelVariableName___.color)
+                            .frame(width: 60, height: 60)
+                        
+                        Text(___VARIABLE_modelVariableName___.name)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundStyle(Color.onSurfacePrimary)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background {
+                LinearGradient(
+                    colors: [
+                        ___VARIABLE_modelVariableName___.color.opacity(0.3),
+                        ___VARIABLE_modelVariableName___.color,
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
+        } else {
+            VStack {
+                Text("___VARIABLE_modelName___ Cover")
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background {
+                LinearGradient(
+                    colors: [
+                        Color.surfacePrimary,
+                        Color.blue,
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
         }
     }
 
     private func content(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         LeadingVStack {
-            Row(___VARIABLE_modelVariableName___.name ?? "Untitled")
-            
-            // Add more content based on your model properties
-            LazyVStack(spacing: 0) {
-                ForEach(1 ... 10, id: \.self) { item in
-                    Button {} label: {
-                        VStack(spacing: 0) {
-                            Text("Item \(item)")
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                        }
-                        .clipShape(Rectangle())
+            // Header Info
+            HStack {
+                VStack(alignment: .leading, spacing: .xSmall) {
+                    Text(___VARIABLE_modelVariableName___.name)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundStyle(Color.onSurfacePrimary)
+                    
+                    Text(___VARIABLE_modelVariableName___.date.formatted(date: .complete, time: .omitted))
+                        .font(.subheadline)
+                        .foregroundStyle(Color.onSurfaceSecondary)
+                }
+                
+                Spacer()
+                
+                HStack(spacing: .small) {
+                    if ___VARIABLE_modelVariableName___.isFavorite {
+                        Image.Base.heart.icon(.accent, size: .medium)
                     }
+                    
+                    if ___VARIABLE_modelVariableName___.isArchive {
+                        Image.Base.archive.icon(.onSurfaceSecondary, size: .medium)
+                    }
+                    
+                    Circle()
+                        .fill(___VARIABLE_modelVariableName___.color)
+                        .frame(width: 24, height: 24)
                 }
             }
+            .padding(.medium)
+            
+            // Note Section
+            if let note = ___VARIABLE_modelVariableName___.note, !note.isEmpty {
+                VStack(alignment: .leading, spacing: .small) {
+                    Text("Note")
+                        .font(.headline)
+                        .foregroundStyle(Color.onSurfacePrimary)
+                    
+                    Text(note)
+                        .font(.body)
+                        .foregroundStyle(Color.onSurfaceSecondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.medium)
+                .background {
+                    RoundedRectangle(cornerRadius: .medium)
+                        .fill(Color.surfaceSecondary)
+                }
+                .padding(.horizontal, .medium)
+            }
+            
+            // Additional Info
+            LazyVStack(spacing: 0) {
+                Row("Created", subtitle: ___VARIABLE_modelVariableName___.date.formatted(date: .complete, time: .shortened))
+                
+                Row("View Count", subtitle: "\(___VARIABLE_modelVariableName___.viewCount)")
+                
+                if ___VARIABLE_modelVariableName___.isArchive {
+                    Row("Status", subtitle: "Archived")
+                        .rowTextColor(.orange)
+                }
+                
+                if ___VARIABLE_modelVariableName___.isFavorite {
+                    Row("Favorite", subtitle: "Yes")
+                        .rowTextColor(.accent)
+                }
+            }
+            .padding(.medium)
         }
     }
 

@@ -17,7 +17,10 @@ extension ___VARIABLE_modelName___ListViewModel {
         case onTapSearch
         case onTapCreate___VARIABLE_modelName___
         case onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
+        case onTapEdit___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
         case onTapDelete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
+        case onTapToggleFavorite___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
+        case onTapToggleArchive___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
         case onTapDisplayType(_ displayType: ___VARIABLE_modelName___ListDisplayType)
         case onChangeSearchTerm(oldValue: String, newValue: String)
     }
@@ -25,7 +28,7 @@ extension ___VARIABLE_modelName___ListViewModel {
 
 public actor ___VARIABLE_modelName___ListViewModel {
     /// Services
-    /// @Injected(\.service) var service
+    @Injected(\.___VARIABLE_modelVariableName___StorageService) var storageService
 
     /// ViewState
     public var state: ___VARIABLE_modelName___ListViewState
@@ -51,6 +54,12 @@ public actor ___VARIABLE_modelName___ListViewModel {
             await onTapDisplayType(displayType)
         case let .onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
             await onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
+        case let .onTapEdit___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
+            await onTapEdit___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
+        case let .onTapToggleFavorite___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
+            await onTapToggleFavorite___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
+        case let .onTapToggleArchive___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
+            await onTapToggleArchive___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         case .onTapCreate___VARIABLE_modelName___:
             await onCreate()
         }
@@ -93,11 +102,37 @@ public extension ___VARIABLE_modelName___ListViewModel {
             $0.destination = .___VARIABLE_modelVariableName___Details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
         }
     }
+    
+    func onTapEdit___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
+        await state.update {
+            $0.destination = .___VARIABLE_modelVariableName___Edit___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+        }
+    }
+    
+    func onTapToggleFavorite___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
+        await storageService.update___VARIABLE_modelName___(
+            ___VARIABLE_modelName___: ___VARIABLE_modelVariableName___,
+            isFavorite: !___VARIABLE_modelVariableName___.isFavorite
+        )
+        await fetchData(force: true)
+    }
+    
+    func onTapToggleArchive___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
+        await storageService.update___VARIABLE_modelName___(
+            ___VARIABLE_modelName___: ___VARIABLE_modelVariableName___,
+            isArchive: !___VARIABLE_modelVariableName___.isArchive
+        )
+        await fetchData(force: true)
+    }
 
     private func delete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update {
             $0.alert = .delete {
-                logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
+                Task {
+                    await storageService.delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
+                    await fetchData(force: true)
+                    logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
+                }
             }
         }
     }
@@ -121,8 +156,6 @@ extension ___VARIABLE_modelName___ListViewModel {
     }
 
     private func fetch___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
-        .success([
-            .init(id: UUID(), name: "___VARIABLE_modelName___ 1", color: Color.red, date: Date()),
-        ])
+        await storageService.fetch___VARIABLE_modelName___()
     }
 }

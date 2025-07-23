@@ -25,12 +25,29 @@ struct ___VARIABLE_modelName___Row: View {
 
     var body: some View {
         Row(
-            "Title",
-            subtitle: isCompact ? nil : "Subtitle",
+            ___VARIABLE_modelVariableName___.name,
+            subtitle: isCompact ? nil : subtitle,
+            leadingAccessory: {
+                Circle()
+                    .fill(___VARIABLE_modelVariableName___.color)
+                    .frame(width: 12, height: 12)
+            },
+            trailingAccessory: {
+                if ___VARIABLE_modelVariableName___.isFavorite {
+                    Image.Base.heart.icon(.accent)
+                }
+            },
             action: action
         )
         #if os(macOS)
         .rowTextColor(isSelected ? Color.onPrimary : Color.onSurfacePrimary)
         #endif
+    }
+    
+    private var subtitle: String? {
+        if let note = ___VARIABLE_modelVariableName___.note, !note.isEmpty {
+            return note
+        }
+        return ___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .omitted)
     }
 }

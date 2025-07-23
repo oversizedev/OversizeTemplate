@@ -60,23 +60,27 @@ public struct ___VARIABLE_modelName___ListScreen: View {
 
     @ViewBuilder
     private func content(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) -> some View {
-        switch viewState.storage.displayType {
-        case .list:
-            LazyVStack(spacing: .zero) {
-                ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
-                    ___VARIABLE_modelName___Row(___VARIABLE_modelVariableName___, isCompact: viewState.storage.isCompactRow) {
-                        reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+        if ___VARIABLE_modelPluralVariableName___.isEmpty {
+            emptyContent
+        } else {
+            switch viewState.storage.displayType {
+            case .list:
+                LazyVStack(spacing: .zero) {
+                    ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
+                        ___VARIABLE_modelName___Row(___VARIABLE_modelVariableName___, isCompact: viewState.storage.isCompactRow) {
+                            reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                        }
+                        .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                     }
-                    .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                 }
-            }
-        case .grid:
-            LazyVGrid(columns: [.init(.adaptive(minimum: 320), spacing: 12)], spacing: 12) {
-                ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
-                    ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___) {
-                        reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+            case .grid:
+                LazyVGrid(columns: [.init(.adaptive(minimum: 320), spacing: 12)], spacing: 12) {
+                    ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
+                        ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___) {
+                            reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                        }
+                        .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                     }
-                    .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                 }
             }
         }
@@ -159,11 +163,39 @@ public struct ___VARIABLE_modelName___ListScreen: View {
     #endif
 
     private func contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
-        Button(role: .destructive, action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)) }) {
-            Label {
-                Text(L10n.Button.delete)
-            } icon: {
-                Image.Base.delete.icon(.error)
+        Group {
+            Button(action: { reducer.callAsFunction(.onTapEdit___VARIABLE_modelName___(___VARIABLE_modelVariableName___)) }) {
+                Label {
+                    Text(L10n.Button.edit)
+                } icon: {
+                    Image.Base.edit.icon()
+                }
+            }
+            
+            Button(action: { reducer.callAsFunction(.onTapToggleFavorite___VARIABLE_modelName___(___VARIABLE_modelVariableName___)) }) {
+                Label {
+                    Text(___VARIABLE_modelVariableName___.isFavorite ? "Remove from Favorites" : "Add to Favorites")
+                } icon: {
+                    Image.Base.heart.icon(___VARIABLE_modelVariableName___.isFavorite ? .accent : .onSurfaceSecondary)
+                }
+            }
+            
+            Button(action: { reducer.callAsFunction(.onTapToggleArchive___VARIABLE_modelName___(___VARIABLE_modelVariableName___)) }) {
+                Label {
+                    Text(___VARIABLE_modelVariableName___.isArchive ? "Unarchive" : "Archive")
+                } icon: {
+                    Image.Base.archive.icon()
+                }
+            }
+            
+            Divider()
+            
+            Button(role: .destructive, action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)) }) {
+                Label {
+                    Text(L10n.Button.delete)
+                } icon: {
+                    Image.Base.delete.icon(.error)
+                }
             }
         }
     }
