@@ -89,10 +89,23 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
     }
 
     public func fetch___VARIABLE_modelName___() -> Result<[___VARIABLE_modelName___], AppError> {
+        fetch___VARIABLE_modelName___(sortBy: .date)
+    }
+    
+    public func fetch___VARIABLE_modelName___(sortBy: ___VARIABLE_modelName___SortType) -> Result<[___VARIABLE_modelName___], AppError> {
         do {
+            let sortDescriptor = switch sortBy {
+            case .name:
+                SortDescriptor(\___VARIABLE_modelName___.name, order: .forward)
+            case .date:
+                SortDescriptor(\___VARIABLE_modelName___.date, order: .reverse)
+            case .favorite:
+                SortDescriptor(\___VARIABLE_modelName___.isFavorite, order: .reverse)
+            }
+            
             let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
                 predicate: #Predicate { !$0.isArchive },
-                sortBy: [SortDescriptor(\___VARIABLE_modelName___.date, order: .reverse)]
+                sortBy: [sortDescriptor]
             )
             let ___VARIABLE_modelName___s = try context.fetch(descriptor)
             return .success(___VARIABLE_modelName___s)

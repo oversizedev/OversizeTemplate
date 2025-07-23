@@ -143,6 +143,26 @@ public struct ___VARIABLE_modelName___ListScreen: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    
+                    Divider()
+                    
+                    Picker("Sort", selection: $viewState.storage.sortType) {
+                        ForEach(___VARIABLE_modelName___SortType.allCases) { type in
+                            Text(type.title)
+                                .tag(type)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    
+                    Picker("Filter", selection: $viewState.storage.filterType) {
+                        ForEach(___VARIABLE_modelName___FilterType.allCases) { type in
+                            Text(type.title)
+                                .tag(type)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    
+                    Divider()
 
                     Button {
                         reducer.callAsFunction(.onTapSearch)

@@ -22,6 +22,8 @@ extension ___VARIABLE_modelName___ListViewModel {
         case onTapToggleFavorite___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
         case onTapToggleArchive___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
         case onTapDisplayType(_ displayType: ___VARIABLE_modelName___ListDisplayType)
+        case onTapSortType(_ sortType: ___VARIABLE_modelName___SortType)
+        case onTapFilterType(_ filterType: ___VARIABLE_modelName___FilterType)
         case onChangeSearchTerm(oldValue: String, newValue: String)
     }
 }
@@ -52,6 +54,10 @@ public actor ___VARIABLE_modelName___ListViewModel {
             await delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         case let .onTapDisplayType(displayType):
             await onTapDisplayType(displayType)
+        case let .onTapSortType(sortType):
+            await onTapSortType(sortType)
+        case let .onTapFilterType(filterType):
+            await onTapFilterType(filterType)
         case let .onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
             await onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         case let .onTapEdit___VARIABLE_modelName___(___VARIABLE_modelVariableName___):
@@ -77,7 +83,9 @@ public extension ___VARIABLE_modelName___ListViewModel {
         await fetchData(force: true)
     }
 
-    func onChangeSearchTerm(oldValue _: String, newValue _: String) async {}
+    func onChangeSearchTerm(oldValue _: String, newValue _: String) async {
+        await fetchData()
+    }
 
     func onTapSearch() async {
         await state.update {
@@ -95,6 +103,20 @@ public extension ___VARIABLE_modelName___ListViewModel {
         await state.update {
             $0.storage.displayType = displayType
         }
+    }
+    
+    func onTapSortType(_ sortType: ___VARIABLE_modelName___SortType) async {
+        await state.update {
+            $0.storage.sortType = sortType
+        }
+        await fetchData(force: true)
+    }
+    
+    func onTapFilterType(_ filterType: ___VARIABLE_modelName___FilterType) async {
+        await state.update {
+            $0.storage.filterType = filterType
+        }
+        await fetchData(force: true)
     }
 
     func onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
@@ -156,6 +178,25 @@ extension ___VARIABLE_modelName___ListViewModel {
     }
 
     private func fetch___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
-        await storageService.fetch___VARIABLE_modelName___()
+        let result = switch await state.storage.filterType {
+        case .all:
+            await storageService.fetch___VARIABLE_modelName___(sortBy: await state.storage.sortType)
+        case .favorites:
+            await storageService.fetchFavorite___VARIABLE_modelName___()
+        case .archived:
+            await storageService.fetchArchived___VARIABLE_modelName___()
+        }
+        
+        // Apply search filter if needed
+        if case let .success(___VARIABLE_modelPluralVariableName___) = result, !await state.searchTerm.isEmpty {
+            let searchTerm = await state.searchTerm.lowercased()
+            let filtered = ___VARIABLE_modelPluralVariableName___.filter { ___VARIABLE_modelVariableName___ in
+                ___VARIABLE_modelVariableName___.name.lowercased().contains(searchTerm) ||
+                (___VARIABLE_modelVariableName___.note?.lowercased().contains(searchTerm) ?? false)
+            }
+            return .success(filtered)
+        }
+        
+        return result
     }
 }

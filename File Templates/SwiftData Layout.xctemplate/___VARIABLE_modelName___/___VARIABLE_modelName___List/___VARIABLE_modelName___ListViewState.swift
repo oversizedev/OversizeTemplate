@@ -50,5 +50,11 @@ public extension ___VARIABLE_modelName___ListViewState {
 
         @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.isCompactMode)
         public var isCompactRow: Bool = false
+        
+        @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.sortType)
+        public var sortType: ___VARIABLE_modelName___SortType = .date
+        
+        @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.filterType)
+        public var filterType: ___VARIABLE_modelName___FilterType = .all
     }
 }
