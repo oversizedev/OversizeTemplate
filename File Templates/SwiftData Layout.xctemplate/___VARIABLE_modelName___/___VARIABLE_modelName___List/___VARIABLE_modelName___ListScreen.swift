@@ -38,7 +38,6 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             placement: .navigationBarDrawer(displayMode: .automatic)
         )
         .alert(item: $viewState.alert) { $0.alert }
-        .hud($viewState.hud)
         .task(priority: .background) { 
             await reducer(.onAppear)
         }

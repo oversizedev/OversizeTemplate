@@ -23,7 +23,7 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol, Sen
     public var isSearch: Bool = false
     public var destination: ___VARIABLE_modelName___Destinations?
     public var alert: AppAlert?
-    public var hud: HUDState = .idle
+
     
     /// Filtering and Sorting
     public var sortType: ___VARIABLE_modelName___SortType = .date

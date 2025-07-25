@@ -30,7 +30,7 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol, Sen
     /// User Interface
     public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
     public var focusedField: FocusField?
-    public var hud: HUDState = .idle
+
     public var alert: AppAlert?
     public var isDismissed: Bool = false
 
@@ -41,10 +41,6 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol, Sen
     /// Checks
     var isEmptyForm: Bool {
         name.isEmpty && note.isEmpty && url == nil
-    }
-
-    var isValidForm: Bool {
-        !name.isEmpty
     }
 
     /// View

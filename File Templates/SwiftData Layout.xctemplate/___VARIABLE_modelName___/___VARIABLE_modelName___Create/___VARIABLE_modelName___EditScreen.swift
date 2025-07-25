@@ -154,7 +154,6 @@ private extension ___VARIABLE_modelName___EditScreen {
             } label: {
                 Text(L10n.Button.save)
             }
-            .disabled(!viewState.isValidForm)
             #if !os(tvOS)
                 .keyboardShortcut(.defaultAction)
             #endif

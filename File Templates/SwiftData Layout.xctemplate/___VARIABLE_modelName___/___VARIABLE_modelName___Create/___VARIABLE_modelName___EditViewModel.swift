@@ -106,19 +106,6 @@ public extension ___VARIABLE_modelName___EditViewModel {
     }
 
     func onSave() async {
-        guard await state.isValidForm else {
-            await state.update {
-                $0.alert = AppAlert(
-                    title: "Invalid Form",
-                    subtitle: "Please fill in all required fields"
-                ) {}
-            }
-            return
-        }
-        
-        await state.update {
-            $0.hud = .loading(subtitle: "Saving...")
-        }
         
         let result: Result<___VARIABLE_modelName___, AppError>
         
@@ -129,9 +116,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
             result = await update___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         case .editId:
             guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
-                await state.update {
-                    $0.hud = .error(subtitle: "Failed to load ___VARIABLE_modelName___")
-                }
+                // Handle error case
                 return
             }
             result = await update___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
@@ -140,17 +125,10 @@ public extension ___VARIABLE_modelName___EditViewModel {
         switch result {
         case .success(let ___VARIABLE_modelVariableName___):
             await state.update {
-                $0.hud = .success(subtitle: "Saved successfully")
                 $0.isDismissed = true
             }
         case .failure(let error):
-            await state.update {
-                $0.hud = .error(subtitle: "Failed to save")
-                $0.alert = AppAlert(
-                    title: "Save Error",
-                    subtitle: error.localizedDescription
-                ) {}
-            }
+            // Handle error case
         }
     }
 }

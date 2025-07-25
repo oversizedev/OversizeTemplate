@@ -19,7 +19,7 @@ public final class ___VARIABLE_modelName___DetailViewState: ViewStateProtocol, S
     public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
     public var headerVisibleRatio: CGFloat = .zero
     public var offset: CGPoint = .zero
-    public var hud: HUDState = .idle
+
 
     // Routing
     public var destination: ___VARIABLE_modelName___Destinations?
