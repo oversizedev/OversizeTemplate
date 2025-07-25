@@ -30,7 +30,7 @@ extension ___VARIABLE_modelName___ListViewModel {
 
 public actor ___VARIABLE_modelName___ListViewModel {
     /// Services
-    /// @Injected(\.service) var service
+    @Injected(\.___VARIABLE_modelVariableName___StorageService) var storageService
 
     /// ViewState
     public var state: ___VARIABLE_modelName___ListViewState
@@ -132,20 +132,31 @@ public extension ___VARIABLE_modelName___ListViewModel {
     }
 
     func onTapToggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        // TODO: Implement toggle favorite logic
+        await storageService.update___VARIABLE_modelName___(
+            ___VARIABLE_modelName___: ___VARIABLE_modelVariableName___,
+            isFavorite: !___VARIABLE_modelVariableName___.isFavorite
+        )
+        await fetchData() // Refresh the list
         logInfo("Toggle favorite for ___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
     }
 
     func onTapArchive(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        // TODO: Implement archive logic
+        await storageService.update___VARIABLE_modelName___(
+            ___VARIABLE_modelName___: ___VARIABLE_modelVariableName___,
+            isArchive: !___VARIABLE_modelVariableName___.isArchive
+        )
+        await fetchData() // Refresh the list
         logInfo("Archive ___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
     }
 
     private func delete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update {
             $0.alert = .delete {
+                Task {
+                    await self.storageService.delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
+                    await self.fetchData() // Refresh the list
+                }
                 logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
-                // TODO: Implement actual deletion logic
             }
         }
     }
@@ -175,30 +186,30 @@ extension ___VARIABLE_modelName___ListViewModel {
     }
 
     private func fetch___VARIABLE_modelName___(filterType: ___VARIABLE_modelName___FilterType = .all, searchTerm: String? = nil) async -> Result<[___VARIABLE_modelName___], AppError> {
-        // TODO: Implement actual data fetching based on filter type and search term
-        var mock___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___] = [
-            .init(id: UUID(), name: "___VARIABLE_modelName___ 1", color: Color.red, date: Date()),
-            .init(id: UUID(), name: "___VARIABLE_modelName___ 2", color: Color.blue, date: Date()),
-            .init(id: UUID(), name: "___VARIABLE_modelName___ 3", color: Color.green, date: Date()),
-        ]
-
-        // Apply filter
+        let result: Result<[___VARIABLE_modelName___], AppError>
+        
         switch filterType {
         case .all:
-            break // No filtering needed
+            result = await storageService.fetch___VARIABLE_modelName___()
         case .favorites:
-            mock___VARIABLE_modelPluralVariableName___ = mock___VARIABLE_modelPluralVariableName___.filter { $0.isFavorite }
+            result = await storageService.fetchFavorite___VARIABLE_modelName___()
         case .archived:
-            mock___VARIABLE_modelPluralVariableName___ = mock___VARIABLE_modelPluralVariableName___.filter { $0.isArchive }
+            result = await storageService.fetchArchived___VARIABLE_modelName___()
         }
 
-        // Apply search term filtering
-        if let searchTerm = searchTerm, !searchTerm.isEmpty {
-            mock___VARIABLE_modelPluralVariableName___ = mock___VARIABLE_modelPluralVariableName___.filter {
-                $0.name.localizedCaseInsensitiveContains(searchTerm)
+        // Apply search term filtering to the results
+        switch result {
+        case let .success(___VARIABLE_modelPluralVariableName___):
+            var filtered___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelPluralVariableName___
+            if let searchTerm = searchTerm, !searchTerm.isEmpty {
+                filtered___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelPluralVariableName___.filter {
+                    $0.name.localizedCaseInsensitiveContains(searchTerm) ||
+                    ($0.note?.localizedCaseInsensitiveContains(searchTerm) ?? false)
+                }
             }
+            return .success(filtered___VARIABLE_modelPluralVariableName___)
+        case .failure:
+            return result
         }
-
-        return .success(mock___VARIABLE_modelPluralVariableName___)
     }
 }
