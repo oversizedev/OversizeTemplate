@@ -14,14 +14,14 @@ public extension ___VARIABLE_modelName___DetailScreen {
     static func build(id: UUID) -> some View {
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___Id: id)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)
+        let reducer = Reducer(viewModel)
         return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
     }
 
     static func build(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)
+        let reducer = Reducer(viewModel)
         return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
     }
 }
@@ -29,10 +29,10 @@ public extension ___VARIABLE_modelName___DetailScreen {
 public struct ___VARIABLE_modelName___DetailScreen: View {
     // States
     @State var viewState: ___VARIABLE_modelName___DetailViewState
-    let reducer: ___VARIABLE_modelName___DetailReducer
+    let reducer: Reducer<___VARIABLE_modelName___DetailViewModel>
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___DetailViewState, reducer: ___VARIABLE_modelName___DetailReducer) {
+    public init(viewState: ___VARIABLE_modelName___DetailViewState, reducer: Reducer<___VARIABLE_modelName___DetailViewModel>) {
         self.viewState = viewState
         self.reducer = reducer
     }
