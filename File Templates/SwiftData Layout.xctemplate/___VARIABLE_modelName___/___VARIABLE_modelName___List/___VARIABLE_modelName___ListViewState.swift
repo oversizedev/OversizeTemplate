@@ -13,7 +13,7 @@ import OversizeNavigation
 
 @MainActor
 @Observable
-public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol, Sendable {
+public final class ___VARIABLE_modelName___ListViewState: Sendable {
     /// App Storage
     public var storage = Storage()
 

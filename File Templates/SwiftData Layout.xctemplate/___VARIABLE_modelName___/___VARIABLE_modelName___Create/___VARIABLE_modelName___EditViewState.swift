@@ -12,7 +12,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol, Sendable {
+public final class ___VARIABLE_modelName___EditViewState: Sendable {
     /// Forms
     public var name: String = .init()
     public var note: String = .init()

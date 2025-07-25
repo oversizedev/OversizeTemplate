@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUI
 
 extension ___VARIABLE_modelName___ListViewModel {
-    public enum Action: Sendable {
+    public enum InputEvent: Sendable {
         case onAppear
         case onRefresh
         case onTapSearch
@@ -29,7 +29,7 @@ extension ___VARIABLE_modelName___ListViewModel {
     }
 }
 
-public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
+public actor ___VARIABLE_modelName___ListViewModel {
     /// Services
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var storageService
 
@@ -41,8 +41,8 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
         self.state = state
     }
 
-    public func handleAction(_ action: Action) async {
-        switch action {
+    public func handleEvent(_ event: InputEvent) async {
+        switch event {
         case .onAppear:
             await onAppear()
         case .onRefresh:

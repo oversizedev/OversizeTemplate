@@ -14,7 +14,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-public final class ___VARIABLE_modelName___DetailViewState: ViewStateProtocol, Sendable {
+public final class ___VARIABLE_modelName___DetailViewState: Sendable {
     // User Interface
     public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
     public var headerVisibleRatio: CGFloat = .zero

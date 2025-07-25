@@ -130,15 +130,10 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             
             // Add search term if provided
             if let searchTerm, !searchTerm.isEmpty {
-                let existingPredicate = predicate
                 if let existingPredicate {
+                    // Combine search with existing filter
                     predicate = #Predicate<___VARIABLE_modelName___> { ___VARIABLE_modelVariableName___ in
-                        ___VARIABLE_modelVariableName___.name.localizedStandardContains(searchTerm) && 
-                        !___VARIABLE_modelVariableName___.isArchive &&
-                        (filterType == .all || 
-                         (filterType == .favorites && ___VARIABLE_modelVariableName___.isFavorite) ||
-                         (filterType == .archived && ___VARIABLE_modelVariableName___.isArchive) ||
-                         (filterType == .recent && ___VARIABLE_modelVariableName___.date >= Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()))
+                        ___VARIABLE_modelVariableName___.name.localizedStandardContains(searchTerm)
                     }
                 } else {
                     predicate = #Predicate<___VARIABLE_modelName___> { ___VARIABLE_modelVariableName___ in

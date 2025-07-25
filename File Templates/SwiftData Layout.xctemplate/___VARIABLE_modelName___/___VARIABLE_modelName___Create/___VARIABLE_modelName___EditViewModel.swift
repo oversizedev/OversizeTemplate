@@ -9,7 +9,7 @@ import OversizeUI
 import SwiftUI
 
 extension ___VARIABLE_modelName___EditViewModel {
-    public enum Action: Sendable {
+    public enum InputEvent: Sendable {
         case onAppear
         case onTapSave
         case onTapCancel
@@ -20,7 +20,7 @@ extension ___VARIABLE_modelName___EditViewModel {
     }
 }
 
-public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
+public actor ___VARIABLE_modelName___EditViewModel {
     /// Services
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var storageService
 
@@ -32,8 +32,8 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
         self.state = state
     }
 
-    public func handleAction(_ action: Action) async {
-        switch action {
+    public func handleEvent(_ event: InputEvent) async {
+        switch event {
         case .onAppear:
             await onAppear()
         case .onTapSave:

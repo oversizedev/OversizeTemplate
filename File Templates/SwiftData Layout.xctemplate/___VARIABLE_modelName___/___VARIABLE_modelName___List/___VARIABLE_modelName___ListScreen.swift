@@ -13,13 +13,13 @@ import OversizeUI
 import SwiftData
 import SwiftUI
 
-public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
+public struct ___VARIABLE_modelName___ListScreen: View {
     // States
     @State var viewState: ___VARIABLE_modelName___ListViewState
-    let reducer: Reducer<___VARIABLE_modelName___ListViewModel>
+    let reducer: ___VARIABLE_modelName___ListReducer
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___ListViewState, reducer: Reducer<___VARIABLE_modelName___ListViewModel>) {
+    public init(viewState: ___VARIABLE_modelName___ListViewState, reducer: ___VARIABLE_modelName___ListReducer) {
         self.viewState = viewState
         self.reducer = reducer
     }
@@ -39,16 +39,14 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
         )
         .alert(item: $viewState.alert) { $0.alert }
         .task(priority: .background) { 
-            await reducer(.onAppear)
+            reducer(.onAppear)
         }
         .refreshable {
-            await reducer(.onRefresh)
+            reducer(.onRefresh)
         }
         .navigationMove($viewState.destination)
         .onChange(of: viewState.searchTerm) {
-            Task {
-                await reducer(.onChangeSearchTerm(oldValue: $0, newValue: $1))
-            }
+            reducer(.onChangeSearchTerm(oldValue: $0, newValue: $1))
         }
     }
 
@@ -79,9 +77,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
                         isCompact: viewState.storage.isCompactRow,
                         viewOption: viewState.viewOption
                     ) {
-                        Task {
-                            await reducer(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
-                        }
+                        reducer(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                     }
                     .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -94,9 +90,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
                     ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___, viewOption: viewState.viewOption) {
-                        Task {
-                            await reducer(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
-                        }
+                        reducer(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                     }
                     .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                 }
@@ -108,9 +102,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
     private var emptyContent: some View {
         if viewState.searchTerm.isEmpty {
             ___VARIABLE_modelName___EmptyView {
-                Task {
-                    await reducer(.onTapCreate___VARIABLE_modelName___)
-                }
+                reducer(.onTapCreate___VARIABLE_modelName___)
             }
         } else {
             ContentView(
@@ -141,9 +133,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
                 .pickerStyle(.segmented)
 
                 Button {
-                    Task {
-                        await reducer(.onTapCreate___VARIABLE_modelName___)
-                    }
+                    reducer(.onTapCreate___VARIABLE_modelName___)
                 } label: {
                     Image.Base.plus.icon()
                 }
@@ -156,9 +146,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
         private func toolbarContent() -> some ToolbarContent {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button {
-                    Task {
-                        await reducer(.onTapCreate___VARIABLE_modelName___)
-                    }
+                    reducer(.onTapCreate___VARIABLE_modelName___)
                 } label: {
                     Image.Base.plus.icon()
                 }
@@ -183,9 +171,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
                     Divider()
                     
                     Button {
-                        Task {
-                            await reducer(.onTapSearch)
-                        }
+                        reducer(.onTapSearch)
                     } label: {
                         Label {
                             Text(L10n.Button.search)
@@ -217,9 +203,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             }
             .pickerStyle(.menu)
             .onChange(of: viewState.storage.sortType) {
-                Task {
-                    await reducer(.onTapSortType($1))
-                }
+                reducer(.onTapSortType($1))
             }
             
             Picker("Sort Order", selection: $viewState.storage.sortOrder) {
@@ -244,9 +228,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             }
             .pickerStyle(.menu)
             .onChange(of: viewState.storage.filterType) {
-                Task {
-                    await reducer(.onTapFilterType($1))
-                }
+                reducer(.onTapFilterType($1))
             }
         }
     }
@@ -254,9 +236,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
     private func contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         Group {
             Button {
-                Task {
-                    await reducer(.onToggleFavorite(___VARIABLE_modelVariableName___))
-                }
+                reducer(.onToggleFavorite(___VARIABLE_modelVariableName___))
             } label: {
                 Label {
                     Text(___VARIABLE_modelVariableName___.isFavorite ? "Remove from Favorites" : "Add to Favorites")
@@ -266,9 +246,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             }
             
             Button {
-                Task {
-                    await reducer(.onToggleArchive(___VARIABLE_modelVariableName___))
-                }
+                reducer(.onToggleArchive(___VARIABLE_modelVariableName___))
             } label: {
                 Label {
                     Text(___VARIABLE_modelVariableName___.isArchive ? "Unarchive" : "Archive")
@@ -280,9 +258,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             Divider()
             
             Button(role: .destructive) {
-                Task {
-                    await reducer(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
-                }
+                reducer(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
             } label: {
                 Label {
                     Text(L10n.Button.delete)
@@ -296,27 +272,21 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
     @ViewBuilder
     private func swipeActions(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         Button {
-            Task {
-                await reducer(.onToggleFavorite(___VARIABLE_modelVariableName___))
-            }
+            reducer(.onToggleFavorite(___VARIABLE_modelVariableName___))
         } label: {
             Image.Base.heart.icon()
         }
         .tint(___VARIABLE_modelVariableName___.isFavorite ? .red : .orange)
         
         Button {
-            Task {
-                await reducer(.onToggleArchive(___VARIABLE_modelVariableName___))
-            }
+            reducer(.onToggleArchive(___VARIABLE_modelVariableName___))
         } label: {
             Image.Base.archive.icon()
         }
         .tint(.blue)
         
         Button(role: .destructive) {
-            Task {
-                await reducer(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
-            }
+            reducer(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
         } label: {
             Image.Base.delete.icon()
         }
@@ -328,7 +298,7 @@ public extension ___VARIABLE_modelName___ListScreen {
     static func build() -> some View {
         let viewState = ___VARIABLE_modelName___ListViewState()
         let viewModel = ___VARIABLE_modelName___ListViewModel(state: viewState)
-        let reducer = Reducer(viewModel: viewModel)
+        let reducer = ___VARIABLE_modelName___ListReducer(viewModel: viewModel)
         return ___VARIABLE_modelName___ListScreen(viewState: viewState, reducer: reducer)
     }
 }
