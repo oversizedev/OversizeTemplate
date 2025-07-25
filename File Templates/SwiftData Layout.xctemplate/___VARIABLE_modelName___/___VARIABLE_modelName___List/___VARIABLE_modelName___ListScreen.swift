@@ -13,13 +13,13 @@ import OversizeUI
 import SwiftData
 import SwiftUI
 
-public struct ___VARIABLE_modelName___ListScreen: View {
+public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
     // States
     @State var viewState: ___VARIABLE_modelName___ListViewState
-    let reducer: ___VARIABLE_modelName___ListReducer
+    let reducer: Reducer<___VARIABLE_modelName___ListViewModel>
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___ListViewState, reducer: ___VARIABLE_modelName___ListReducer) {
+    public init(viewState: ___VARIABLE_modelName___ListViewState, reducer: Reducer<___VARIABLE_modelName___ListViewModel>) {
         self.viewState = viewState
         self.reducer = reducer
     }
@@ -38,21 +38,32 @@ public struct ___VARIABLE_modelName___ListScreen: View {
             placement: .navigationBarDrawer(displayMode: .automatic)
         )
         .alert(item: $viewState.alert) { $0.alert }
-        .task(priority: .background) { reducer.callAsFunction(.onAppear) }
-        .refreshable(action: { reducer.callAsFunction(.onRefresh) })
+        .hud($viewState.hud)
+        .task(priority: .background) { 
+            await reducer.send(.onAppear)
+        }
+        .refreshable {
+            await reducer.send(.onRefresh)
+        }
         .navigationMove($viewState.destination)
         .onChange(of: viewState.searchTerm) {
-            reducer.callAsFunction(.onChangeSearchTerm(oldValue: $0, newValue: $1))
+            Task {
+                await reducer.send(.onChangeSearchTerm(oldValue: $0, newValue: $1))
+            }
         }
     }
 
     @ViewBuilder
-    private func stateView(_ state: LoadingViewState<[___VARIABLE_modelName___]>) -> some View {
+    private func stateView(_ state: LoadingState<[___VARIABLE_modelName___]>) -> some View {
         switch state {
         case .idle, .loading:
             ___VARIABLE_modelName___PlaceholderView(displayType: viewState.storage.displayType)
         case let .result(___VARIABLE_modelPluralVariableName___):
-            content(___VARIABLE_modelPluralVariableName___)
+            if ___VARIABLE_modelPluralVariableName___.isEmpty {
+                emptyContent
+            } else {
+                content(___VARIABLE_modelPluralVariableName___)
+            }
         case let .error(error):
             ErrorView(error)
         }
@@ -64,17 +75,29 @@ public struct ___VARIABLE_modelName___ListScreen: View {
         case .list:
             LazyVStack(spacing: .zero) {
                 ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
-                    ___VARIABLE_modelName___Row(___VARIABLE_modelVariableName___, isCompact: viewState.storage.isCompactRow) {
-                        reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                    ___VARIABLE_modelName___Row(
+                        ___VARIABLE_modelVariableName___,
+                        isCompact: viewState.storage.isCompactRow,
+                        viewOption: viewState.viewOption
+                    ) {
+                        Task {
+                            await reducer.send(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                        }
                     }
                     .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        swipeActions(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+                    }
                 }
             }
         case .grid:
-            LazyVGrid(columns: [.init(.adaptive(minimum: 320), spacing: 12)], spacing: 12) {
+            let columns = Array(repeating: GridItem(.adaptive(minimum: viewState.storage.gridSize.minWidth), spacing: 12), count: viewState.storage.gridSize.columnCount)
+            LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
-                    ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___) {
-                        reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                    ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___, viewOption: viewState.viewOption) {
+                        Task {
+                            await reducer.send(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                        }
                     }
                     .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                 }
@@ -85,7 +108,11 @@ public struct ___VARIABLE_modelName___ListScreen: View {
     @ViewBuilder
     private var emptyContent: some View {
         if viewState.searchTerm.isEmpty {
-            ___VARIABLE_modelName___EmptyView(action: { reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___) })
+            ___VARIABLE_modelName___EmptyView {
+                Task {
+                    await reducer.send(.onTapCreate___VARIABLE_modelName___)
+                }
+            }
         } else {
             ContentView(
                 image: Illustration.Objects.search,
@@ -100,6 +127,12 @@ public struct ___VARIABLE_modelName___ListScreen: View {
         @ToolbarContentBuilder
         private func toolbarContent() -> some ToolbarContent {
             ToolbarItemGroup(placement: .primaryAction) {
+                Menu {
+                    sortingAndFilteringMenu()
+                } label: {
+                    Image.Base.filter.icon()
+                }
+                
                 Picker("Display", selection: $viewState.storage.displayType) {
                     ForEach(___VARIABLE_modelName___ListDisplayType.allCases) { type in
                         type.icon.icon()
@@ -109,7 +142,9 @@ public struct ___VARIABLE_modelName___ListScreen: View {
                 .pickerStyle(.segmented)
 
                 Button {
-                    reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
+                    Task {
+                        await reducer.send(.onTapCreate___VARIABLE_modelName___)
+                    }
                 } label: {
                     Image.Base.plus.icon()
                 }
@@ -122,7 +157,9 @@ public struct ___VARIABLE_modelName___ListScreen: View {
         private func toolbarContent() -> some ToolbarContent {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button {
-                    reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
+                    Task {
+                        await reducer.send(.onTapCreate___VARIABLE_modelName___)
+                    }
                 } label: {
                     Image.Base.plus.icon()
                 }
@@ -139,9 +176,17 @@ public struct ___VARIABLE_modelName___ListScreen: View {
                         }
                     }
                     .pickerStyle(.menu)
+                    
+                    Divider()
+                    
+                    sortingAndFilteringMenu()
 
+                    Divider()
+                    
                     Button {
-                        reducer.callAsFunction(.onTapSearch)
+                        Task {
+                            await reducer.send(.onTapSearch)
+                        }
                     } label: {
                         Label {
                             Text(L10n.Button.search)
@@ -157,15 +202,126 @@ public struct ___VARIABLE_modelName___ListScreen: View {
         }
 
     #endif
-
-    private func contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
-        Button(role: .destructive, action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)) }) {
-            Label {
-                Text(L10n.Button.delete)
-            } icon: {
-                Image.Base.delete.icon(.error)
+    
+    @ViewBuilder
+    private func sortingAndFilteringMenu() -> some View {
+        Section("Sort") {
+            Picker("Sort Type", selection: $viewState.storage.sortType) {
+                ForEach(___VARIABLE_modelName___SortType.allCases) { sortType in
+                    Label {
+                        Text(sortType.title)
+                    } icon: {
+                        sortType.icon
+                    }
+                    .tag(sortType)
+                }
+            }
+            .pickerStyle(.menu)
+            .onChange(of: viewState.storage.sortType) {
+                Task {
+                    await reducer.send(.onTapSortType($1))
+                }
+            }
+            
+            Picker("Sort Order", selection: $viewState.storage.sortOrder) {
+                Label("Ascending", systemImage: "arrow.up")
+                    .tag(SortOrder.forward)
+                Label("Descending", systemImage: "arrow.down")
+                    .tag(SortOrder.reverse)
+            }
+            .pickerStyle(.menu)
+        }
+        
+        Section("Filter") {
+            Picker("Filter Type", selection: $viewState.storage.filterType) {
+                ForEach(___VARIABLE_modelName___FilterType.allCases) { filterType in
+                    Label {
+                        Text(filterType.title)
+                    } icon: {
+                        filterType.icon
+                    }
+                    .tag(filterType)
+                }
+            }
+            .pickerStyle(.menu)
+            .onChange(of: viewState.storage.filterType) {
+                Task {
+                    await reducer.send(.onTapFilterType($1))
+                }
             }
         }
+    }
+
+    private func contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
+        Group {
+            Button {
+                Task {
+                    await reducer.send(.onToggleFavorite(___VARIABLE_modelVariableName___))
+                }
+            } label: {
+                Label {
+                    Text(___VARIABLE_modelVariableName___.isFavorite ? "Remove from Favorites" : "Add to Favorites")
+                } icon: {
+                    Image.Base.heart.icon(___VARIABLE_modelVariableName___.isFavorite ? .error : .onSurfaceHighEmphasis)
+                }
+            }
+            
+            Button {
+                Task {
+                    await reducer.send(.onToggleArchive(___VARIABLE_modelVariableName___))
+                }
+            } label: {
+                Label {
+                    Text(___VARIABLE_modelVariableName___.isArchive ? "Unarchive" : "Archive")
+                } icon: {
+                    Image.Base.archive.icon()
+                }
+            }
+            
+            Divider()
+            
+            Button(role: .destructive) {
+                Task {
+                    await reducer.send(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                }
+            } label: {
+                Label {
+                    Text(L10n.Button.delete)
+                } icon: {
+                    Image.Base.delete.icon(.error)
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func swipeActions(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
+        Button {
+            Task {
+                await reducer.send(.onToggleFavorite(___VARIABLE_modelVariableName___))
+            }
+        } label: {
+            Image.Base.heart.icon()
+        }
+        .tint(___VARIABLE_modelVariableName___.isFavorite ? .red : .orange)
+        
+        Button {
+            Task {
+                await reducer.send(.onToggleArchive(___VARIABLE_modelVariableName___))
+            }
+        } label: {
+            Image.Base.archive.icon()
+        }
+        .tint(.blue)
+        
+        Button(role: .destructive) {
+            Task {
+                await reducer.send(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+            }
+        } label: {
+            Image.Base.delete.icon()
+        }
+        .tint(.red)
     }
 }
 
@@ -173,7 +329,7 @@ public extension ___VARIABLE_modelName___ListScreen {
     static func build() -> some View {
         let viewState = ___VARIABLE_modelName___ListViewState()
         let viewModel = ___VARIABLE_modelName___ListViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___ListReducer(viewModel: viewModel)
+        let reducer = Reducer<___VARIABLE_modelName___ListViewModel>(viewModel: viewModel)
         return ___VARIABLE_modelName___ListScreen(viewState: viewState, reducer: reducer)
     }
 }
