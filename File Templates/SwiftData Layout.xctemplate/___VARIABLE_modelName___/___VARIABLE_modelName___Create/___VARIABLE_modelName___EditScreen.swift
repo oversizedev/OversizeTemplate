@@ -14,21 +14,21 @@ extension ___VARIABLE_modelName___EditScreen {
     static func build() -> some View {
         let viewState = ___VARIABLE_modelName___EditViewState(.create)
         let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___EditReducer(viewModel: viewModel)
+        let reducer = Reducer(viewModel: viewModel)
         return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
     }
 
     static func buildEdit(id: UUID) -> some View {
         let viewState = ___VARIABLE_modelName___EditViewState(.editId(id))
         let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___EditReducer(viewModel: viewModel)
+        let reducer = Reducer(viewModel: viewModel)
         return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
     }
 
     static func buildEdit(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         let viewState = ___VARIABLE_modelName___EditViewState(.edit(___VARIABLE_modelVariableName___))
         let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___EditReducer(viewModel: viewModel)
+        let reducer = Reducer(viewModel: viewModel)
         return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
     }
 }
@@ -38,11 +38,11 @@ public struct ___VARIABLE_modelName___EditScreen: View {
 
     // States
     @State var viewState: ___VARIABLE_modelName___EditViewState
-    let reducer: ___VARIABLE_modelName___EditReducer
+    let reducer: Reducer<___VARIABLE_modelName___EditViewModel>
     @FocusState private var focusedField: ___VARIABLE_modelName___EditViewState.FocusField?
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___EditViewState, reducer: ___VARIABLE_modelName___EditReducer) {
+    public init(viewState: ___VARIABLE_modelName___EditViewState, reducer: Reducer<___VARIABLE_modelName___EditViewModel>) {
         self.viewState = viewState
         self.reducer = reducer
     }
