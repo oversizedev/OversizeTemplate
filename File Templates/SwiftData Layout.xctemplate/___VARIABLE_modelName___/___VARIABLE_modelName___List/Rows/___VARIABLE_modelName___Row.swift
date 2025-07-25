@@ -25,12 +25,43 @@ struct ___VARIABLE_modelName___Row: View {
 
     var body: some View {
         Row(
-            "Title",
-            subtitle: isCompact ? nil : "Subtitle",
+            ___VARIABLE_modelVariableName___.name,
+            subtitle: isCompact ? nil : ___VARIABLE_modelVariableName___.note,
+            leading: {
+                leadingView
+            },
+            trailing: {
+                trailingView
+            },
             action: action
         )
         #if os(macOS)
         .rowTextColor(isSelected ? Color.onPrimary : Color.onSurfacePrimary)
         #endif
+    }
+
+    @ViewBuilder
+    private var leadingView: some View {
+        Circle()
+            .fill(___VARIABLE_modelVariableName___.color)
+            .frame(width: 32, height: 32)
+    }
+
+    @ViewBuilder
+    private var trailingView: some View {
+        VStack(alignment: .trailing, spacing: 4) {
+            Text(___VARIABLE_modelVariableName___.date, style: .date)
+                .font(.caption)
+                .foregroundColor(.onSurfaceSecondary)
+            
+            HStack(spacing: 4) {
+                if ___VARIABLE_modelVariableName___.isFavorite {
+                    Image.Base.star.icon(.warning, size: .xSmall)
+                }
+                if ___VARIABLE_modelVariableName___.isArchive {
+                    Image.Base.archive.icon(.onSurfaceSecondary, size: .xSmall)
+                }
+            }
+        }
     }
 }

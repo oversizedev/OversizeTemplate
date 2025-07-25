@@ -84,21 +84,32 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
 
     private func content(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         LeadingVStack {
-            Row(___VARIABLE_modelVariableName___.name ?? "Untitled")
+            Row(___VARIABLE_modelVariableName___.name)
             
-            // Add more content based on your model properties
+            if let note = ___VARIABLE_modelVariableName___.note, !note.isEmpty {
+                Row("Note", subtitle: note)
+            }
+            
+            Row("Date", subtitle: ___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened))
+            
+            Row("Color") {
+                Circle()
+                    .fill(___VARIABLE_modelVariableName___.color)
+                    .frame(width: 24, height: 24)
+            }
+            
+            HStack {
+                Text("Properties")
+                    .font(.headline)
+                    .foregroundColor(.onSurfacePrimary)
+                Spacer()
+            }
+            .padding(.top)
+            
             LazyVStack(spacing: 0) {
-                ForEach(1 ... 10, id: \.self) { item in
-                    Button {} label: {
-                        VStack(spacing: 0) {
-                            Text("Item \(item)")
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                        }
-                        .clipShape(Rectangle())
-                    }
-                }
+                Row("Favorite", subtitle: ___VARIABLE_modelVariableName___.isFavorite ? "Yes" : "No")
+                Row("Archived", subtitle: ___VARIABLE_modelVariableName___.isArchive ? "Yes" : "No")
+                Row("View Count", subtitle: "\(___VARIABLE_modelVariableName___.viewCount)")
             }
         }
     }
