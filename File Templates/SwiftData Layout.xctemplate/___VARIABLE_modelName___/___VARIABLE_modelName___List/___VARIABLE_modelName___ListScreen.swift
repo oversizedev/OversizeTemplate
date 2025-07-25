@@ -16,10 +16,10 @@ import SwiftUI
 public struct ___VARIABLE_modelName___ListScreen: View {
     // States
     @State var viewState: ___VARIABLE_modelName___ListViewState
-    let reducer: Reducer<___VARIABLE_modelName___ListViewModel>
+    let reducer: ___VARIABLE_modelName___ListReducer
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___ListViewState, reducer: Reducer<___VARIABLE_modelName___ListViewModel>) {
+    public init(viewState: ___VARIABLE_modelName___ListViewState, reducer: ___VARIABLE_modelName___ListReducer) {
         self.viewState = viewState
         self.reducer = reducer
     }
@@ -60,27 +60,23 @@ public struct ___VARIABLE_modelName___ListScreen: View {
 
     @ViewBuilder
     private func content(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) -> some View {
-        if ___VARIABLE_modelPluralVariableName___.isEmpty {
-            emptyContent
-        } else {
-            switch viewState.storage.displayType {
-            case .list:
-                LazyVStack(spacing: .zero) {
-                    ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
-                        ___VARIABLE_modelName___Row(___VARIABLE_modelVariableName___, isCompact: viewState.storage.isCompactRow) {
-                            reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
-                        }
-                        .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
+        switch viewState.storage.displayType {
+        case .list:
+            LazyVStack(spacing: .zero) {
+                ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
+                    ___VARIABLE_modelName___Row(___VARIABLE_modelVariableName___, isCompact: viewState.storage.isCompactRow) {
+                        reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                     }
+                    .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                 }
-            case .grid:
-                LazyVGrid(columns: [.init(.adaptive(minimum: 320), spacing: 12)], spacing: 12) {
-                    ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
-                        ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___) {
-                            reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
-                        }
-                        .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
+            }
+        case .grid:
+            LazyVGrid(columns: [.init(.adaptive(minimum: 320), spacing: 12)], spacing: 12) {
+                ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
+                    ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___) {
+                        reducer.callAsFunction(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                     }
+                    .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
                 }
             }
         }
@@ -177,7 +173,7 @@ public extension ___VARIABLE_modelName___ListScreen {
     static func build() -> some View {
         let viewState = ___VARIABLE_modelName___ListViewState()
         let viewModel = ___VARIABLE_modelName___ListViewModel(state: viewState)
-        let reducer = Reducer(viewModel)
+        let reducer = ___VARIABLE_modelName___ListReducer(viewModel: viewModel)
         return ___VARIABLE_modelName___ListScreen(viewState: viewState, reducer: reducer)
     }
 }

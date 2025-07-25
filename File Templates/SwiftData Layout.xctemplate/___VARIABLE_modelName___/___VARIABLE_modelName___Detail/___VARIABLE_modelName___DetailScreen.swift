@@ -14,14 +14,14 @@ public extension ___VARIABLE_modelName___DetailScreen {
     static func build(id: UUID) -> some View {
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___Id: id)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
-        let reducer = Reducer(viewModel)
+        let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)
         return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
     }
 
     static func build(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
-        let reducer = Reducer(viewModel)
+        let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)
         return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
     }
 }
@@ -29,10 +29,10 @@ public extension ___VARIABLE_modelName___DetailScreen {
 public struct ___VARIABLE_modelName___DetailScreen: View {
     // States
     @State var viewState: ___VARIABLE_modelName___DetailViewState
-    let reducer: Reducer<___VARIABLE_modelName___DetailViewModel>
+    let reducer: ___VARIABLE_modelName___DetailReducer
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___DetailViewState, reducer: Reducer<___VARIABLE_modelName___DetailViewModel>) {
+    public init(viewState: ___VARIABLE_modelName___DetailViewState, reducer: ___VARIABLE_modelName___DetailReducer) {
         self.viewState = viewState
         self.reducer = reducer
     }
@@ -84,32 +84,21 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
 
     private func content(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         LeadingVStack {
-            Row(___VARIABLE_modelVariableName___.name)
+            Row(___VARIABLE_modelVariableName___.name ?? "Untitled")
             
-            if let note = ___VARIABLE_modelVariableName___.note, !note.isEmpty {
-                Row("Note", subtitle: note)
-            }
-            
-            Row("Date", subtitle: ___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened))
-            
-            Row("Color") {
-                Circle()
-                    .fill(___VARIABLE_modelVariableName___.color)
-                    .frame(width: 24, height: 24)
-            }
-            
-            HStack {
-                Text("Properties")
-                    .font(.headline)
-                    .foregroundColor(.onSurfacePrimary)
-                Spacer()
-            }
-            .padding(.top)
-            
+            // Add more content based on your model properties
             LazyVStack(spacing: 0) {
-                Row("Favorite", subtitle: ___VARIABLE_modelVariableName___.isFavorite ? "Yes" : "No")
-                Row("Archived", subtitle: ___VARIABLE_modelVariableName___.isArchive ? "Yes" : "No")
-                Row("View Count", subtitle: "\(___VARIABLE_modelVariableName___.viewCount)")
+                ForEach(1 ... 10, id: \.self) { item in
+                    Button {} label: {
+                        VStack(spacing: 0) {
+                            Text("Item \(item)")
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Divider()
+                        }
+                        .clipShape(Rectangle())
+                    }
+                }
             }
         }
     }

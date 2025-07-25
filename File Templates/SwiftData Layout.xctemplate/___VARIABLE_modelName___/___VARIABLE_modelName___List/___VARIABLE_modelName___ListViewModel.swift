@@ -20,17 +20,12 @@ extension ___VARIABLE_modelName___ListViewModel {
         case onTapDelete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
         case onTapDisplayType(_ displayType: ___VARIABLE_modelName___ListDisplayType)
         case onChangeSearchTerm(oldValue: String, newValue: String)
-        case onTapFilterType(_ filterType: ___VARIABLE_modelName___FilterType)
-        case onTapViewOption(_ viewOption: ___VARIABLE_modelName___ViewOption)
-        case onTapGridSize(_ gridSize: ___VARIABLE_modelName___GridSize)
-        case onTapToggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
-        case onTapArchive(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
     }
 }
 
 public actor ___VARIABLE_modelName___ListViewModel {
     /// Services
-    @Injected(\.___VARIABLE_modelVariableName___StorageService) var storageService
+    /// @Injected(\.service) var service
 
     /// ViewState
     public var state: ___VARIABLE_modelName___ListViewState
@@ -58,16 +53,6 @@ public actor ___VARIABLE_modelName___ListViewModel {
             await onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         case .onTapCreate___VARIABLE_modelName___:
             await onCreate()
-        case let .onTapFilterType(filterType):
-            await onTapFilterType(filterType)
-        case let .onTapViewOption(viewOption):
-            await onTapViewOption(viewOption)
-        case let .onTapGridSize(gridSize):
-            await onTapGridSize(gridSize)
-        case let .onTapToggleFavorite(___VARIABLE_modelVariableName___):
-            await onTapToggleFavorite(___VARIABLE_modelVariableName___)
-        case let .onTapArchive(___VARIABLE_modelVariableName___):
-            await onTapArchive(___VARIABLE_modelVariableName___)
         }
     }
 }
@@ -83,10 +68,7 @@ public extension ___VARIABLE_modelName___ListViewModel {
         await fetchData(force: true)
     }
 
-    func onChangeSearchTerm(oldValue _: String, newValue _: String) async {
-        // Implement search filtering logic
-        await fetchData(searchTerm: newValue)
-    }
+    func onChangeSearchTerm(oldValue _: String, newValue _: String) async {}
 
     func onTapSearch() async {
         await state.update {
@@ -106,56 +88,15 @@ public extension ___VARIABLE_modelName___ListViewModel {
         }
     }
 
-    func onTapFilterType(_ filterType: ___VARIABLE_modelName___FilterType) async {
-        await state.update {
-            $0.storage.filterType = filterType
-        }
-        await fetchData()
-    }
-
-    func onTapViewOption(_ viewOption: ___VARIABLE_modelName___ViewOption) async {
-        await state.update {
-            $0.storage.viewOption = viewOption
-        }
-    }
-
-    func onTapGridSize(_ gridSize: ___VARIABLE_modelName___GridSize) async {
-        await state.update {
-            $0.storage.gridSize = gridSize
-        }
-    }
-
     func onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
         }
     }
 
-    func onTapToggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        await storageService.update___VARIABLE_modelName___(
-            ___VARIABLE_modelName___: ___VARIABLE_modelVariableName___,
-            isFavorite: !___VARIABLE_modelVariableName___.isFavorite
-        )
-        await fetchData() // Refresh the list
-        logInfo("Toggle favorite for ___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
-    }
-
-    func onTapArchive(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        await storageService.update___VARIABLE_modelName___(
-            ___VARIABLE_modelName___: ___VARIABLE_modelVariableName___,
-            isArchive: !___VARIABLE_modelVariableName___.isArchive
-        )
-        await fetchData() // Refresh the list
-        logInfo("Archive ___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
-    }
-
     private func delete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update {
             $0.alert = .delete {
-                Task {
-                    await self.storageService.delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
-                    await self.fetchData() // Refresh the list
-                }
                 logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
             }
         }
@@ -165,14 +106,8 @@ public extension ___VARIABLE_modelName___ListViewModel {
 // MARK: - Data Fetching
 
 extension ___VARIABLE_modelName___ListViewModel {
-    private func fetchData(force _: Bool = false, searchTerm: String? = nil) async {
-        await state.update {
-            $0.___VARIABLE_modelPluralVariableName___State = .loading
-        }
-
-        let filterType = await state.storage.filterType
-        let result = await fetch___VARIABLE_modelName___(filterType: filterType, searchTerm: searchTerm)
-        
+    private func fetchData(force _: Bool = false) async {
+        let result = await fetch___VARIABLE_modelName___()
         switch result {
         case let .success(___VARIABLE_modelPluralVariableName___):
             await state.update {
@@ -185,31 +120,9 @@ extension ___VARIABLE_modelName___ListViewModel {
         }
     }
 
-    private func fetch___VARIABLE_modelName___(filterType: ___VARIABLE_modelName___FilterType = .all, searchTerm: String? = nil) async -> Result<[___VARIABLE_modelName___], AppError> {
-        let result: Result<[___VARIABLE_modelName___], AppError>
-        
-        switch filterType {
-        case .all:
-            result = await storageService.fetch___VARIABLE_modelName___()
-        case .favorites:
-            result = await storageService.fetchFavorite___VARIABLE_modelName___()
-        case .archived:
-            result = await storageService.fetchArchived___VARIABLE_modelName___()
-        }
-
-        // Apply search term filtering to the results
-        switch result {
-        case let .success(___VARIABLE_modelPluralVariableName___):
-            var filtered___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelPluralVariableName___
-            if let searchTerm = searchTerm, !searchTerm.isEmpty {
-                filtered___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelPluralVariableName___.filter {
-                    $0.name.localizedCaseInsensitiveContains(searchTerm) ||
-                    ($0.note?.localizedCaseInsensitiveContains(searchTerm) ?? false)
-                }
-            }
-            return .success(filtered___VARIABLE_modelPluralVariableName___)
-        case .failure:
-            return result
-        }
+    private func fetch___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
+        .success([
+            .init(id: UUID(), name: "___VARIABLE_modelName___ 1", color: Color.red, date: Date()),
+        ])
     }
 }

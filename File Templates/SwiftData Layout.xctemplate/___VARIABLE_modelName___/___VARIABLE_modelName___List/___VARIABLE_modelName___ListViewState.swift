@@ -50,14 +50,5 @@ public extension ___VARIABLE_modelName___ListViewState {
 
         @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.isCompactMode)
         public var isCompactRow: Bool = false
-
-        @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.filterType)
-        public var filterType: ___VARIABLE_modelName___FilterType = .all
-
-        @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.viewOption)
-        public var viewOption: ___VARIABLE_modelName___ViewOption = .standard
-
-        @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.gridSize)
-        public var gridSize: ___VARIABLE_modelName___GridSize = .medium
     }
 }
