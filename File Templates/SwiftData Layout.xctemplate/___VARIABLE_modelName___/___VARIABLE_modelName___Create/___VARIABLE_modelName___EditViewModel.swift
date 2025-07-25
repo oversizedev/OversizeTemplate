@@ -91,7 +91,6 @@ public extension ___VARIABLE_modelName___EditViewModel {
     
     func onValidateForm() async {
         // Perform additional validation if needed
-        logInfo("Form validation - Valid: \(await state.isValidForm)")
     }
     
     func onResetForm() async {
@@ -144,7 +143,6 @@ public extension ___VARIABLE_modelName___EditViewModel {
                 $0.hud = .success(subtitle: "Saved successfully")
                 $0.isDismissed = true
             }
-            logCreated("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
         case .failure(let error):
             await state.update {
                 $0.hud = .error(subtitle: "Failed to save")
@@ -153,7 +151,6 @@ public extension ___VARIABLE_modelName___EditViewModel {
                     subtitle: error.localizedDescription
                 ) {}
             }
-            logError("Failed to save ___VARIABLE_modelName___:", error: error)
         }
     }
 }
@@ -172,7 +169,6 @@ public extension ___VARIABLE_modelName___EditViewModel {
                 $0.setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
             }
         case let .failure(error):
-            logError("Failed to fetch ___VARIABLE_modelName___:", error: error)
             await state.update {
                 $0.___VARIABLE_modelVariableName___State = .error(error)
             }

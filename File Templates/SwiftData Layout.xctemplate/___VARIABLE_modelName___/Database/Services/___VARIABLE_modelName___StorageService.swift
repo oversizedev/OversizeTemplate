@@ -41,10 +41,8 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         do {
             context.insert(___VARIABLE_modelName___)
             try context.save()
-            logCreated("___VARIABLE_modelName___ \(name)")
             return .success(___VARIABLE_modelName___)
         } catch {
-            logError("Save for ___VARIABLE_modelName___:", error: error)
             return .failure(AppError.coreData(type: .savingItem))
         }
     }
@@ -83,9 +81,8 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         
         do {
             try context.save()
-            logUpdated("___VARIABLE_modelName___ \(___VARIABLE_modelName___.name)")
         } catch {
-            logError("Error updating ___VARIABLE_modelName___:", error: error)
+            // Handle error silently or add proper error handling
         }
     }
 
@@ -93,9 +90,8 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         context.delete(___VARIABLE_modelVariableName___)
         do {
             try context.save()
-            logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
         } catch {
-            logError("Error deleting ___VARIABLE_modelName___:", error: error)
+            // Handle error silently or add proper error handling
         }
     }
     
@@ -104,7 +100,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         do {
             try context.save()
         } catch {
-            logError("Error incrementing view count:", error: error)
+            // Handle error silently or add proper error handling
         }
     }
 
@@ -135,12 +131,18 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             // Add search term if provided
             if let searchTerm, !searchTerm.isEmpty {
                 let existingPredicate = predicate
-                predicate = #Predicate { ___VARIABLE_modelVariableName___ in
-                    let matchesSearch = ___VARIABLE_modelVariableName___.name.localizedStandardContains(searchTerm)
-                    if let existing = existingPredicate {
-                        return matchesSearch && existing.evaluate(___VARIABLE_modelVariableName___)
-                    } else {
-                        return matchesSearch
+                if let existingPredicate {
+                    predicate = #Predicate<___VARIABLE_modelName___> { ___VARIABLE_modelVariableName___ in
+                        ___VARIABLE_modelVariableName___.name.localizedStandardContains(searchTerm) && 
+                        !___VARIABLE_modelVariableName___.isArchive &&
+                        (filterType == .all || 
+                         (filterType == .favorites && ___VARIABLE_modelVariableName___.isFavorite) ||
+                         (filterType == .archived && ___VARIABLE_modelVariableName___.isArchive) ||
+                         (filterType == .recent && ___VARIABLE_modelVariableName___.date >= Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()))
+                    }
+                } else {
+                    predicate = #Predicate<___VARIABLE_modelName___> { ___VARIABLE_modelVariableName___ in
+                        ___VARIABLE_modelVariableName___.name.localizedStandardContains(searchTerm)
                     }
                 }
             }
@@ -149,13 +151,13 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             var sortDescriptor: SortDescriptor<___VARIABLE_modelName___>
             switch sortType {
             case .name:
-                sortDescriptor = SortDescriptor(\___VARIABLE_modelName___.name, order: sortOrder == .forward ? .forward : .reverse)
+                sortDescriptor = SortDescriptor(\___VARIABLE_modelName___.name, order: sortOrder)
             case .date:
-                sortDescriptor = SortDescriptor(\___VARIABLE_modelName___.date, order: sortOrder == .forward ? .forward : .reverse)
+                sortDescriptor = SortDescriptor(\___VARIABLE_modelName___.date, order: sortOrder)
             case .favorite:
-                sortDescriptor = SortDescriptor(\___VARIABLE_modelName___.isFavorite, order: sortOrder == .forward ? .forward : .reverse)
+                sortDescriptor = SortDescriptor(\___VARIABLE_modelName___.isFavorite, order: sortOrder)
             case .viewCount:
-                sortDescriptor = SortDescriptor(\___VARIABLE_modelName___.viewCount, order: sortOrder == .forward ? .forward : .reverse)
+                sortDescriptor = SortDescriptor(\___VARIABLE_modelName___.viewCount, order: sortOrder)
             }
             
             let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
@@ -166,7 +168,6 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Fetching ___VARIABLE_modelName___:", error: error)
             return .failure(AppError.coreData(type: .fetchItems))
         }
     }
@@ -201,11 +202,8 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let calendar = Calendar.current
             let startOfDay = calendar.startOfDay(for: date)
             guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
-                logError("Failed to calculate endOfDay for date: \(date)")
                 return .failure(AppError.coreData(type: .fetchItems))
             }
-
-            logInfo("Date range for ___VARIABLE_modelName___s: \(startOfDay) to \(endOfDay)")
 
             let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
                 predicate: #Predicate { ___VARIABLE_modelName___ in
@@ -253,9 +251,8 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         
         do {
             try context.save()
-            logDeleted("Batch deleted \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelPluralVariableName___")
         } catch {
-            logError("Error in batch delete:", error: error)
+            // Handle error silently or add proper error handling
         }
     }
     
@@ -266,9 +263,8 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         
         do {
             try context.save()
-            logUpdated("Batch archived \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelPluralVariableName___")
         } catch {
-            logError("Error in batch archive:", error: error)
+            // Handle error silently or add proper error handling
         }
     }
     
@@ -279,9 +275,8 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         
         do {
             try context.save()
-            logUpdated("Batch unarchived \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelPluralVariableName___")
         } catch {
-            logError("Error in batch unarchive:", error: error)
+            // Handle error silently or add proper error handling
         }
     }
     
@@ -304,7 +299,6 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             )
             return try context.fetchCount(descriptor)
         } catch {
-            logError("Error getting ___VARIABLE_modelName___ count:", error: error)
             return 0
         }
     }
@@ -316,7 +310,6 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             )
             return try context.fetchCount(descriptor)
         } catch {
-            logError("Error getting favorite ___VARIABLE_modelName___ count:", error: error)
             return 0
         }
     }

@@ -40,15 +40,15 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
         .alert(item: $viewState.alert) { $0.alert }
         .hud($viewState.hud)
         .task(priority: .background) { 
-            await reducer.send(.onAppear)
+            await reducer(.onAppear)
         }
         .refreshable {
-            await reducer.send(.onRefresh)
+            await reducer(.onRefresh)
         }
         .navigationMove($viewState.destination)
         .onChange(of: viewState.searchTerm) {
             Task {
-                await reducer.send(.onChangeSearchTerm(oldValue: $0, newValue: $1))
+                await reducer(.onChangeSearchTerm(oldValue: $0, newValue: $1))
             }
         }
     }
@@ -81,7 +81,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
                         viewOption: viewState.viewOption
                     ) {
                         Task {
-                            await reducer.send(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                            await reducer(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                         }
                     }
                     .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
@@ -96,7 +96,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
                 ForEach(___VARIABLE_modelPluralVariableName___) { ___VARIABLE_modelVariableName___ in
                     ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___, viewOption: viewState.viewOption) {
                         Task {
-                            await reducer.send(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                            await reducer(.onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                         }
                     }
                     .contextMenu { contextMenu(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
@@ -110,7 +110,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
         if viewState.searchTerm.isEmpty {
             ___VARIABLE_modelName___EmptyView {
                 Task {
-                    await reducer.send(.onTapCreate___VARIABLE_modelName___)
+                    await reducer(.onTapCreate___VARIABLE_modelName___)
                 }
             }
         } else {
@@ -143,7 +143,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
 
                 Button {
                     Task {
-                        await reducer.send(.onTapCreate___VARIABLE_modelName___)
+                        await reducer(.onTapCreate___VARIABLE_modelName___)
                     }
                 } label: {
                     Image.Base.plus.icon()
@@ -158,7 +158,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button {
                     Task {
-                        await reducer.send(.onTapCreate___VARIABLE_modelName___)
+                        await reducer(.onTapCreate___VARIABLE_modelName___)
                     }
                 } label: {
                     Image.Base.plus.icon()
@@ -185,7 +185,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
                     
                     Button {
                         Task {
-                            await reducer.send(.onTapSearch)
+                            await reducer(.onTapSearch)
                         }
                     } label: {
                         Label {
@@ -219,7 +219,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             .pickerStyle(.menu)
             .onChange(of: viewState.storage.sortType) {
                 Task {
-                    await reducer.send(.onTapSortType($1))
+                    await reducer(.onTapSortType($1))
                 }
             }
             
@@ -246,7 +246,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             .pickerStyle(.menu)
             .onChange(of: viewState.storage.filterType) {
                 Task {
-                    await reducer.send(.onTapFilterType($1))
+                    await reducer(.onTapFilterType($1))
                 }
             }
         }
@@ -256,7 +256,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
         Group {
             Button {
                 Task {
-                    await reducer.send(.onToggleFavorite(___VARIABLE_modelVariableName___))
+                    await reducer(.onToggleFavorite(___VARIABLE_modelVariableName___))
                 }
             } label: {
                 Label {
@@ -268,7 +268,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             
             Button {
                 Task {
-                    await reducer.send(.onToggleArchive(___VARIABLE_modelVariableName___))
+                    await reducer(.onToggleArchive(___VARIABLE_modelVariableName___))
                 }
             } label: {
                 Label {
@@ -282,7 +282,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
             
             Button(role: .destructive) {
                 Task {
-                    await reducer.send(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                    await reducer(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
                 }
             } label: {
                 Label {
@@ -298,7 +298,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
     private func swipeActions(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         Button {
             Task {
-                await reducer.send(.onToggleFavorite(___VARIABLE_modelVariableName___))
+                await reducer(.onToggleFavorite(___VARIABLE_modelVariableName___))
             }
         } label: {
             Image.Base.heart.icon()
@@ -307,7 +307,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
         
         Button {
             Task {
-                await reducer.send(.onToggleArchive(___VARIABLE_modelVariableName___))
+                await reducer(.onToggleArchive(___VARIABLE_modelVariableName___))
             }
         } label: {
             Image.Base.archive.icon()
@@ -316,7 +316,7 @@ public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
         
         Button(role: .destructive) {
             Task {
-                await reducer.send(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
+                await reducer(.onTapDelete___VARIABLE_modelName___(___VARIABLE_modelVariableName___))
             }
         } label: {
             Image.Base.delete.icon()

@@ -185,7 +185,6 @@ extension ___VARIABLE_modelName___ListViewModel {
                 $0.___VARIABLE_modelPluralVariableName___State = .result(___VARIABLE_modelPluralVariableName___)
             }
         case let .failure(error):
-            logError("Failed to fetch ___VARIABLE_modelPluralVariableName___:", error: error)
             await state.update {
                 $0.___VARIABLE_modelPluralVariableName___State = .error(error)
             }
@@ -222,30 +221,25 @@ extension ___VARIABLE_modelName___ListViewModel {
     private func updateFavoriteStatus(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, isFavorite: Bool) async {
         await storageService.update___VARIABLE_modelName___(___VARIABLE_modelVariableName___, isFavorite: isFavorite)
         await fetchData(force: true)
-        logUpdated("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name) favorite status: \(isFavorite)")
     }
     
     private func updateArchiveStatus(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, isArchive: Bool) async {
         await storageService.update___VARIABLE_modelName___(___VARIABLE_modelVariableName___, isArchive: isArchive)
         await fetchData(force: true)
-        logUpdated("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name) archive status: \(isArchive)")
     }
     
     private func performDelete(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await storageService.delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         await fetchData(force: true)
-        logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
     }
     
     private func performBatchDelete(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) async {
         await storageService.batchDelete___VARIABLE_modelName___(___VARIABLE_modelPluralVariableName___)
         await fetchData(force: true)
-        logDeleted("\(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelPluralVariableName___")
     }
     
     private func performBatchArchive(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) async {
         await storageService.batchArchive___VARIABLE_modelName___(___VARIABLE_modelPluralVariableName___)
         await fetchData(force: true)
-        logUpdated("Archived \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelPluralVariableName___")
     }
 }

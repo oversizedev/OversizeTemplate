@@ -56,7 +56,7 @@ public struct ___VARIABLE_modelName___EditScreen: View {
         .toolbarTitleDisplayMode(.inline)
         .toolbar(content: toolbarContent)
         .task { 
-            await reducer.send(.onAppear)
+            await reducer(.onAppear)
         }
         .onChange(of: viewState.focusedField) { focusedField = $1 }
     }
@@ -149,7 +149,7 @@ private extension ___VARIABLE_modelName___EditScreen {
         ToolbarItem(placement: .confirmationAction) {
             Button {
                 Task {
-                    await reducer.send(.onTapSave)
+                    await reducer(.onTapSave)
                 }
             } label: {
                 Text(L10n.Button.save)

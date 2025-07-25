@@ -89,7 +89,6 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     
     func onShare() async {
         // Share functionality can be implemented here
-        logInfo("Share ___VARIABLE_modelName___ requested")
     }
     
     func onIncrementViewCount() async {
@@ -115,19 +114,16 @@ public extension ___VARIABLE_modelName___DetailViewModel {
         await state.update { viewState in
             viewState.isDismissed = true
         }
-        logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
     }
     
     private func updateFavoriteStatus(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, isFavorite: Bool) async {
         await storageService.update___VARIABLE_modelName___(___VARIABLE_modelVariableName___, isFavorite: isFavorite)
         await fetchData(force: true)
-        logUpdated("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name) favorite status: \(isFavorite)")
     }
     
     private func updateArchiveStatus(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, isArchive: Bool) async {
         await storageService.update___VARIABLE_modelName___(___VARIABLE_modelVariableName___, isArchive: isArchive)
         await fetchData(force: true)
-        logUpdated("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name) archive status: \(isArchive)")
     }
 }
 
@@ -144,7 +140,6 @@ public extension ___VARIABLE_modelName___DetailViewModel {
                 $0.___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
             }
         case let .failure(error):
-            logError("Failed to fetch ___VARIABLE_modelName___:", error: error)
             await state.update {
                 $0.___VARIABLE_modelVariableName___State = .error(error)
             }

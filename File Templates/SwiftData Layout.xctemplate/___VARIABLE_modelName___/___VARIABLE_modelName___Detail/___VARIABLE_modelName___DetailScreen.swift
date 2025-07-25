@@ -48,17 +48,17 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
         .toolbar(content: toolbarContent)
         .alert(item: $viewState.alert) { $0.alert }
         .task { 
-            await reducer.send(.onAppear)
+            await reducer(.onAppear)
         }
         .refreshable {
-            await reducer.send(.onRefresh)
+            await reducer(.onRefresh)
         }
         .navigationMove($viewState.destination)
         .navigationBack($viewState.isDismissed)
     }
 
     @ViewBuilder
-    private func stateView(_ state: LoadingViewState<___VARIABLE_modelName___>) -> some View {
+    private func stateView(_ state: LoadingState<___VARIABLE_modelName___>) -> some View {
         switch state {
         case .idle, .loading:
             ___VARIABLE_modelName___DetailPlaceholder()
@@ -113,7 +113,7 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
         ToolbarItemGroup(placement: .primaryAction) {
             Button {
                 Task {
-                    await reducer.send(.onTapDelete___VARIABLE_modelName___)
+                    await reducer(.onTapDelete___VARIABLE_modelName___)
                 }
             } label: {
                 Label {
@@ -131,7 +131,7 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
             Menu {
                 Button {
                     Task {
-                        await reducer.send(.onTapEdit___VARIABLE_modelName___)
+                        await reducer(.onTapEdit___VARIABLE_modelName___)
                     }
                 } label: {
                     Label {
@@ -143,7 +143,7 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
 
                 Button {
                     Task {
-                        await reducer.send(.onTapDelete___VARIABLE_modelName___)
+                        await reducer(.onTapDelete___VARIABLE_modelName___)
                     }
                 } label: {
                     Label {

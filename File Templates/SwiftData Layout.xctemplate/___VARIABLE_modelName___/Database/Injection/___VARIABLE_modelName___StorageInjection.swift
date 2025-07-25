@@ -16,7 +16,6 @@ public extension Container {
 public extension Container {
     func register___VARIABLE_modelName___Services() {
         // Register all ___VARIABLE_modelName___ related services
-        logInfo("Registering ___VARIABLE_modelName___ services")
         
         // Storage service is automatically registered via the factory above
         // Add any additional service registrations here
