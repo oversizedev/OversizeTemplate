@@ -16,10 +16,10 @@ import SwiftUI
 public struct ___VARIABLE_modelName___ListScreen: View, ViewProtocol {
     // States
     @State var viewState: ___VARIABLE_modelName___ListViewState
-    let reducer: ___VARIABLE_modelName___ListReducer
+    let reducer: Reducer<___VARIABLE_modelName___ListViewModel>
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___ListViewState, reducer: ___VARIABLE_modelName___ListReducer) {
+    public init(viewState: ___VARIABLE_modelName___ListViewState, reducer: Reducer<___VARIABLE_modelName___ListViewModel>) {
         self.viewState = viewState
         self.reducer = reducer
     }
@@ -329,7 +329,7 @@ public extension ___VARIABLE_modelName___ListScreen {
     static func build() -> some View {
         let viewState = ___VARIABLE_modelName___ListViewState()
         let viewModel = ___VARIABLE_modelName___ListViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___ListReducer(viewModel: viewModel)
+        let reducer = Reducer(viewModel: viewModel)
         return ___VARIABLE_modelName___ListScreen(viewState: viewState, reducer: reducer)
     }
 }

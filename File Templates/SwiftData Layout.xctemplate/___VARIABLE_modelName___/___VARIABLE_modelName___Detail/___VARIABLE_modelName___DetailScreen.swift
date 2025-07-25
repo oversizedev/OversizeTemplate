@@ -14,14 +14,14 @@ public extension ___VARIABLE_modelName___DetailScreen {
     static func build(id: UUID) -> some View {
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___Id: id)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)
+        let reducer = Reducer(viewModel: viewModel)
         return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
     }
 
     static func build(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)
+        let reducer = Reducer(viewModel: viewModel)
         return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
     }
 }
@@ -29,10 +29,10 @@ public extension ___VARIABLE_modelName___DetailScreen {
 public struct ___VARIABLE_modelName___DetailScreen: View {
     // States
     @State var viewState: ___VARIABLE_modelName___DetailViewState
-    let reducer: ___VARIABLE_modelName___DetailReducer
+    let reducer: Reducer<___VARIABLE_modelName___DetailViewModel>
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___DetailViewState, reducer: ___VARIABLE_modelName___DetailReducer) {
+    public init(viewState: ___VARIABLE_modelName___DetailViewState, reducer: Reducer<___VARIABLE_modelName___DetailViewModel>) {
         self.viewState = viewState
         self.reducer = reducer
     }
@@ -47,8 +47,12 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
         }
         .toolbar(content: toolbarContent)
         .alert(item: $viewState.alert) { $0.alert }
-        .task { reducer.callAsFunction(.onAppear) }
-        .refreshable(action: { reducer.callAsFunction(.onRefresh) })
+        .task { 
+            await reducer.send(.onAppear)
+        }
+        .refreshable {
+            await reducer.send(.onRefresh)
+        }
         .navigationMove($viewState.destination)
         .navigationBack($viewState.isDismissed)
     }
@@ -107,7 +111,11 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
     private func toolbarContent() -> some ToolbarContent {
         #if os(macOS)
         ToolbarItemGroup(placement: .primaryAction) {
-            Button(action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___) }) {
+            Button {
+                Task {
+                    await reducer.send(.onTapDelete___VARIABLE_modelName___)
+                }
+            } label: {
                 Label {
                     Text(L10n.Button.delete)
                 } icon: {
@@ -121,7 +129,11 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
         #else
         ToolbarItem(placement: .confirmationAction) {
             Menu {
-                Button(action: { reducer.callAsFunction(.onTapEdit___VARIABLE_modelName___) }) {
+                Button {
+                    Task {
+                        await reducer.send(.onTapEdit___VARIABLE_modelName___)
+                    }
+                } label: {
                     Label {
                         Text(L10n.Button.edit)
                     } icon: {
@@ -129,7 +141,11 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
                     }
                 }
 
-                Button(action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___) }) {
+                Button {
+                    Task {
+                        await reducer.send(.onTapDelete___VARIABLE_modelName___)
+                    }
+                } label: {
                     Label {
                         Text(L10n.Button.delete)
                     } icon: {
