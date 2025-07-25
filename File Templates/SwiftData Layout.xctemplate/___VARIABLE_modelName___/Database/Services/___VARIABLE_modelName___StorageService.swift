@@ -26,7 +26,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         date: Date = Date(),
         image: Data? = nil,
         note: String? = nil
-    ) -> Result<___VARIABLE_modelName___, AppError> {
+    ) async -> Result<___VARIABLE_modelName___, AppError> {
         let ___VARIABLE_modelName___: ___VARIABLE_modelName___ = .init(
             id: id,
             name: name,
@@ -55,7 +55,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         note: String? = nil,
         isFavorite: Bool? = nil,
         isArchive: Bool? = nil
-    ) {
+    ) async -> Result<Void, AppError> {
         if let name {
             ___VARIABLE_modelName___.name = name
         }
@@ -77,19 +77,28 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         if let isArchive {
             ___VARIABLE_modelName___.isArchive = isArchive
         }
-    }
 
-    public func delete___VARIABLE_modelName___(_ account: ___VARIABLE_modelName___) {
-        context.delete(account)
         do {
             try context.save()
-
+            return .success(())
         } catch {
-            logError("Error deleting account:", error: error)
+            logError("Update for ___VARIABLE_modelName___:", error: error)
+            return .failure(AppError.coreData(type: .savingItem))
         }
     }
 
-    public func fetch___VARIABLE_modelName___() -> Result<[___VARIABLE_modelName___], AppError> {
+    public func delete(_ ___VARIABLE_modelName___: ___VARIABLE_modelName___) async -> Result<Void, AppError> {
+        context.delete(___VARIABLE_modelName___)
+        do {
+            try context.save()
+            return .success(())
+        } catch {
+            logError("Error deleting ___VARIABLE_modelName___:", error: error)
+            return .failure(AppError.coreData(type: .savingItem))
+        }
+    }
+
+    public func fetch___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
         do {
             let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
                 predicate: #Predicate { !$0.isArchive },
@@ -103,7 +112,57 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         }
     }
 
-    public func fetch___VARIABLE_modelName___ByDateRange(from: Date, to: Date, withArchive: Bool = false) -> Result<[___VARIABLE_modelName___], AppError> {
+    public func fetchFavorite___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
+        do {
+            let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
+                predicate: #Predicate { ___VARIABLE_modelName___ in
+                    ___VARIABLE_modelName___.isFavorite && !___VARIABLE_modelName___.isArchive
+                },
+                sortBy: [SortDescriptor(\___VARIABLE_modelName___.date, order: .reverse)]
+            )
+            let ___VARIABLE_modelName___s = try context.fetch(descriptor)
+            return .success(___VARIABLE_modelName___s)
+        } catch {
+            logError("Fetching favorite ___VARIABLE_modelName___:", error: error)
+            return .failure(AppError.coreData(type: .fetchItems))
+        }
+    }
+
+    public func fetchArchived___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
+        do {
+            let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
+                predicate: #Predicate { $0.isArchive },
+                sortBy: [SortDescriptor(\___VARIABLE_modelName___.date, order: .reverse)]
+            )
+            let ___VARIABLE_modelName___s = try context.fetch(descriptor)
+            return .success(___VARIABLE_modelName___s)
+        } catch {
+            logError("Fetching archived ___VARIABLE_modelName___:", error: error)
+            return .failure(AppError.coreData(type: .fetchItems))
+        }
+    }
+
+    public func fetch___VARIABLE_modelName___(id: UUID) async -> Result<___VARIABLE_modelName___, AppError> {
+        do {
+            let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
+                predicate: #Predicate { $0.id == id }
+            )
+            guard let ___VARIABLE_modelName___ = try context.fetch(descriptor).first else {
+                return .failure(AppError.coreData(type: .fetchItems))
+            }
+            
+            // Increment view count
+            ___VARIABLE_modelName___.viewCount += 1
+            try context.save()
+            
+            return .success(___VARIABLE_modelName___)
+        } catch {
+            logError("Fetching ___VARIABLE_modelName___ by ID:", error: error)
+            return .failure(AppError.coreData(type: .fetchItems))
+        }
+    }
+
+    public func fetch___VARIABLE_modelName___ByDateRange(from: Date, to: Date, withArchive: Bool = false) async -> Result<[___VARIABLE_modelName___], AppError> {
         do {
             let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
                 predicate: #Predicate { ___VARIABLE_modelName___ in
@@ -118,11 +177,12 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelName___s = try context.fetch(descriptor)
             return .success(___VARIABLE_modelName___s)
         } catch {
+            logError("Fetching ___VARIABLE_modelName___ by date range:", error: error)
             return .failure(AppError.coreData(type: .fetchItems))
         }
     }
 
-    public func fetch___VARIABLE_modelName___ForDate(_ date: Date) -> Result<[___VARIABLE_modelName___], AppError> {
+    public func fetch___VARIABLE_modelName___ForDate(_ date: Date) async -> Result<[___VARIABLE_modelName___], AppError> {
         do {
             let calendar = Calendar.current
             let startOfDay = calendar.startOfDay(for: date)
@@ -144,49 +204,32 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             return .success(___VARIABLE_modelName___s)
 
         } catch {
+            logError("Fetching ___VARIABLE_modelName___ for date:", error: error)
             return .failure(AppError.coreData(type: .fetchItems))
         }
     }
 
-    public func fetchFavorite___VARIABLE_modelName___() -> Result<[___VARIABLE_modelName___], AppError> {
+    public func toggleFavorite(_ ___VARIABLE_modelName___: ___VARIABLE_modelName___) async -> Result<Void, AppError> {
+        ___VARIABLE_modelName___.isFavorite.toggle()
+        
         do {
-            let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
-                predicate: #Predicate { ___VARIABLE_modelName___ in
-                    ___VARIABLE_modelName___.isFavorite && !___VARIABLE_modelName___.isArchive
-                },
-                sortBy: [SortDescriptor(\___VARIABLE_modelName___.date, order: .reverse)]
-            )
-            let ___VARIABLE_modelName___s = try context.fetch(descriptor)
-            return .success(___VARIABLE_modelName___s)
+            try context.save()
+            return .success(())
         } catch {
-            return .failure(AppError.coreData(type: .fetchItems))
+            logError("Toggle favorite for ___VARIABLE_modelName___:", error: error)
+            return .failure(AppError.coreData(type: .savingItem))
         }
     }
 
-    public func fetchArchived___VARIABLE_modelName___() -> Result<[___VARIABLE_modelName___], AppError> {
+    public func toggleArchive(_ ___VARIABLE_modelName___: ___VARIABLE_modelName___) async -> Result<Void, AppError> {
+        ___VARIABLE_modelName___.isArchive.toggle()
+        
         do {
-            let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
-                predicate: #Predicate { $0.isArchive },
-                sortBy: [SortDescriptor(\___VARIABLE_modelName___.date, order: .reverse)]
-            )
-            let ___VARIABLE_modelName___s = try context.fetch(descriptor)
-            return .success(___VARIABLE_modelName___s)
+            try context.save()
+            return .success(())
         } catch {
-            return .failure(AppError.coreData(type: .fetchItems))
-        }
-    }
-
-    public func fetch___VARIABLE_modelName___(id: UUID) -> Result<___VARIABLE_modelName___, AppError> {
-        do {
-            let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
-                predicate: #Predicate { $0.id == id }
-            )
-            guard let ___VARIABLE_modelName___ = try context.fetch(descriptor).first else {
-                return .failure(AppError.coreData(type: .fetchItems))
-            }
-            return .success(___VARIABLE_modelName___)
-        } catch {
-            return .failure(AppError.coreData(type: .fetchItems))
+            logError("Toggle archive for ___VARIABLE_modelName___:", error: error)
+            return .failure(AppError.coreData(type: .savingItem))
         }
     }
 }

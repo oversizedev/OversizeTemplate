@@ -1,6 +1,7 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import FactoryKit
 import OversizeCore
 import OversizeKit
 import OversizeModels
@@ -13,10 +14,15 @@ extension ___VARIABLE_modelName___DetailViewModel {
         case onRefresh
         case onTapEdit___VARIABLE_modelName___
         case onTapDelete___VARIABLE_modelName___
+        case onTapToggleFavorite
+        case onTapToggleArchive
     }
 }
 
 public actor ___VARIABLE_modelName___DetailViewModel {
+    /// Services
+    @Injected(\.___VARIABLE_modelVariableName___StorageService) var storageService
+
     /// ViewState
     public var state: ___VARIABLE_modelName___DetailViewState
 
@@ -35,6 +41,10 @@ public actor ___VARIABLE_modelName___DetailViewModel {
             await delete___VARIABLE_modelName___()
         case .onTapEdit___VARIABLE_modelName___:
             await onEdit()
+        case .onTapToggleFavorite:
+            await toggleFavorite()
+        case .onTapToggleArchive:
+            await toggleArchive()
         }
     }
 }
@@ -59,10 +69,56 @@ public extension ___VARIABLE_modelName___DetailViewModel {
     }
 
     private func delete___VARIABLE_modelName___() async {
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else { return }
+        
         await state.update { viewState in
             viewState.alert = .delete {
-                logDeleted("___VARIABLE_modelName___")
-                viewState.isDismissed = true
+                Task {
+                    await self.performDelete(___VARIABLE_modelVariableName___)
+                }
+            }
+        }
+    }
+
+    private func performDelete(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
+        let result = await storageService.delete(___VARIABLE_modelVariableName___)
+        switch result {
+        case .success:
+            logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
+            await state.update {
+                $0.isDismissed = true
+            }
+        case .failure(let error):
+            await state.update {
+                $0.alert = .error(error)
+            }
+        }
+    }
+
+    private func toggleFavorite() async {
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else { return }
+        
+        let result = await storageService.toggleFavorite(___VARIABLE_modelVariableName___)
+        switch result {
+        case .success:
+            await fetchData(force: true)
+        case .failure(let error):
+            await state.update {
+                $0.alert = .error(error)
+            }
+        }
+    }
+
+    private func toggleArchive() async {
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else { return }
+        
+        let result = await storageService.toggleArchive(___VARIABLE_modelVariableName___)
+        switch result {
+        case .success:
+            await fetchData(force: true)
+        case .failure(let error):
+            await state.update {
+                $0.alert = .error(error)
             }
         }
     }
@@ -72,7 +128,13 @@ public extension ___VARIABLE_modelName___DetailViewModel {
 
 public extension ___VARIABLE_modelName___DetailViewModel {
     private func fetchData(force _: Bool = false) async {
-        let result = await fetch___VARIABLE_modelName___()
+        await state.update {
+            $0.___VARIABLE_modelVariableName___State = .loading
+        }
+
+        let id = await state.___VARIABLE_modelVariableName___Id
+        let result = await storageService.fetch___VARIABLE_modelName___(id: id)
+        
         switch result {
         case let .success(___VARIABLE_modelVariableName___):
             await state.update {
@@ -83,9 +145,5 @@ public extension ___VARIABLE_modelName___DetailViewModel {
                 $0.___VARIABLE_modelVariableName___State = .error(error)
             }
         }
-    }
-
-    private func fetch___VARIABLE_modelName___() async -> Result<___VARIABLE_modelName___, AppError> {
-        .failure(AppError.network(type: .unknown))
     }
 }

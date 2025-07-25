@@ -18,7 +18,9 @@ public final class ___VARIABLE_modelName___EditViewState: Sendable {
     public var note: String = .init()
     public var color: Color = .blue
     public var url: URL?
-    public var date: Date?
+    public var date: Date = Date()
+    public var isFavorite: Bool = false
+    public var isArchive: Bool = false
     #if os(macOS)
     public var image: NSImage?
     #else
@@ -29,6 +31,8 @@ public final class ___VARIABLE_modelName___EditViewState: Sendable {
     public var ___VARIABLE_modelVariableName___State: LoadingViewState<___VARIABLE_modelName___> = .idle
     public var focusedField: FocusField?
     public var isSaving: Bool = false
+    public var alert: AppAlert?
+    public var isDismissed: Bool = false
 
     /// Constants
     public let mode: EditMode
@@ -36,7 +40,7 @@ public final class ___VARIABLE_modelName___EditViewState: Sendable {
 
     /// Checks
     var isEmptyForm: Bool {
-        name.isEmpty && note.isEmpty && url == nil
+        name.isEmpty && note.isEmpty && url == nil && !isFavorite && !isArchive
     }
 
     var isValidForm: Bool {
@@ -77,12 +81,22 @@ public extension ___VARIABLE_modelName___EditViewState {
     }
 
     func setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        // Uncomment and modify based on your model properties
-        // name = ___VARIABLE_modelVariableName___.name ?? ""
-        // note = ___VARIABLE_modelVariableName___.note ?? ""
-        // color = Color(___VARIABLE_modelVariableName___.color ?? "blue")
-        // url = ___VARIABLE_modelVariableName___.url
-        // date = ___VARIABLE_modelVariableName___.date
+        name = ___VARIABLE_modelVariableName___.name
+        note = ___VARIABLE_modelVariableName___.note ?? ""
+        color = ___VARIABLE_modelVariableName___.color
+        date = ___VARIABLE_modelVariableName___.date
+        isFavorite = ___VARIABLE_modelVariableName___.isFavorite
+        isArchive = ___VARIABLE_modelVariableName___.isArchive
+        
+        #if os(macOS)
+        if let imageData = ___VARIABLE_modelVariableName___.imageData {
+            image = NSImage(data: imageData)
+        }
+        #else
+        if let imageData = ___VARIABLE_modelVariableName___.imageData {
+            image = UIImage(data: imageData)
+        }
+        #endif
     }
 }
 

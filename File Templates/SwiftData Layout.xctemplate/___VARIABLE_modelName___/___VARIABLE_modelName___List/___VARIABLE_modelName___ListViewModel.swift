@@ -20,12 +20,15 @@ extension ___VARIABLE_modelName___ListViewModel {
         case onTapDelete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___)
         case onTapDisplayType(_ displayType: ___VARIABLE_modelName___ListDisplayType)
         case onChangeSearchTerm(oldValue: String, newValue: String)
+        case onTapFilterType(_ filterType: ___VARIABLE_modelName___FilterType)
+        case onTapViewOption(_ viewOption: ___VARIABLE_modelName___ViewOption)
+        case onTapGridSize(_ gridSize: ___VARIABLE_modelName___GridSize)
     }
 }
 
 public actor ___VARIABLE_modelName___ListViewModel {
     /// Services
-    /// @Injected(\.service) var service
+    @Injected(\.___VARIABLE_modelVariableName___StorageService) var storageService
 
     /// ViewState
     public var state: ___VARIABLE_modelName___ListViewState
@@ -53,6 +56,12 @@ public actor ___VARIABLE_modelName___ListViewModel {
             await onTapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
         case .onTapCreate___VARIABLE_modelName___:
             await onCreate()
+        case let .onTapFilterType(filterType):
+            await onTapFilterType(filterType)
+        case let .onTapViewOption(viewOption):
+            await onTapViewOption(viewOption)
+        case let .onTapGridSize(gridSize):
+            await onTapGridSize(gridSize)
         }
     }
 }
@@ -68,7 +77,9 @@ public extension ___VARIABLE_modelName___ListViewModel {
         await fetchData(force: true)
     }
 
-    func onChangeSearchTerm(oldValue _: String, newValue _: String) async {}
+    func onChangeSearchTerm(oldValue _: String, newValue: String) async {
+        await fetchData()
+    }
 
     func onTapSearch() async {
         await state.update {
@@ -88,6 +99,25 @@ public extension ___VARIABLE_modelName___ListViewModel {
         }
     }
 
+    func onTapFilterType(_ filterType: ___VARIABLE_modelName___FilterType) async {
+        await state.update {
+            $0.storage.filterType = filterType
+        }
+        await fetchData()
+    }
+
+    func onTapViewOption(_ viewOption: ___VARIABLE_modelName___ViewOption) async {
+        await state.update {
+            $0.storage.viewOption = viewOption
+        }
+    }
+
+    func onTapGridSize(_ gridSize: ___VARIABLE_modelName___GridSize) async {
+        await state.update {
+            $0.storage.gridSize = gridSize
+        }
+    }
+
     func onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
@@ -97,7 +127,22 @@ public extension ___VARIABLE_modelName___ListViewModel {
     private func delete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update {
             $0.alert = .delete {
-                logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
+                Task {
+                    await self.performDelete(___VARIABLE_modelVariableName___)
+                }
+            }
+        }
+    }
+
+    private func performDelete(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
+        let result = await storageService.delete(___VARIABLE_modelVariableName___)
+        switch result {
+        case .success:
+            logDeleted("___VARIABLE_modelName___ \(___VARIABLE_modelVariableName___.name)")
+            await fetchData()
+        case .failure(let error):
+            await state.update {
+                $0.alert = .error(error)
             }
         }
     }
@@ -107,11 +152,16 @@ public extension ___VARIABLE_modelName___ListViewModel {
 
 extension ___VARIABLE_modelName___ListViewModel {
     private func fetchData(force _: Bool = false) async {
+        await state.update {
+            $0.___VARIABLE_modelPluralVariableName___State = .loading
+        }
+
         let result = await fetch___VARIABLE_modelName___()
         switch result {
         case let .success(___VARIABLE_modelPluralVariableName___):
+            let filtered___VARIABLE_modelName___ = await applyFilters(___VARIABLE_modelPluralVariableName___)
             await state.update {
-                $0.___VARIABLE_modelPluralVariableName___State = .result(___VARIABLE_modelPluralVariableName___)
+                $0.___VARIABLE_modelPluralVariableName___State = .result(filtered___VARIABLE_modelName___)
             }
         case let .failure(error):
             await state.update {
@@ -121,8 +171,28 @@ extension ___VARIABLE_modelName___ListViewModel {
     }
 
     private func fetch___VARIABLE_modelName___() async -> Result<[___VARIABLE_modelName___], AppError> {
-        .success([
-            .init(id: UUID(), name: "___VARIABLE_modelName___ 1", color: Color.red, date: Date()),
-        ])
+        let filterType = await state.storage.filterType
+        
+        switch filterType {
+        case .all:
+            return await storageService.fetch___VARIABLE_modelName___()
+        case .favorites:
+            return await storageService.fetchFavorite___VARIABLE_modelName___()
+        case .archived:
+            return await storageService.fetchArchived___VARIABLE_modelName___()
+        }
+    }
+
+    private func applyFilters(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) async -> [___VARIABLE_modelName___] {
+        let searchTerm = await state.searchTerm.lowercased()
+        
+        guard !searchTerm.isEmpty else {
+            return ___VARIABLE_modelPluralVariableName___
+        }
+        
+        return ___VARIABLE_modelPluralVariableName___.filter { ___VARIABLE_modelVariableName___ in
+            ___VARIABLE_modelVariableName___.name.lowercased().contains(searchTerm) ||
+            (___VARIABLE_modelVariableName___.note?.lowercased().contains(searchTerm) ?? false)
+        }
     }
 }
