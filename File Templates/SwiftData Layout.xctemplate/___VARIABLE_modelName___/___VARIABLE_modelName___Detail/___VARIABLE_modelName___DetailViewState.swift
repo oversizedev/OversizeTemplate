@@ -1,4 +1,4 @@
- // ___FILEHEADER___
+// ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
 import ___VARIABLE_environmentPackage___
@@ -14,11 +14,12 @@ import SwiftUI
 
 @MainActor
 @Observable
-public final class ___VARIABLE_modelName___DetailViewState: Sendable {
+public final class ___VARIABLE_modelName___DetailViewState: ViewStateProtocol, Sendable {
     // User Interface
-    public var ___VARIABLE_modelVariableName___State: LoadingViewState<___VARIABLE_modelName___> = .idle
+    public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
     public var headerVisibleRatio: CGFloat = .zero
     public var offset: CGPoint = .zero
+    public var hud: HUDState = .idle
 
     // Routing
     public var destination: ___VARIABLE_modelName___Destinations?
@@ -27,6 +28,11 @@ public final class ___VARIABLE_modelName___DetailViewState: Sendable {
 
     // Static
     public let ___VARIABLE_modelVariableName___Id: UUID
+    
+    // Computed properties
+    public var ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___? {
+        ___VARIABLE_modelVariableName___State.result
+    }
 
     // Initialization
     public init(___VARIABLE_modelVariableName___Id: UUID) {

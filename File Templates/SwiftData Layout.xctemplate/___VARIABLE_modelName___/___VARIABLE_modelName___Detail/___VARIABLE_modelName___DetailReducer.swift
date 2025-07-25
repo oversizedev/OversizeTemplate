@@ -3,17 +3,15 @@
 import Foundation
 import OversizeCore
 
-public final class ___VARIABLE_modelName___DetailReducer: Sendable {
-    private let viewModel: ___VARIABLE_modelName___DetailViewModel
-
-    public init(viewModel: ___VARIABLE_modelName___DetailViewModel) {
-        self.viewModel = viewModel
+public final class ___VARIABLE_modelName___DetailReducer: Reducer<___VARIABLE_modelName___DetailViewModel> {
+    public override init(viewModel: ___VARIABLE_modelName___DetailViewModel) {
+        super.init(viewModel: viewModel)
     }
 
-    func callAsFunction(_ event: ___VARIABLE_modelName___DetailViewModel.InputEvent, function _: String = #function, file _: String = #file) {
+    func callAsFunction(_ action: ___VARIABLE_modelName___DetailViewModel.Action, function: String = #function, file: String = #file) {
         Task {
-            logUI(String(describing: event))
-            await viewModel.handleEvent(event)
+            logUI(String(describing: action))
+            await viewModel.handleAction(action)
         }
     }
 }
