@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUI
 
 extension ___VARIABLE_modelName___ListViewModel {
-    enum Action {
+    public enum Action: Sendable {
         case onAppear
         case onRefresh
         case onTapSearch

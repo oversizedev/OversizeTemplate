@@ -9,7 +9,7 @@ import OversizeUI
 import SwiftUI
 
 extension ___VARIABLE_modelName___EditViewModel {
-    enum Action {
+    public enum Action: Sendable {
         case onAppear
         case onTapSave
         case onTapCancel
