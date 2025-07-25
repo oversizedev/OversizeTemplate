@@ -10,10 +10,17 @@ public final class ___VARIABLE_modelName___EditReducer: Sendable {
         self.viewModel = viewModel
     }
 
-    func callAsFunction(_ event: ___VARIABLE_modelName___EditViewModel.InputEvent, function _: String = #function, file _: String = #file) {
+    func callAsFunction(_ action: ___VARIABLE_modelName___EditViewModel.Action, function: String = #function, file: String = #file) {
         Task {
-            logUI(String(describing: event))
-            await viewModel.handleEvent(event)
+            logUI(String(describing: action))
+            await viewModel.handleAction(action)
         }
+    }
+    
+    // MARK: - Async Send Method for Modern Usage
+    
+    func send(_ action: ___VARIABLE_modelName___EditViewModel.Action) async {
+        logUI(String(describing: action))
+        await viewModel.handleAction(action)
     }
 }
