@@ -1,7 +1,6 @@
- // ___FILEHEADER___
+//___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
-import ___VARIABLE_environmentPackage___
 import FactoryKit
 import ObservableDefaults
 import Observation
@@ -14,15 +13,16 @@ import SwiftUI
 
 @MainActor
 @Observable
-public final class ___VARIABLE_modelName___DetailViewState: Sendable {
+public final class ___VARIABLE_modelName___DetailViewState: ViewStateProtocol {
     // User Interface
-    public var ___VARIABLE_modelVariableName___State: LoadingViewState<___VARIABLE_modelName___> = .idle
+    public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
     public var headerVisibleRatio: CGFloat = .zero
     public var offset: CGPoint = .zero
 
     // Routing
     public var destination: ___VARIABLE_modelName___Destinations?
     public var alert: AppAlert?
+    public var hud: OversizeNavigation.HUD?
     public var isDismissed: Bool = false
 
     // Static
@@ -41,8 +41,5 @@ public final class ___VARIABLE_modelName___DetailViewState: Sendable {
 
 // MARK: - User Actions
 
-public extension ___VARIABLE_modelName___DetailViewState {
-    func update(_ handler: @Sendable @MainActor (___VARIABLE_modelName___DetailViewState) -> Void) async {
-        await MainActor.run { handler(self) }
-    }
-}
+public extension ___VARIABLE_modelName___DetailViewState {}
+

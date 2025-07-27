@@ -1,27 +1,8 @@
-//
-// Copyright © 2025 Alexander Romanov
-// ___VARIABLE_modelName___StorageService.swift, created on 09.07.2025
-//
+// ___FILEHEADER___
 
 import OversizeCore
 import SwiftData
 import SwiftUI
-
-public enum ___VARIABLE_modelName___SortType: String, CaseIterable, Sendable, Identifiable {
-    case name, date, popularity
-
-    public var id: String {
-        rawValue
-    }
-}
-
-public enum ___VARIABLE_modelName___SortOrder: String, CaseIterable, Sendable, Identifiable {
-    case ascending, descending
-
-    public var id: String {
-        rawValue
-    }
-}
 
 public actor ___VARIABLE_modelName___StorageService: ModelActor {
     public let modelContainer: ModelContainer
@@ -136,7 +117,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         logData("Fetching sorted ___VARIABLE_modelName___s (sort: \(sortType)/\(sortOrder), includeArchived: \(includeArchived))")
 
         do {
-            let sortDescriptor = makeSortDescriptor(sortType: sortType, sortOrder: sortOrder)
+            let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
 
             let descriptor = if includeArchived {
                 FetchDescriptor<___VARIABLE_modelName___>(
@@ -263,7 +244,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         sortOrder: ___VARIABLE_modelName___SortOrder,
     ) -> Result<[___VARIABLE_modelName___], Error> {
         do {
-            let sortDescriptor = makeSortDescriptor(sortType: sortType, sortOrder: sortOrder)
+            let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
             let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
                 predicate: #Predicate { $0.isArchive },
                 sortBy: [sortDescriptor]
@@ -281,7 +262,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         sortOrder: ___VARIABLE_modelName___SortOrder,
     ) -> Result<[___VARIABLE_modelName___], Error> {
         do {
-            let sortDescriptor = makeSortDescriptor(sortType: sortType, sortOrder: sortOrder)
+            let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
             let descriptor = FetchDescriptor<___VARIABLE_modelName___>(
                 predicate: #Predicate { ___VARIABLE_modelVariableName___ in
                     ___VARIABLE_modelVariableName___.isFavorite && !___VARIABLE_modelVariableName___.isArchive
@@ -334,7 +315,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         includeArchived: Bool = false,
     ) -> Result<[___VARIABLE_modelName___], Error> {
         do {
-            let sortDescriptor = makeSortDescriptor(sortType: sortType, sortOrder: sortOrder)
+            let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
 
             let descriptor = if includeArchived {
                 FetchDescriptor<___VARIABLE_modelName___>(
