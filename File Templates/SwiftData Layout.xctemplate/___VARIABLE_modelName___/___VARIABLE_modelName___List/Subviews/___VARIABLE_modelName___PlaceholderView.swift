@@ -5,9 +5,11 @@ import SwiftUI
 
 struct ___VARIABLE_modelName___PlaceholderView: View {
     let displayType: ___VARIABLE_modelName___ListDisplayType
+    let gridSize: ___VARIABLE_modelName___GridSize
 
-    init(displayType: ___VARIABLE_modelName___ListDisplayType) {
+    init(displayType: ___VARIABLE_modelName___ListDisplayType, gridSize: ___VARIABLE_modelName___GridSize = .medium) {
         self.displayType = displayType
+        self.gridSize = gridSize
     }
 
     var body: some View {
@@ -21,9 +23,9 @@ struct ___VARIABLE_modelName___PlaceholderView: View {
             .redacted(reason: .placeholder)
         case .grid:
             LazyVGrid(
-                columns: [.init(.adaptive(minimum: 320), spacing: 12)],
-                spacing: 12)
-            {
+                columns: [.init(.adaptive(minimum: gridSize.minimumWidth), spacing: 12)],
+                spacing: 12,
+            ) {
                 ForEach(0 ... 8, id: \.self) { _ in
                     VStack {
                         Text("Title")

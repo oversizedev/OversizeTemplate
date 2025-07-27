@@ -1,73 +1,61 @@
- // ___FILEHEADER___
+//___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
-import ___VARIABLE_environmentPackage___
 import OversizeCore
 import OversizeKit
 import OversizeLocalizable
 import OversizeNavigation
-import OversizeNavigation
 import OversizeUI
 import SwiftUI
 
-public extension ___VARIABLE_modelName___DetailScreen {
-    static func build(id: UUID) -> some View {
-        let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___Id: id)
-        let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)
-        return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
-    }
-
-    static func build(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
-        let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
-        let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___DetailReducer(viewModel: viewModel)
-        return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
-    }
-}
-
-public struct ___VARIABLE_modelName___DetailScreen: View {
+public struct ___VARIABLE_modelName___DetailScreen: ViewProtocol {
     // States
-    @State var viewState: ___VARIABLE_modelName___DetailViewState
-    let reducer: ___VARIABLE_modelName___DetailReducer
+    @Bindable var viewState: ___VARIABLE_modelName___DetailViewState
+    let reducer: Reducer<___VARIABLE_modelName___DetailViewModel>
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___DetailViewState, reducer: ___VARIABLE_modelName___DetailReducer) {
+    @MainActor
+    public init(viewState: ___VARIABLE_modelName___DetailViewState, reducer: Reducer<___VARIABLE_modelName___DetailViewModel>) {
         self.viewState = viewState
         self.reducer = reducer
     }
 
     public var body: some View {
-        NavigationCoverLayoutView("___VARIABLE_modelName___ Detail") {
+        NavigationCoverLayoutView("Detail") {
             stateView(viewState.___VARIABLE_modelVariableName___State)
         } cover: {
             cover
         } background: {
             Color.backgroundPrimary
         }
-        .toolbar(content: toolbarContent)
-        .alert(item: $viewState.alert) { $0.alert }
-        .task { reducer.callAsFunction(.onAppear) }
-        .refreshable(action: { reducer.callAsFunction(.onRefresh) })
+        .toolbar { toolbarContent }
+        .presentationAlert($viewState.alert)
+        .presentationHUD($viewState.hud)
+        .task {
+            reducer.callAsFunction(.onAppear)
+        }
+        .refreshable(action: {
+            reducer.callAsFunction(.onRefresh)
+        })
         .navigationMove($viewState.destination)
         .navigationBack($viewState.isDismissed)
     }
 
     @ViewBuilder
-    private func stateView(_ state: LoadingViewState<___VARIABLE_modelName___>) -> some View {
+    private func stateView(_ state: LoadingState<___VARIABLE_modelName___>) -> some View {
         switch state {
         case .idle, .loading:
             ___VARIABLE_modelName___DetailPlaceholder()
         case let .result(model):
             content(model)
         case let .error(error):
-            ErrorView(error)
+            ErrorView(error: error)
         }
     }
 
     private var cover: some View {
         VStack {
-            Text("___VARIABLE_modelName___ Cover")
+            Text("Cover")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
@@ -77,44 +65,32 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
                     Color.blue,
                 ],
                 startPoint: .top,
-                endPoint: .bottom
+                endPoint: .bottom,
             )
         }
     }
 
     private func content(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
         LeadingVStack {
-            Row(___VARIABLE_modelVariableName___.name ?? "Untitled")
-            
-            // Add more content based on your model properties
-            LazyVStack(spacing: 0) {
-                ForEach(1 ... 10, id: \.self) { item in
-                    Button {} label: {
-                        VStack(spacing: 0) {
-                            Text("Item \(item)")
-                                .padding()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                        }
-                        .clipShape(Rectangle())
-                    }
-                }
-            }
+            Row(___VARIABLE_modelVariableName___.name)
         }
     }
+}
 
+// MARK: - Toolbar
+
+private extension ___VARIABLE_modelName___DetailScreen {
     @ToolbarContentBuilder
-    private func toolbarContent() -> some ToolbarContent {
+    private var toolbarContent: some ToolbarContent {
         #if os(macOS)
         ToolbarItemGroup(placement: .primaryAction) {
-            Button(action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___) }) {
+            Button(action: {
+                reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___)
+            }) {
                 Label {
                     Text(L10n.Button.delete)
                 } icon: {
-                    Image.Editor.trashWithLines.icon(
-                        .onSurfaceSecondary,
-                        size: .medium
-                    )
+                    Image.Editor.TrashWithLines.mini
                 }
             }
         }
@@ -125,15 +101,37 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
                     Label {
                         Text(L10n.Button.edit)
                     } icon: {
-                        Image.Base.edit.icon()
+                        Image.Design.PencilAndSquare.mini
                     }
                 }
 
-                Button(action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___) }) {
+                if let ___VARIABLE_modelVariableName___ = viewState.___VARIABLE_modelVariableName___State.successResult {
+                    Button(action: { reducer.callAsFunction(.onToggleFavorite) }) {
+                        Label {
+                            Text(___VARIABLE_modelVariableName___.isFavorite ? "Unfavorite" : "Favorite")
+                        } icon: {
+                            if ___VARIABLE_modelVariableName___.isFavorite {
+                                Image.Base.Unstar.mini
+                            } else {
+                                Image.Base.Star.mini
+                            }
+                        }
+                    }
+
+                    Button(action: { reducer.callAsFunction(.onToggleArchive) }) {
+                        Label {
+                            Text(___VARIABLE_modelVariableName___.isArchive ? L10n.Button.unarchive : L10n.Button.archive)
+                        } icon: {
+                            Image.Delivery.Delivery.mini
+                        }
+                    }
+                }
+
+                Button(role: .destructive, action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___) }) {
                     Label {
                         Text(L10n.Button.delete)
                     } icon: {
-                        Image.Base.delete.icon(Color.error)
+                        Image.Editor.TrashWithLines.mini
                     }
                 }
 
@@ -142,5 +140,27 @@ public struct ___VARIABLE_modelName___DetailScreen: View {
             }
         }
         #endif
+    }
+}
+
+// MARK: - Build Methods
+
+public extension ___VARIABLE_modelName___DetailScreen {
+    @MainActor
+    static func build(id: UUID) -> some View {
+        logNotice("Building ___VARIABLE_modelName___DetailScreen for ID: \(id)")
+        let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___Id: id)
+        let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
+        let reducer = Reducer(viewModel: viewModel)
+        return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
+    }
+
+    @MainActor
+    static func build(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
+        logNotice("Building ___VARIABLE_modelName___DetailScreen for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+        let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+        let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
+        let reducer = Reducer(viewModel: viewModel)
+        return ___VARIABLE_modelName___DetailScreen(viewState: viewState, reducer: reducer)
     }
 }

@@ -1,48 +1,25 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import NavigatorUI
 import OversizeComponents
 import OversizeCore
 import OversizeKit
 import OversizeLocalizable
-import OversizePhotoComponents
 import OversizeNavigation
+import OversizePhotoComponents
 import OversizeUI
 import SwiftUI
 
-extension ___VARIABLE_modelName___EditScreen {
-    static func build() -> some View {
-        let viewState = ___VARIABLE_modelName___EditViewState(.create)
-        let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___EditReducer(viewModel: viewModel)
-        return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
-    }
-
-    static func buildEdit(id: UUID) -> some View {
-        let viewState = ___VARIABLE_modelName___EditViewState(.editId(id))
-        let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___EditReducer(viewModel: viewModel)
-        return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
-    }
-
-    static func buildEdit(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
-        let viewState = ___VARIABLE_modelName___EditViewState(.edit(___VARIABLE_modelVariableName___))
-        let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
-        let reducer = ___VARIABLE_modelName___EditReducer(viewModel: viewModel)
-        return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
-    }
-}
-
-public struct ___VARIABLE_modelName___EditScreen: View {
-    @Environment(\.platform) private var platform
-
+public struct ___VARIABLE_modelName___EditScreen: ViewProtocol {
     // States
-    @State var viewState: ___VARIABLE_modelName___EditViewState
-    let reducer: ___VARIABLE_modelName___EditReducer
+    @Bindable var viewState: ___VARIABLE_modelName___EditViewState
+    let reducer: Reducer<___VARIABLE_modelName___EditViewModel>
     @FocusState private var focusedField: ___VARIABLE_modelName___EditViewState.FocusField?
 
     // Initial
-    public init(viewState: ___VARIABLE_modelName___EditViewState, reducer: ___VARIABLE_modelName___EditReducer) {
+
+    public init(viewState: ___VARIABLE_modelName___EditViewState, reducer: Reducer<___VARIABLE_modelName___EditViewModel>) {
         self.viewState = viewState
         self.reducer = reducer
     }
@@ -50,13 +27,16 @@ public struct ___VARIABLE_modelName___EditScreen: View {
     public var body: some View {
         NavigationLayoutView(
             viewState.title,
-            content: content
+            content: content,
         )
         .backConfirmationDialog(viewState.isEmptyForm ? nil : .discard)
         .toolbarTitleDisplayMode(.inline)
-        .toolbar(content: toolbarContent)
+        .toolbar(content: { toolbarContent })
+        .navigationDismiss(trigger: $viewState.isDismissed)
+        .presentationHUD($viewState.hud)
+        .onChange(of: viewState.focusedField) { _, newValue in focusedField = newValue }
         .task { reducer.callAsFunction(.onAppear) }
-        .onChange(of: viewState.focusedField) { focusedField = $1 }
+        .onAppear { focusedField = .name }
     }
 
     @ViewBuilder
@@ -67,15 +47,15 @@ public struct ___VARIABLE_modelName___EditScreen: View {
             noteField
 
             #if !os(tvOS)
-                urlField
+            urlField
 
-                colorField
+            colorField
             #endif
 
             #if os(iOS)
-                dateField
+            dateField
 
-                imageField
+            imageField
             #endif
         }
         .fieldLabelPosition(.overInput)
@@ -90,9 +70,10 @@ private extension ___VARIABLE_modelName___EditScreen {
     private var titleField: some View {
         TextField("Name", text: $viewState.name)
             .textFieldStyle(.placeholder("Name", text: $viewState.name))
-            .focused($focusedField, equals: .name)
             .submitLabel(.continue)
             .onSubmit { focusedField = .note }
+            .focused($focusedField, equals: .name)
+            .onChange(of: viewState.name) { reducer.callAsFunction(.onNameChanged($1)) }
     }
 
     private var noteField: some View {
@@ -101,6 +82,7 @@ private extension ___VARIABLE_modelName___EditScreen {
             .submitLabel(.continue)
             .onSubmit { focusedField = .url }
             .textEditorPlaceholder("Note", text: $viewState.note)
+            .onChange(of: viewState.note) { reducer.callAsFunction(.onNoteChanged($1)) }
     }
 
     private var urlField: some View {
@@ -109,12 +91,13 @@ private extension ___VARIABLE_modelName___EditScreen {
                 "URL",
                 text: Binding(
                     get: { viewState.url?.absoluteString ?? "" },
-                    set: { _ in }
-                )
+                    set: { _ in },
+                ),
             ))
             .focused($focusedField, equals: .url)
             .submitLabel(.done)
             .onSubmit { focusedField = nil }
+            .onChange(of: viewState.url) { reducer.callAsFunction(.onUrlChanged($1)) }
     }
 
     #if os(iOS)
@@ -143,7 +126,7 @@ private extension ___VARIABLE_modelName___EditScreen {
 
 private extension ___VARIABLE_modelName___EditScreen {
     @ToolbarContentBuilder
-    private func toolbarContent() -> some ToolbarContent {
+    private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
             Button(action: { reducer.callAsFunction(.onTapSave) }) {
                 Text(L10n.Button.save)
@@ -153,5 +136,33 @@ private extension ___VARIABLE_modelName___EditScreen {
                 .keyboardShortcut(.defaultAction)
             #endif
         }
+    }
+}
+
+// MARK: - Build Methods
+
+extension ___VARIABLE_modelName___EditScreen {
+    @MainActor
+    static func build(handler: Callback<___VARIABLE_modelName___EditViewState.CallbackAction>) -> some View {
+        let viewState = ___VARIABLE_modelName___EditViewState(.create, handler: handler)
+        let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
+        let reducer = Reducer(viewModel: viewModel)
+        return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
+    }
+
+    @MainActor
+    static func buildEdit(id: UUID, handler: Callback<___VARIABLE_modelName___EditViewState.CallbackAction>) -> some View {
+        let viewState = ___VARIABLE_modelName___EditViewState(.editId(id), handler: handler)
+        let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
+        let reducer = Reducer(viewModel: viewModel)
+        return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
+    }
+
+    @MainActor
+    static func buildEdit(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, handler: Callback<___VARIABLE_modelName___EditViewState.CallbackAction>) -> some View {
+        let viewState = ___VARIABLE_modelName___EditViewState(.edit(___VARIABLE_modelVariableName___), handler: handler)
+        let viewModel = ___VARIABLE_modelName___EditViewModel(state: viewState)
+        let reducer = Reducer(viewModel: viewModel)
+        return ___VARIABLE_modelName___EditScreen(viewState: viewState, reducer: reducer)
     }
 }

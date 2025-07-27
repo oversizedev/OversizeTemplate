@@ -33,7 +33,7 @@ public final class ___VARIABLE_modelName___: Identifiable, Equatable, @unchecked
         note: String? = nil,
         isFavorite: Bool = false,
         isArchive: Bool = false,
-        viewCount: Int = 0
+        viewCount: Int = 0,
     ) {
         self.id = id
         self.name = name
