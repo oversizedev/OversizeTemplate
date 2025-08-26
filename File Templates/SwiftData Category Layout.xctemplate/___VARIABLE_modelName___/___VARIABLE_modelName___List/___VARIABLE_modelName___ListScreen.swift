@@ -153,11 +153,34 @@ private extension ___VARIABLE_modelName___ListScreen {
             .onChange(of: viewState.filterType) {
                 reducer.callAsFunction(.onChangeFilterType($1))
             }
+
+            if viewState.filterType == .___VARIABLE_categoryVariableName___ {
+                Separator()
+                
+                Picker("___VARIABLE_categoryName___", selection: $viewState.selected___VARIABLE_categoryName___) {
+                    Text("No ___VARIABLE_categoryName___").tag(nil as ___VARIABLE_categoryName___?)
+                    ForEach(viewState.___VARIABLE_categoryPluralVariableName___, id: \.id) { ___VARIABLE_categoryVariableName___ in
+                        HStack {
+                            Circle()
+                                .fill(___VARIABLE_categoryVariableName___.color)
+                                .frame(width: 12, height: 12)
+                            Text(___VARIABLE_categoryVariableName___.name)
+                        }
+                        .tag(___VARIABLE_categoryVariableName___ as ___VARIABLE_categoryName___?)
+                    }
+                }
+                .onChange(of: viewState.selected___VARIABLE_categoryName___) {
+                    reducer.callAsFunction(.onChange___VARIABLE_categoryName___($1))
+                }
+            }
         } label: {
             Text("Filter")
 
             if viewState.filterType != .standard {
                 Text(viewState.filterType.title)
+                if viewState.filterType == .___VARIABLE_categoryVariableName___, let ___VARIABLE_categoryVariableName___ = viewState.selected___VARIABLE_categoryName___ {
+                    Text(___VARIABLE_categoryVariableName___.name)
+                }
             }
         }
     }

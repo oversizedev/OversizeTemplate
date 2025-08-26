@@ -26,8 +26,15 @@ struct ___VARIABLE_modelName___Row: View {
     var body: some View {
         Row(
             ___VARIABLE_modelVariableName___.name,
-            subtitle: viewOption == .compact ? nil : ___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened),
+            subtitle: viewOption == .compact ? nil : subtitleText,
             action: action,
+            leading: {
+                if let ___VARIABLE_categoryVariableName___ = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ {
+                    Circle()
+                        .fill(___VARIABLE_categoryVariableName___.color)
+                        .frame(width: 12, height: 12)
+                }
+            },
             trailing: {
                 if ___VARIABLE_modelVariableName___.isFavorite {
                     Image.Base.Star.fill.icon(Color.warning)
@@ -37,5 +44,17 @@ struct ___VARIABLE_modelName___Row: View {
         #if os(macOS)
         .rowTextColor(isSelected ? Color.onPrimary : Color.onSurfacePrimary)
         #endif
+    }
+
+    private var subtitleText: String {
+        var components: [String] = []
+        
+        if let ___VARIABLE_categoryVariableName___ = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ {
+            components.append(___VARIABLE_categoryVariableName___.name)
+        }
+        
+        components.append(___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened))
+        
+        return components.joined(separator: " • ")
     }
 }

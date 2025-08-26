@@ -18,6 +18,7 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
 
     /// User Interface
     public var ___VARIABLE_modelPluralVariableName___State: LoadingState<[___VARIABLE_modelName___]> = .idle
+    public var ___VARIABLE_categoryPluralVariableName___State: LoadingState<[___VARIABLE_categoryName___]> = .idle
     public var searchTerm: String = ""
     public var isSearch: Bool = false
     public var destination: ___VARIABLE_modelName___Destinations?
@@ -25,6 +26,7 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
     public var hud: OversizeNavigation.HUD?
 
     public var filterType: ___VARIABLE_modelName___FilterType
+    public var selected___VARIABLE_categoryName___: ___VARIABLE_categoryName___?
 
     /// Initialization
     public init(filterType: ___VARIABLE_modelName___FilterType) {
@@ -40,7 +42,11 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
 
 // MARK: - User Actions
 
-public extension ___VARIABLE_modelName___ListViewState {}
+public extension ___VARIABLE_modelName___ListViewState {
+    var ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___] {
+        ___VARIABLE_categoryPluralVariableName___State.successResult ?? []
+    }
+}
 
 // MARK: - App Storage
 

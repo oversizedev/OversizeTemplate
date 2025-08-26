@@ -27,6 +27,7 @@ public extension ___VARIABLE_modelName___ListViewModel {
         case onChangeSortType(___VARIABLE_modelName___SortType)
         case onChangeSortOrder(___VARIABLE_modelName___SortOrder)
         case onChangeFilterType(___VARIABLE_modelName___FilterType)
+        case onChange___VARIABLE_categoryName___(___VARIABLE_categoryName___?)
         case onTapArchive___VARIABLE_modelName___s
         case onToggleCompactView
         case onChangeViewOption(___VARIABLE_modelName___ViewOption)
@@ -36,6 +37,7 @@ public extension ___VARIABLE_modelName___ListViewModel {
 public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     /// Services
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
+    @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
 
     /// ViewState
     public var state: ___VARIABLE_modelName___ListViewState
@@ -75,6 +77,8 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
             await onChangeSortOrder(sortOrder)
         case let .onChangeFilterType(filterType):
             await onChangeFilterType(filterType)
+        case let .onChange___VARIABLE_categoryName___(___VARIABLE_categoryVariableName___):
+            await onChange___VARIABLE_categoryName___(___VARIABLE_categoryVariableName___)
         case .onTapArchive___VARIABLE_modelName___s:
             await onTapArchive___VARIABLE_modelName___s()
         case .onToggleCompactView:
@@ -91,6 +95,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
 
 public extension ___VARIABLE_modelName___ListViewModel {
     func onAppear() async {
+        await fetch___VARIABLE_categoryPluralVariableName___()
         await fetchData()
     }
 
@@ -141,6 +146,11 @@ public extension ___VARIABLE_modelName___ListViewModel {
 
     func onChangeFilterType(_ filterType: ___VARIABLE_modelName___FilterType) async {
         await state.update { $0.filterType = filterType }
+        await fetchData()
+    }
+
+    func onChange___VARIABLE_categoryName___(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?) async {
+        await state.update { $0.selected___VARIABLE_categoryName___ = ___VARIABLE_categoryVariableName___ }
         await fetchData()
     }
 
@@ -237,6 +247,16 @@ public extension ___VARIABLE_modelName___ListViewModel {
     func fetchData(searchTerm: String? = nil) async {
         await fetch___VARIABLE_modelName___s(searchTerm: searchTerm)
     }
+
+    func fetch___VARIABLE_categoryPluralVariableName___() async {
+        let result = await ___VARIABLE_categoryVariableName___StorageService.fetchAll()
+        switch result {
+        case let .success(___VARIABLE_categoryPluralVariableName___):
+            await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .result(___VARIABLE_categoryPluralVariableName___) }
+        case let .failure(error):
+            await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .error(error) }
+        }
+    }
 }
 
 // MARK: - Internal helper methods
@@ -252,6 +272,7 @@ private extension ___VARIABLE_modelName___ListViewModel {
         let sortType = await state.storage.sortType
         let sortOrder = await state.storage.sortOrder
         let filterType = await state.filterType
+        let selected___VARIABLE_categoryName___ = await state.selected___VARIABLE_categoryName___
 
         let result: Result<[___VARIABLE_modelName___], Error>
 
@@ -273,6 +294,17 @@ private extension ___VARIABLE_modelName___ListViewModel {
                     sortType: sortType,
                     sortOrder: sortOrder,
                 )
+            case .___VARIABLE_categoryVariableName___:
+                if let ___VARIABLE_categoryVariableName___ = selected___VARIABLE_categoryName___ {
+                    result = await ___VARIABLE_modelVariableName___StorageService.fetchSorted(
+                        for: ___VARIABLE_categoryVariableName___,
+                        sortType: sortType,
+                        sortOrder: sortOrder,
+                        includeArchived: false
+                    )
+                } else {
+                    result = await ___VARIABLE_modelVariableName___StorageService.fetchWithoutCategory(includeArchived: false)
+                }
             }
         } else {
             switch filterType {
@@ -308,6 +340,24 @@ private extension ___VARIABLE_modelName___ListViewModel {
                 case let .success(products):
                     let favoriteProducts = products.filter { $0.isFavorite }
                     result = .success(favoriteProducts)
+                case let .failure(error):
+                    result = .failure(error)
+                }
+            case .___VARIABLE_categoryVariableName___:
+                let searchResult = await ___VARIABLE_modelVariableName___StorageService.searchSorted(
+                    query: currentSearchTerm,
+                    sortType: sortType,
+                    sortOrder: sortOrder,
+                    includeArchived: false,
+                )
+                switch searchResult {
+                case let .success(products):
+                    let categoryProducts = if let ___VARIABLE_categoryVariableName___ = selected___VARIABLE_categoryName___ {
+                        products.filter { $0.___VARIABLE_categoryVariableName___ == ___VARIABLE_categoryVariableName___ }
+                    } else {
+                        products.filter { $0.___VARIABLE_categoryVariableName___ == nil }
+                    }
+                    result = .success(categoryProducts)
                 case let .failure(error):
                     result = .failure(error)
                 }

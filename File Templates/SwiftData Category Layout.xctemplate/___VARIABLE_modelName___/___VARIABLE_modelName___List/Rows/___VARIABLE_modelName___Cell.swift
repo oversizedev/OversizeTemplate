@@ -21,12 +21,30 @@ struct ___VARIABLE_modelName___Cell: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(spacing: .small) {
+            if let ___VARIABLE_categoryVariableName___ = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ {
+                HStack {
+                    Circle()
+                        .fill(___VARIABLE_categoryVariableName___.color)
+                        .frame(width: 8, height: 8)
+                    
+                    Text(___VARIABLE_categoryVariableName___.name)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    
+                    Spacer()
+                }
+            }
+
             Text(___VARIABLE_modelVariableName___.name)
+                .font(.headline)
+                .multilineTextAlignment(.center)
 
             if viewOption == .standard {
                 HStack {
                     Text(___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened))
+                        .font(.caption)
+                        .foregroundColor(.secondary)
 
                     if ___VARIABLE_modelVariableName___.isFavorite {
                         Image.Base.Star.fill.icon(Color.warning)
