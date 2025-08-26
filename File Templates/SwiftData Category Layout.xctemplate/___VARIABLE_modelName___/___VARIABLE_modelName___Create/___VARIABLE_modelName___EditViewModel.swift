@@ -16,12 +16,14 @@ public extension ___VARIABLE_modelName___EditViewModel {
         case onNameChanged(String)
         case onNoteChanged(String)
         case onUrlChanged(URL?)
+        case on___VARIABLE_categoryName___Changed(___VARIABLE_categoryName___?)
     }
 }
 
 public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
     /// Services
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
+    @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
 
     /// ViewState
     public var state: ___VARIABLE_modelName___EditViewState
@@ -45,6 +47,8 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
             await onNoteChanged(note: note)
         case let .onUrlChanged(url):
             await onUrlChanged(url: url)
+        case let .on___VARIABLE_categoryName___Changed(___VARIABLE_categoryVariableName___):
+            await on___VARIABLE_categoryName___Changed(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___)
         }
     }
 }
@@ -53,6 +57,7 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
 
 public extension ___VARIABLE_modelName___EditViewModel {
     func onAppear() async {
+        await fetch___VARIABLE_categoryPluralVariableName___()
         switch state.mode {
         case .edit, .editId:
             await fetchData()
@@ -74,6 +79,11 @@ public extension ___VARIABLE_modelName___EditViewModel {
     }
 
     func onUrlChanged(url: URL?) async {
+        await updateFormValidation()
+    }
+
+    func on___VARIABLE_categoryName___Changed(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?) async {
+        await state.update { $0.selected___VARIABLE_categoryName___ = ___VARIABLE_categoryVariableName___ }
         await updateFormValidation()
     }
 
@@ -147,7 +157,8 @@ public extension ___VARIABLE_modelName___EditViewModel {
             color: state.color,
             date: state.date ?? Date(),
             image: state.image?.jpegData(compressionQuality: 5),
-            note: state.note.isEmpty ? nil : state.note
+            note: state.note.isEmpty ? nil : state.note,
+            ___VARIABLE_categoryVariableName___: state.selected___VARIABLE_categoryName___
         )
     }
 
@@ -162,8 +173,19 @@ public extension ___VARIABLE_modelName___EditViewModel {
             color: state.color,
             date: state.date ?? Date(),
             image: state.image?.jpegData(compressionQuality: 5),
-            note: state.note.isEmpty ? nil : state.note
+            note: state.note.isEmpty ? nil : state.note,
+            ___VARIABLE_categoryVariableName___: state.selected___VARIABLE_categoryName___
         )
+    }
+
+    func fetch___VARIABLE_categoryPluralVariableName___() async {
+        let result = await ___VARIABLE_categoryVariableName___StorageService.fetchAll()
+        switch result {
+        case let .success(___VARIABLE_categoryPluralVariableName___):
+            await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .result(___VARIABLE_categoryPluralVariableName___) }
+        case let .failure(error):
+            await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .error(error) }
+        }
     }
 
     private func fetch___VARIABLE_modelName___Internal() async -> Result<___VARIABLE_modelName___, Error> {

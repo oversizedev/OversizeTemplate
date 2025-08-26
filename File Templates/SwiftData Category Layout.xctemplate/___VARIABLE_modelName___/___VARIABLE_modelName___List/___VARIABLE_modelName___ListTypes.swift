@@ -6,7 +6,7 @@ import OversizeResources
 import SwiftUI
 
 public enum ___VARIABLE_modelName___FilterType: String, CaseIterable, Identifiable, Sendable {
-    case standard, archived, favorites
+    case standard, archived, favorites, ___VARIABLE_categoryVariableName___
 
     public var title: String {
         switch self {
@@ -16,6 +16,8 @@ public enum ___VARIABLE_modelName___FilterType: String, CaseIterable, Identifiab
             "Archived"
         case .favorites:
             "Favorites"
+        case .___VARIABLE_categoryVariableName___:
+            "By ___VARIABLE_categoryName___"
         }
     }
 
@@ -27,6 +29,8 @@ public enum ___VARIABLE_modelName___FilterType: String, CaseIterable, Identifiab
             Image.Delivery.Delivery.mini
         case .favorites:
             Image.Base.Star.mini
+        case .___VARIABLE_categoryVariableName___:
+            Image.Editor.OrganizeList.mini
         }
     }
 
@@ -38,6 +42,8 @@ public enum ___VARIABLE_modelName___FilterType: String, CaseIterable, Identifiab
             Illustration.Objects.Arhive.medium
         case .favorites:
             Illustration.Objects.star
+        case .___VARIABLE_categoryVariableName___:
+            Illustration.Objects.folder
         }
     }
 
@@ -49,6 +55,8 @@ public enum ___VARIABLE_modelName___FilterType: String, CaseIterable, Identifiab
             "No archived items yet"
         case .favorites:
             "No favorite items yet"
+        case .___VARIABLE_categoryVariableName___:
+            "No items in this ___VARIABLE_categoryVariableName___"
         }
     }
 
@@ -60,6 +68,8 @@ public enum ___VARIABLE_modelName___FilterType: String, CaseIterable, Identifiab
             "Archive items to see them here"
         case .favorites:
             "Mark items as favorites to see them here"
+        case .___VARIABLE_categoryVariableName___:
+            "Add items to this ___VARIABLE_categoryVariableName___ to see them here"
         }
     }
 

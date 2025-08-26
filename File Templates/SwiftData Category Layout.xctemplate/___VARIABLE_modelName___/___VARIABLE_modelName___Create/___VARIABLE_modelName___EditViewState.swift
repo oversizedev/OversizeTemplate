@@ -24,9 +24,11 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
     #else
     public var image: UIImage?
     #endif
+    public var selected___VARIABLE_categoryName___: ___VARIABLE_categoryName___?
 
     /// User Interface
     public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
+    public var ___VARIABLE_categoryPluralVariableName___State: LoadingState<[___VARIABLE_categoryName___]> = .idle
     public var focusedField: FocusField?
     public var isSaving: Bool = .init()
     public var isDismissed: Bool = .init()
@@ -49,6 +51,10 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
         case .edit, .editId:
             "Edit \(___VARIABLE_modelVariableName___State.successResult?.name ?? "")"
         }
+    }
+
+    var ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___] {
+        ___VARIABLE_categoryPluralVariableName___State.successResult ?? []
     }
 
     /// Initialization
@@ -76,6 +82,7 @@ public extension ___VARIABLE_modelName___EditViewState {
         note = ___VARIABLE_modelVariableName___.note ?? ""
         color = ___VARIABLE_modelVariableName___.color
         date = ___VARIABLE_modelVariableName___.date
+        selected___VARIABLE_categoryName___ = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___
         if let data = ___VARIABLE_modelVariableName___.imageData {
             #if os(macOS)
             image = NSImage(data: data)
@@ -95,7 +102,7 @@ public extension ___VARIABLE_modelName___EditViewState {
 
     /// FocusFields
     enum FocusField: String, Hashable, Sendable {
-        case name, note, url
+        case name, note, url, ___VARIABLE_categoryVariableName___
     }
 
     enum CallbackAction: Sendable {

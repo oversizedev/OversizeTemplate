@@ -49,6 +49,8 @@ public struct ___VARIABLE_modelName___EditScreen: ViewProtocol {
             #if !os(tvOS)
             urlField
 
+            categoryField
+
             colorField
             #endif
 
@@ -113,6 +115,27 @@ private extension ___VARIABLE_modelName___EditScreen {
         })
         .rowOnSurface(backgroundColor: Color.surfaceSecondary)
         .surfaceContentMargins(.init(horizontal: .small, vertical: .small))
+    }
+
+    private var categoryField: some View {
+        Row("___VARIABLE_categoryName___", trailing: {
+            Picker("___VARIABLE_categoryName___", selection: $viewState.selected___VARIABLE_categoryName___) {
+                Text("No ___VARIABLE_categoryName___").tag(nil as ___VARIABLE_categoryName___?)
+                ForEach(viewState.___VARIABLE_categoryPluralVariableName___, id: \.id) { ___VARIABLE_categoryVariableName___ in
+                    HStack {
+                        Circle()
+                            .fill(___VARIABLE_categoryVariableName___.color)
+                            .frame(width: 12, height: 12)
+                        Text(___VARIABLE_categoryVariableName___.name)
+                    }
+                    .tag(___VARIABLE_categoryVariableName___ as ___VARIABLE_categoryName___?)
+                }
+            }
+            .pickerStyle(.menu)
+        })
+        .rowOnSurface(backgroundColor: Color.surfaceSecondary)
+        .surfaceContentMargins(.init(horizontal: .small, vertical: .small))
+        .onChange(of: viewState.selected___VARIABLE_categoryName___) { reducer.callAsFunction(.on___VARIABLE_categoryName___Changed($1)) }
     }
 
     #if os(iOS)
