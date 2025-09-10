@@ -19,6 +19,7 @@ public final class ___VARIABLE_modelName___Entity {
     public var date: Date
     public var note: String?
     public var isFavorite: Bool
+    public var isArchive: Bool
     public var viewCount: Int
 
     public var ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity?
@@ -33,6 +34,7 @@ public final class ___VARIABLE_modelName___Entity {
         image: Data? = nil,
         note: String? = nil,
         isFavorite: Bool = false,
+        isArchive: Bool = false,
         viewCount: Int = 0,
         ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity? = nil
     ) {
@@ -42,6 +44,7 @@ public final class ___VARIABLE_modelName___Entity {
         self.date = date
         self.note = note
         self.isFavorite = isFavorite
+        self.isArchive = isArchive
         self.viewCount = viewCount
         self.___VARIABLE_categoryVariableName___ = ___VARIABLE_categoryVariableName___
         imageData = image
@@ -56,6 +59,7 @@ public final class ___VARIABLE_modelName___Entity {
             image: domain.imageData,
             note: domain.note,
             isFavorite: domain.isFavorite,
+            isArchive: domain.isArchive,
             viewCount: domain.viewCount,
             ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___
         )

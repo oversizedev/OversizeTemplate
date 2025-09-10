@@ -12,6 +12,7 @@ public struct ___VARIABLE_categoryName___: Identifiable, Hashable, Equatable, Se
     public let date: Date
     public let note: String?
     public let isFavorite: Bool
+    public let isArchive: Bool
     public let viewCount: Int
     public let index: Int
 
@@ -24,6 +25,7 @@ public struct ___VARIABLE_categoryName___: Identifiable, Hashable, Equatable, Se
         date: Date,
         note: String? = nil,
         isFavorite: Bool = false,
+        isArchive: Bool = false,
         viewCount: Int = 0,
         index: Int = 0
     ) {
@@ -35,6 +37,7 @@ public struct ___VARIABLE_categoryName___: Identifiable, Hashable, Equatable, Se
         self.date = date
         self.note = note
         self.isFavorite = isFavorite
+        self.isArchive = isArchive
         self.viewCount = viewCount
         self.index = index
     }
@@ -61,6 +64,7 @@ public extension ___VARIABLE_categoryName___ {
             date: entity.date,
             note: entity.note,
             isFavorite: entity.isFavorite,
+            isArchive: entity.isArchive,
             viewCount: entity.viewCount,
             index: entity.index
         )

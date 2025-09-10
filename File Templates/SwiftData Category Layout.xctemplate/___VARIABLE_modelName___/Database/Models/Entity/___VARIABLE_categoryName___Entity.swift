@@ -20,6 +20,7 @@ public final class ___VARIABLE_categoryName___Entity {
     public var date: Date
     public var note: String?
     public var isFavorite: Bool
+    public var isArchive: Bool
     public var viewCount: Int
     public var index: Int
 
@@ -37,6 +38,7 @@ public final class ___VARIABLE_categoryName___Entity {
         image: Data? = nil,
         note: String? = nil,
         isFavorite: Bool = false,
+        isArchive: Bool = false,
         viewCount: Int = 0,
         index: Int = 0,
         ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___Entity] = []
@@ -48,6 +50,7 @@ public final class ___VARIABLE_categoryName___Entity {
         self.date = date
         self.note = note
         self.isFavorite = isFavorite
+        self.isArchive = isArchive
         self.viewCount = viewCount
         self.index = index
         self.___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelPluralVariableName___
@@ -64,6 +67,7 @@ public final class ___VARIABLE_categoryName___Entity {
             image: domain.imageData,
             note: domain.note,
             isFavorite: domain.isFavorite,
+            isArchive: domain.isArchive,
             viewCount: domain.viewCount,
             index: domain.index,
             ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___
