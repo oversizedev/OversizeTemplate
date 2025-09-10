@@ -1,17 +1,13 @@
 // ___FILEHEADER___
 
-import SwiftData
+import FactoryKit
 import OversizeCore
 
-public extension InjectionKey {
-    static var ___VARIABLE_categoryVariableName___StorageService: InjectionKey<___VARIABLE_categoryName___StorageService> {
-        InjectionKey()
-    }
-}
-
-public extension InjectionValues {
-    var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService {
-        get { Self[InjectionKey.___VARIABLE_categoryVariableName___StorageService] }
-        set { Self[InjectionKey.___VARIABLE_categoryVariableName___StorageService] = newValue }
+public extension Container {
+    var ___VARIABLE_categoryVariableName___StorageService: Factory<___VARIABLE_categoryName___StorageService> {
+        self {
+            logInfo("Creating ___VARIABLE_categoryName___StorageService instance")
+            return ___VARIABLE_categoryName___StorageService(modelContainer: self.modelContainerService())
+        }.singleton
     }
 }

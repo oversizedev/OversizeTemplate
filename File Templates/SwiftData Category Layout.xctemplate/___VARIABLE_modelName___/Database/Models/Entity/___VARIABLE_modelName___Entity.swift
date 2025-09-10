@@ -5,7 +5,7 @@ import SwiftData
 import SwiftUI
 
 @Model
-public final class ___VARIABLE_modelName___: Identifiable, Equatable, @unchecked Sendable {
+public final class ___VARIABLE_modelName___Entity {
     @Attribute(.unique)
     public private(set) var id: UUID
 
@@ -19,14 +19,11 @@ public final class ___VARIABLE_modelName___: Identifiable, Equatable, @unchecked
     public var date: Date
     public var note: String?
     public var isFavorite: Bool
-    public var isArchive: Bool
     public var viewCount: Int
 
-    // MARK: Relationships
+    public var ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity?
 
-    public var ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?
-
-    // MARK: Initializer
+    // MARK: Initializers
 
     public init(
         id: UUID = UUID(),
@@ -36,9 +33,8 @@ public final class ___VARIABLE_modelName___: Identifiable, Equatable, @unchecked
         image: Data? = nil,
         note: String? = nil,
         isFavorite: Bool = false,
-        isArchive: Bool = false,
         viewCount: Int = 0,
-        ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___? = nil
+        ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity? = nil
     ) {
         self.id = id
         self.name = name
@@ -46,23 +42,29 @@ public final class ___VARIABLE_modelName___: Identifiable, Equatable, @unchecked
         self.date = date
         self.note = note
         self.isFavorite = isFavorite
-        self.isArchive = isArchive
         self.viewCount = viewCount
-        imageData = image
         self.___VARIABLE_categoryVariableName___ = ___VARIABLE_categoryVariableName___
+        imageData = image
+    }
+
+    public convenience init(from domain: ___VARIABLE_modelName___, ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity? = nil) {
+        self.init(
+            id: domain.id,
+            name: domain.name,
+            color: domain.color,
+            date: domain.date,
+            image: domain.imageData,
+            note: domain.note,
+            isFavorite: domain.isFavorite,
+            viewCount: domain.viewCount,
+            ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___
+        )
     }
 }
 
-public extension ___VARIABLE_modelName___ {
-    static var all: FetchDescriptor<___VARIABLE_modelName___> {
-        FetchDescriptor(
-            sortBy: [SortDescriptor(
-                \___VARIABLE_modelName___.name,
-                order: .reverse,
-            )]
-        )
-    }
+// MARK: - Computed Properties
 
+public extension ___VARIABLE_modelName___Entity {
     var color: Color {
         colorData.color
     }
