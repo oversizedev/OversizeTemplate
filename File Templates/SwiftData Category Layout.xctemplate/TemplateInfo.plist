@@ -7,9 +7,9 @@
 	<key>Kind</key>
 	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
 	<key>Description</key>
-	<string>A SwiftUI custom view with category support, including models with category relationships</string>
+	<string>A SwiftUI custom view with category support, including models with category relationships. Optimized with shared architecture components and MealProduct-inspired patterns.</string>
 	<key>Summary</key>
-	<string>SwiftUI Screens with Categories</string>
+	<string>SwiftUI Screens with Categories (MealProduct Pattern)</string>
 	<key>SortOrder</key>
 	<string>1</string>
 	<key>AllowedTypes</key>
@@ -21,7 +21,7 @@
 	<key>DefaultCompletionName</key>
 	<string>View</string>
 	<key>MainTemplateFile</key>
-	<string>___VARIABLE_productName___EditScreen.swift</string>
+	<string>___VARIABLE_modelName___EditScreen.swift</string>
 	<key>Image</key>
 	<dict>
 		<key>FileTypeIcon</key>
