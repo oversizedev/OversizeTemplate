@@ -4,15 +4,15 @@ import OversizeResources
 import OversizeUI
 import SwiftUI
 
-struct ___VARIABLE_modelName___EmptyView: View {
+struct ___VARIABLE_categoryName___ListContentView: View {
     @State var scrollViewSize: CGSize = .init(width: 0, height: 0)
 
-    let filter: ___VARIABLE_modelName___FilterType
+    let filter: ___VARIABLE_categoryName___FilterType
     let isSearch: Bool
 
     private let action: () -> Void
 
-    init(filter: ___VARIABLE_modelName___FilterType, isSearch: Bool, action: @escaping () -> Void) {
+    init(filter: ___VARIABLE_categoryName___FilterType, isSearch: Bool, action: @escaping () -> Void) {
         self.filter = filter
         self.isSearch = isSearch
         self.action = action
@@ -53,12 +53,12 @@ struct ___VARIABLE_modelName___EmptyView: View {
     }
 
     private var primaryButton: ContenButtonType? {
-        isSearch == false && filter == .standard ? .primary("Add item", action: action) : nil
+        isSearch == false && filter == .standard ? .primary("Add ___VARIABLE_categoryVariableName___", action: action) : nil
     }
 }
 
 #Preview {
-    ___VARIABLE_modelName___EmptyView(
+    ___VARIABLE_categoryName___ListContentView(
         filter: .standard,
         isSearch: false,
         action: {},
