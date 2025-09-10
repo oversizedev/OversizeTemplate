@@ -9,5 +9,5 @@ public protocol ViewModelProtocol: AnyObject, Observable {
 
     var state: ViewState { get }
 
-    func handleEvent(_ event: InputEvent) async
+    func handleAction(_ action: InputEvent) async
 }

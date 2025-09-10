@@ -11,7 +11,7 @@ public final class Reducer<ViewModel>: Sendable where ViewModel: ViewModelProtoc
 
     func callAsFunction(_ event: ViewModel.InputEvent, function _: String = #function, file _: String = #file) {
         Task {
-            await viewModel.handleEvent(event)
+            await viewModel.handleAction(event)
         }
     }
 }
