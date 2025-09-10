@@ -50,11 +50,13 @@ struct ___VARIABLE_categoryName___Row: View {
     ___VARIABLE_categoryName___Row(
         .init(
             name: "Sample ___VARIABLE_categoryName___",
+            emoji: "📁",
             color: .blue,
             date: Date(),
             note: "Sample note",
             isFavorite: true,
-            viewCount: 5
+            viewCount: 5,
+            index: 0
         ),
         viewOption: .withNote
     ) {}

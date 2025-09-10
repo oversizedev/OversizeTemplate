@@ -289,7 +289,7 @@ private extension ___VARIABLE_modelName___ListScreen {
 
                     if viewState.storage.displayType == .grid {
                         Picker("Grid Size", selection: $viewState.storage.gridSize) {
-                            ForEach(___VARIABLE_modelName___GridSize.allCases) { size in
+                            ForEach(GridSize.allCases) { size in
                                 Text(size.title)
                                     .tag(size)
                             }

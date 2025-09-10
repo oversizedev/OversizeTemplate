@@ -62,11 +62,13 @@ struct ___VARIABLE_categoryName___Cell: View {
     ___VARIABLE_categoryName___Cell(
         .init(
             name: "Sample ___VARIABLE_categoryName___",
+            emoji: "📁",
             color: .blue,
             date: Date(),
             note: "Sample note",
             isFavorite: true,
-            viewCount: 5
+            viewCount: 5,
+            index: 0
         ),
         viewOption: .withNote
     ) {}

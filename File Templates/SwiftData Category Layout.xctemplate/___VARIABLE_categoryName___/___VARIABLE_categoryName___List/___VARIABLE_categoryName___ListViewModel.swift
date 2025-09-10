@@ -102,11 +102,13 @@ private extension ___VARIABLE_categoryName___ListViewModel {
             do {
                 let duplicated___VARIABLE_categoryName___ = ___VARIABLE_categoryName___(
                     name: "\(___VARIABLE_categoryVariableName___.name) Copy",
+                    emoji: ___VARIABLE_categoryVariableName___.emoji,
                     color: ___VARIABLE_categoryVariableName___.color,
                     date: Date(),
                     note: ___VARIABLE_categoryVariableName___.note,
                     isFavorite: false,
-                    viewCount: 0
+                    viewCount: 0,
+                    index: ___VARIABLE_categoryVariableName___.index
                 )
                 try await ___VARIABLE_categoryVariableName___StorageService.save(duplicated___VARIABLE_categoryName___)
                 await MainActor.run {

@@ -69,6 +69,6 @@ public extension ___VARIABLE_modelName___ListViewState {
         public var viewOption: ___VARIABLE_modelName___ViewOption = .standard
 
         @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.gridSize)
-        public var gridSize: ___VARIABLE_modelName___GridSize = .medium
+        public var gridSize: GridSize = .medium
     }
 }

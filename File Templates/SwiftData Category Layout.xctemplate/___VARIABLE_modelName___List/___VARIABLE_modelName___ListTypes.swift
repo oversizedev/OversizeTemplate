@@ -116,7 +116,7 @@ public enum ___VARIABLE_modelName___ViewOption: String, CaseIterable, Identifiab
     }
 }
 
-public enum ___VARIABLE_modelName___GridSize: String, CaseIterable, Identifiable, Sendable {
+public enum GridSize: String, CaseIterable, Identifiable, Sendable {
     case small, medium, large
 
     public var title: String {
