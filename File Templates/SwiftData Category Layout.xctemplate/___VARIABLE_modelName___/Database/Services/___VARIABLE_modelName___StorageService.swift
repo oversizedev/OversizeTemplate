@@ -1,0 +1,257 @@
+// ___FILEHEADER___
+
+import OversizeCore
+import SwiftData
+import SwiftUI
+
+@ModelActor
+public actor ___VARIABLE_modelName___StorageService {
+    // MARK: - Save Operations
+
+    public func save(
+        name: String,
+        color: Color,
+        date: Date = Date(),
+        imageData: Data? = nil,
+        note: String? = nil,
+        ___VARIABLE_categoryVariableName___Id: UUID? = nil
+    ) async throws -> ___VARIABLE_modelName___ {
+        let ___VARIABLE_modelVariableName___ = ___VARIABLE_modelName___(
+            imageData: imageData,
+            name: name,
+            color: color,
+            date: date,
+            note: note,
+            ___VARIABLE_categoryVariableName___Id: ___VARIABLE_categoryVariableName___Id
+        )
+
+        let results = try await save([___VARIABLE_modelVariableName___])
+        guard let result = results.first else {
+            throw SwiftDataError.saveFailed
+        }
+        return result
+    }
+
+    public func save(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) async throws -> [___VARIABLE_modelName___] {
+        let count = ___VARIABLE_modelPluralVariableName___.count
+        logData("Saving \(count) ___VARIABLE_modelName___(s)")
+
+        do {
+            var savedProducts: [___VARIABLE_modelName___Entity] = []
+
+            for ___VARIABLE_modelVariableName___ in ___VARIABLE_modelPluralVariableName___ {
+                var ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity? = nil
+
+                if let ___VARIABLE_categoryVariableName___Id = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id {
+                    let categoryDescriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
+                        predicate: #Predicate { $0.id == ___VARIABLE_categoryVariableName___Id }
+                    )
+                    ___VARIABLE_categoryVariableName___ = try modelContext.fetch(categoryDescriptor).first
+                }
+
+                let entity = ___VARIABLE_modelName___Entity(
+                    id: ___VARIABLE_modelVariableName___.id,
+                    name: ___VARIABLE_modelVariableName___.name,
+                    color: ___VARIABLE_modelVariableName___.color,
+                    date: ___VARIABLE_modelVariableName___.date,
+                    image: ___VARIABLE_modelVariableName___.imageData,
+                    note: ___VARIABLE_modelVariableName___.note,
+                    ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___
+                )
+
+                modelContext.insert(entity)
+                savedProducts.append(entity)
+            }
+
+            try modelContext.save()
+            return savedProducts.map { ___VARIABLE_modelName___(from: $0) }
+        } catch {
+            logError("Save failed:", error: error)
+            throw count == 1 ? SwiftDataError.saveFailed : SwiftDataError.batchOperationFailed
+        }
+    }
+
+    public func duplicate(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async throws -> ___VARIABLE_modelName___ {
+        let duplicatedProduct = ___VARIABLE_modelName___(
+            imageData: ___VARIABLE_modelVariableName___.imageData,
+            name: "\(___VARIABLE_modelVariableName___.name) (Copy)",
+            color: ___VARIABLE_modelVariableName___.color,
+            date: Date(),
+            note: ___VARIABLE_modelVariableName___.note,
+            ___VARIABLE_categoryVariableName___Id: ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id
+        )
+
+        let results = try await save([duplicatedProduct])
+        guard let result = results.first else {
+            throw SwiftDataError.saveFailed
+        }
+
+        return result
+    }
+
+    // MARK: - Fetch Operations
+
+    public func fetch(
+        filterType: ___VARIABLE_modelName___FilterType? = nil,
+        sortType: ___VARIABLE_modelName___SortType = .date,
+        sortOrder: ___VARIABLE_modelName___SortOrder = .descending,
+        ___VARIABLE_categoryVariableName___Id: UUID? = nil
+    ) async throws -> [___VARIABLE_modelName___] {
+        do {
+            var predicate: Predicate<___VARIABLE_modelName___Entity>?
+
+            if let ___VARIABLE_categoryVariableName___Id {
+                predicate = #Predicate { product in
+                    product.___VARIABLE_categoryVariableName___?.id == ___VARIABLE_categoryVariableName___Id
+                }
+            } else if let filterPredicate = filterType?.filterPredicate {
+                predicate = filterPredicate
+            }
+
+            let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
+            let descriptor = FetchDescriptor<___VARIABLE_modelName___Entity>(
+                predicate: predicate,
+                sortBy: [sortDescriptor]
+            )
+
+            let ___VARIABLE_modelPluralVariableName___ = try modelContext.fetch(descriptor)
+            return ___VARIABLE_modelPluralVariableName___.map { ___VARIABLE_modelName___(from: $0) }
+        } catch {
+            logError("Fetch failed:", error: error)
+            throw SwiftDataError.fetchFailed
+        }
+    }
+
+    public func fetch(by id: UUID) async throws -> ___VARIABLE_modelName___ {
+        do {
+            let ___VARIABLE_modelVariableName___ = try await fetchProduct(by: id)
+            return ___VARIABLE_modelName___(from: ___VARIABLE_modelVariableName___)
+        } catch {
+            logError("Fetch by id failed:", error: error)
+            throw SwiftDataError.fetchFailed
+        }
+    }
+
+    // MARK: - Search
+
+    public func search(
+        query: String,
+        filterType: ___VARIABLE_modelName___FilterType? = nil,
+        sortType: ___VARIABLE_modelName___SortType = .date,
+        sortOrder: ___VARIABLE_modelName___SortOrder = .descending
+    ) async throws -> [___VARIABLE_modelName___] {
+        do {
+            let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
+            let descriptor = if filterType == .favorites {
+                FetchDescriptor<___VARIABLE_modelName___Entity>(
+                    predicate: #Predicate { ___VARIABLE_modelVariableName___ in
+                        ___VARIABLE_modelVariableName___.isFavorite &&
+                            (___VARIABLE_modelVariableName___.name.localizedStandardContains(query) ||
+                                (___VARIABLE_modelVariableName___.note?.localizedStandardContains(query) == true))
+                    },
+                    sortBy: [sortDescriptor]
+                )
+            } else {
+                FetchDescriptor<___VARIABLE_modelName___Entity>(
+                    predicate: #Predicate { ___VARIABLE_modelVariableName___ in
+                        ___VARIABLE_modelVariableName___.name.localizedStandardContains(query) ||
+                            (___VARIABLE_modelVariableName___.note?.localizedStandardContains(query) == true)
+                    },
+                    sortBy: [sortDescriptor]
+                )
+            }
+
+            let ___VARIABLE_modelPluralVariableName___ = try modelContext.fetch(descriptor)
+            return ___VARIABLE_modelPluralVariableName___.map { ___VARIABLE_modelName___(from: $0) }
+        } catch {
+            logError("Search failed:", error: error)
+            throw SwiftDataError.fetchFailed
+        }
+    }
+
+    // MARK: - Update Operations
+
+    public func update(
+        _ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___,
+        name: String? = nil,
+        color: Color? = nil,
+        date: Date? = nil,
+        image: Data? = nil,
+        note: String? = nil,
+        isFavorite: Bool? = nil,
+        ___VARIABLE_categoryVariableName___Id: UUID? = nil
+    ) async throws -> ___VARIABLE_modelName___ {
+        do {
+            let product = try await fetchProduct(by: ___VARIABLE_modelVariableName___.id)
+
+            if let name { product.name = name }
+            if let color { product.colorData = .init(color: color) }
+            if let date { product.date = date }
+            if let image { product.imageData = image }
+            if let note { product.note = note }
+            if let isFavorite { product.isFavorite = isFavorite }
+            if let ___VARIABLE_categoryVariableName___Id {
+                let categoryDescriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
+                    predicate: #Predicate { $0.id == ___VARIABLE_categoryVariableName___Id }
+                )
+                product.___VARIABLE_categoryVariableName___ = try modelContext.fetch(categoryDescriptor).first
+            }
+            try modelContext.save()
+            return ___VARIABLE_modelName___(from: product)
+        } catch {
+            logError("Update failed:", error: error)
+            throw SwiftDataError.saveFailed
+        }
+    }
+
+    public func updateCategory(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, ___VARIABLE_categoryVariableName___Id: UUID?) async throws -> ___VARIABLE_modelName___ {
+        try await update(___VARIABLE_modelVariableName___, ___VARIABLE_categoryVariableName___Id: ___VARIABLE_categoryVariableName___Id)
+    }
+
+    public func toggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async throws -> ___VARIABLE_modelName___ {
+        try await update(___VARIABLE_modelVariableName___, isFavorite: !___VARIABLE_modelVariableName___.isFavorite)
+    }
+
+    public func incrementViewCount(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async throws -> ___VARIABLE_modelName___ {
+        do {
+            let product = try await fetchProduct(by: ___VARIABLE_modelVariableName___.id)
+            product.viewCount += 1
+            try modelContext.save()
+            return ___VARIABLE_modelName___(from: product)
+        } catch {
+            logError("Increment view count failed:", error: error)
+            throw SwiftDataError.saveFailed
+        }
+    }
+
+    // MARK: - Delete Operations
+
+    public func delete(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async throws {
+        try await delete([___VARIABLE_modelVariableName___])
+    }
+
+    public func delete(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) async throws {
+        do {
+            for ___VARIABLE_modelVariableName___ in ___VARIABLE_modelPluralVariableName___ {
+                let product = try await fetchProduct(by: ___VARIABLE_modelVariableName___.id)
+                modelContext.delete(product)
+            }
+            try modelContext.save()
+        } catch {
+            logError("Delete failed:", error: error)
+            throw SwiftDataError.batchOperationFailed
+        }
+    }
+
+    // MARK: - Private Helper Methods
+
+    private func fetchProduct(by id: UUID) async throws -> ___VARIABLE_modelName___Entity {
+        let descriptor = FetchDescriptor<___VARIABLE_modelName___Entity>(
+            predicate: #Predicate { $0.id == id }
+        )
+        guard let ___VARIABLE_modelVariableName___ = try modelContext.fetch(descriptor).first else {
+            throw SwiftDataError.itemNotFound
+        }
+        return ___VARIABLE_modelVariableName___
+    }
+}
