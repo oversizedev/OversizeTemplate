@@ -12,6 +12,7 @@ public struct ___VARIABLE_modelName___: Identifiable, Hashable, Equatable, Senda
     public let date: Date
     public let note: String?
     public let isFavorite: Bool
+    public let isArchive: Bool
     public let viewCount: Int
     public let ___VARIABLE_categoryVariableName___Id: UUID?
 
@@ -23,6 +24,7 @@ public struct ___VARIABLE_modelName___: Identifiable, Hashable, Equatable, Senda
         date: Date,
         note: String? = nil,
         isFavorite: Bool = false,
+        isArchive: Bool = false,
         viewCount: Int = 0,
         ___VARIABLE_categoryVariableName___Id: UUID? = nil
     ) {
@@ -33,6 +35,7 @@ public struct ___VARIABLE_modelName___: Identifiable, Hashable, Equatable, Senda
         self.date = date
         self.note = note
         self.isFavorite = isFavorite
+        self.isArchive = isArchive
         self.viewCount = viewCount
         self.___VARIABLE_categoryVariableName___Id = ___VARIABLE_categoryVariableName___Id
         if let imageData {
@@ -63,6 +66,7 @@ public extension ___VARIABLE_modelName___ {
             date: entity.date,
             note: entity.note,
             isFavorite: entity.isFavorite,
+            isArchive: entity.isArchive,
             viewCount: entity.viewCount,
             ___VARIABLE_categoryVariableName___Id: entity.___VARIABLE_categoryVariableName___?.id
         )

@@ -74,4 +74,12 @@ public extension ___VARIABLE_categoryName___ {
         guard let imageData else { return nil }
         return .init(data: imageData)
     }
+    
+    /// This would typically be computed from a relationship count
+    /// For now, returning a placeholder value - should be replaced with actual relationship counting
+    var ___VARIABLE_modelVariableName___Count: Int {
+        // This is a placeholder - in real implementation this would count related items
+        // Example: items.filter { $0.categoryId == self.id }.count
+        0
+    }
 }
