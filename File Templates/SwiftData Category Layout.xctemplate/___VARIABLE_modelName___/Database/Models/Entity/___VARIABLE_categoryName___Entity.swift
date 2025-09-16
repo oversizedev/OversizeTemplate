@@ -82,4 +82,16 @@ public extension ___VARIABLE_categoryName___Entity {
         guard let imageData else { return nil }
         return .init(data: imageData)
     }
+    
+    var ___VARIABLE_modelVariableName___Count: Int {
+        ___VARIABLE_modelPluralVariableName___.count
+    }
+}
+
+// MARK: - Query Extensions
+
+public extension ___VARIABLE_categoryName___Entity {
+    static var all: [SortDescriptor<___VARIABLE_categoryName___Entity>] {
+        [SortDescriptor(\___VARIABLE_categoryName___Entity.date, order: .reverse)]
+    }
 }

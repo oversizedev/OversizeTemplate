@@ -83,3 +83,11 @@ public extension ___VARIABLE_categoryName___ {
         0
     }
 }
+
+// MARK: - Query Extensions
+
+public extension ___VARIABLE_categoryName___ {
+    static var all: [SortDescriptor<___VARIABLE_categoryName___Entity>] {
+        [SortDescriptor(\___VARIABLE_categoryName___Entity.date, order: .reverse)]
+    }
+}
