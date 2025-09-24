@@ -1,4 +1,4 @@
-// ___FILEHEADER___
+//___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
 import FactoryKit
@@ -13,11 +13,13 @@ import SwiftUI
 @MainActor
 @Observable
 public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
-    /// App Storage
+    // MARK: - App Storage
+    
     public var storage: Storage
 
-    /// User Interface
-    public var ___VARIABLE_modelPluralVariableName___State: LoadingState<[___VARIABLE_modelName___]> = .idle
+    // MARK: - User Interface
+    
+    public var ___VARIABLE_modelPluralVariableName___State: SearchableLoadingState<[___VARIABLE_modelName___]> = .idle
     public var ___VARIABLE_categoryPluralVariableName___State: LoadingState<[___VARIABLE_categoryName___]> = .idle
     public var searchTerm: String = ""
     public var isSearch: Bool = false
@@ -26,9 +28,9 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
     public var hud: OversizeNavigation.HUD?
 
     public var filterType: ___VARIABLE_modelName___FilterType
-    public var selected___VARIABLE_categoryName___: ___VARIABLE_categoryName___?
 
-    /// Initialization
+    // MARK: - Initialization
+    
     public init(filterType: ___VARIABLE_modelName___FilterType) {
         storage = .init()
         self.filterType = filterType
@@ -37,14 +39,6 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
     public init() {
         storage = .init()
         filterType = .standard
-    }
-}
-
-// MARK: - User Actions
-
-public extension ___VARIABLE_modelName___ListViewState {
-    var ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___] {
-        ___VARIABLE_categoryPluralVariableName___State.successResult ?? []
     }
 }
 
@@ -69,6 +63,6 @@ public extension ___VARIABLE_modelName___ListViewState {
         public var viewOption: ___VARIABLE_modelName___ViewOption = .standard
 
         @DefaultsKey(userDefaultsKey: ___VARIABLE_modelName___ListKeys.gridSize)
-        public var gridSize: ___VARIABLE_modelName___GridSize = .medium
+        public var gridSize: GridSize = .medium
     }
 }

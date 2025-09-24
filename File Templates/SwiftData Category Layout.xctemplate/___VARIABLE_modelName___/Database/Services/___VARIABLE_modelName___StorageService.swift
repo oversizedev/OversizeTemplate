@@ -37,16 +37,16 @@ public actor ___VARIABLE_modelName___StorageService {
         logData("Saving \(count) ___VARIABLE_modelName___(s)")
 
         do {
-            var savedProducts: [___VARIABLE_modelName___Entity] = []
+            var saved___VARIABLE_modelName___s: [___VARIABLE_modelName___Entity] = []
 
             for ___VARIABLE_modelVariableName___ in ___VARIABLE_modelPluralVariableName___ {
                 var ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity? = nil
 
                 if let ___VARIABLE_categoryVariableName___Id = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id {
-                    let categoryDescriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
+                    let ___VARIABLE_categoryVariableName___Descriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
                         predicate: #Predicate { $0.id == ___VARIABLE_categoryVariableName___Id }
                     )
-                    ___VARIABLE_categoryVariableName___ = try modelContext.fetch(categoryDescriptor).first
+                    ___VARIABLE_categoryVariableName___ = try modelContext.fetch(___VARIABLE_categoryVariableName___Descriptor).first
                 }
 
                 let entity = ___VARIABLE_modelName___Entity(
@@ -60,11 +60,11 @@ public actor ___VARIABLE_modelName___StorageService {
                 )
 
                 modelContext.insert(entity)
-                savedProducts.append(entity)
+                saved___VARIABLE_modelName___s.append(entity)
             }
 
             try modelContext.save()
-            return savedProducts.map { ___VARIABLE_modelName___(from: $0) }
+            return saved___VARIABLE_modelName___s.map { ___VARIABLE_modelName___(from: $0) }
         } catch {
             logError("Save failed:", error: error)
             throw count == 1 ? SwiftDataError.saveFailed : SwiftDataError.batchOperationFailed
@@ -72,7 +72,7 @@ public actor ___VARIABLE_modelName___StorageService {
     }
 
     public func duplicate(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async throws -> ___VARIABLE_modelName___ {
-        let duplicatedProduct = ___VARIABLE_modelName___(
+        let duplicated___VARIABLE_modelName___ = ___VARIABLE_modelName___(
             imageData: ___VARIABLE_modelVariableName___.imageData,
             name: "\(___VARIABLE_modelVariableName___.name) (Copy)",
             color: ___VARIABLE_modelVariableName___.color,
@@ -81,7 +81,7 @@ public actor ___VARIABLE_modelName___StorageService {
             ___VARIABLE_categoryVariableName___Id: ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id
         )
 
-        let results = try await save([duplicatedProduct])
+        let results = try await save([duplicated___VARIABLE_modelName___])
         guard let result = results.first else {
             throw SwiftDataError.saveFailed
         }
@@ -101,8 +101,8 @@ public actor ___VARIABLE_modelName___StorageService {
             var predicate: Predicate<___VARIABLE_modelName___Entity>?
 
             if let ___VARIABLE_categoryVariableName___Id {
-                predicate = #Predicate { product in
-                    product.___VARIABLE_categoryVariableName___?.id == ___VARIABLE_categoryVariableName___Id
+                predicate = #Predicate { ___VARIABLE_modelVariableName___ in
+                    ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___?.id == ___VARIABLE_categoryVariableName___Id
                 }
             } else if let filterPredicate = filterType?.filterPredicate {
                 predicate = filterPredicate
@@ -124,7 +124,7 @@ public actor ___VARIABLE_modelName___StorageService {
 
     public func fetch(by id: UUID) async throws -> ___VARIABLE_modelName___ {
         do {
-            let ___VARIABLE_modelVariableName___ = try await fetchProduct(by: id)
+            let ___VARIABLE_modelVariableName___ = try await fetch___VARIABLE_modelName___(by: id)
             return ___VARIABLE_modelName___(from: ___VARIABLE_modelVariableName___)
         } catch {
             logError("Fetch by id failed:", error: error)
@@ -182,29 +182,29 @@ public actor ___VARIABLE_modelName___StorageService {
         ___VARIABLE_categoryVariableName___Id: UUID? = nil
     ) async throws -> ___VARIABLE_modelName___ {
         do {
-            let product = try await fetchProduct(by: ___VARIABLE_modelVariableName___.id)
+            let ___VARIABLE_modelVariableName___Entity = try await fetch___VARIABLE_modelName___(by: ___VARIABLE_modelVariableName___.id)
 
-            if let name { product.name = name }
-            if let color { product.colorData = .init(color: color) }
-            if let date { product.date = date }
-            if let image { product.imageData = image }
-            if let note { product.note = note }
-            if let isFavorite { product.isFavorite = isFavorite }
+            if let name { ___VARIABLE_modelVariableName___Entity.name = name }
+            if let color { ___VARIABLE_modelVariableName___Entity.colorData = .init(color: color) }
+            if let date { ___VARIABLE_modelVariableName___Entity.date = date }
+            if let image { ___VARIABLE_modelVariableName___Entity.imageData = image }
+            if let note { ___VARIABLE_modelVariableName___Entity.note = note }
+            if let isFavorite { ___VARIABLE_modelVariableName___Entity.isFavorite = isFavorite }
             if let ___VARIABLE_categoryVariableName___Id {
-                let categoryDescriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
+                let ___VARIABLE_categoryVariableName___Descriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
                     predicate: #Predicate { $0.id == ___VARIABLE_categoryVariableName___Id }
                 )
-                product.___VARIABLE_categoryVariableName___ = try modelContext.fetch(categoryDescriptor).first
+                ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___ = try modelContext.fetch(___VARIABLE_categoryVariableName___Descriptor).first
             }
             try modelContext.save()
-            return ___VARIABLE_modelName___(from: product)
+            return ___VARIABLE_modelName___(from: ___VARIABLE_modelVariableName___Entity)
         } catch {
             logError("Update failed:", error: error)
             throw SwiftDataError.saveFailed
         }
     }
 
-    public func updateCategory(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, ___VARIABLE_categoryVariableName___Id: UUID?) async throws -> ___VARIABLE_modelName___ {
+    public func update___VARIABLE_categoryName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, ___VARIABLE_categoryVariableName___Id: UUID?) async throws -> ___VARIABLE_modelName___ {
         try await update(___VARIABLE_modelVariableName___, ___VARIABLE_categoryVariableName___Id: ___VARIABLE_categoryVariableName___Id)
     }
 
@@ -214,10 +214,10 @@ public actor ___VARIABLE_modelName___StorageService {
 
     public func incrementViewCount(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async throws -> ___VARIABLE_modelName___ {
         do {
-            let product = try await fetchProduct(by: ___VARIABLE_modelVariableName___.id)
-            product.viewCount += 1
+            let ___VARIABLE_modelVariableName___Entity = try await fetch___VARIABLE_modelName___(by: ___VARIABLE_modelVariableName___.id)
+            ___VARIABLE_modelVariableName___Entity.viewCount += 1
             try modelContext.save()
-            return ___VARIABLE_modelName___(from: product)
+            return ___VARIABLE_modelName___(from: ___VARIABLE_modelVariableName___Entity)
         } catch {
             logError("Increment view count failed:", error: error)
             throw SwiftDataError.saveFailed
@@ -233,8 +233,8 @@ public actor ___VARIABLE_modelName___StorageService {
     public func delete(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) async throws {
         do {
             for ___VARIABLE_modelVariableName___ in ___VARIABLE_modelPluralVariableName___ {
-                let product = try await fetchProduct(by: ___VARIABLE_modelVariableName___.id)
-                modelContext.delete(product)
+                let ___VARIABLE_modelVariableName___Entity = try await fetch___VARIABLE_modelName___(by: ___VARIABLE_modelVariableName___.id)
+                modelContext.delete(___VARIABLE_modelVariableName___Entity)
             }
             try modelContext.save()
         } catch {
@@ -245,7 +245,7 @@ public actor ___VARIABLE_modelName___StorageService {
 
     // MARK: - Private Helper Methods
 
-    private func fetchProduct(by id: UUID) async throws -> ___VARIABLE_modelName___Entity {
+    private func fetch___VARIABLE_modelName___(by id: UUID) async throws -> ___VARIABLE_modelName___Entity {
         let descriptor = FetchDescriptor<___VARIABLE_modelName___Entity>(
             predicate: #Predicate { $0.id == id }
         )
