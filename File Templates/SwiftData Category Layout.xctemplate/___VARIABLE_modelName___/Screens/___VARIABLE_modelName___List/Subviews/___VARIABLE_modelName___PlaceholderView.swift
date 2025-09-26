@@ -1,16 +1,13 @@
-//
-// Copyright © 2025 Alexander Romanov
-// MealProductPlaceholderView.swift, created on 10.07.2025
-//
+// ___FILEHEADER___
 
 import OversizeUI
 import SwiftUI
 
-struct MealProductPlaceholderView: View {
-    let displayType: MealProductListDisplayType
-    let gridSize: MealProductGridSize
+struct ___VARIABLE_modelName___PlaceholderView: View {
+    let displayType: ___VARIABLE_modelName___ListDisplayType
+    let gridSize: ___VARIABLE_modelName___GridSize
 
-    init(displayType: MealProductListDisplayType, gridSize: MealProductGridSize = .medium) {
+    init(displayType: ___VARIABLE_modelName___ListDisplayType, gridSize: ___VARIABLE_modelName___GridSize = .medium) {
         self.displayType = displayType
         self.gridSize = gridSize
     }

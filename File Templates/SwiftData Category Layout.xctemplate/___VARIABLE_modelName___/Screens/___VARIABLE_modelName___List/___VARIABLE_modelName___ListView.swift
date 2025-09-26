@@ -1,7 +1,4 @@
-//
-// Copyright © 2025 Alexander Romanov
-// MealProductListView.swift, created on 10.07.2025
-//
+// ___FILEHEADER___
 
 import Database
 import OversizeArchitecture
@@ -14,11 +11,11 @@ import OversizeUI
 import SwiftData
 import SwiftUI
 
-@View(module: MealProductList.self)
-public struct MealProductListView: ViewProtocol {
+@View(module: ___VARIABLE_modelName___List.self)
+public struct ___VARIABLE_modelName___ListView: ViewProtocol {
     public var body: some View {
         NavigationLayoutView(viewState.filterType.title) {
-            stateView(viewState.mealProductsState)
+            stateView(viewState.___VARIABLE_modelPluralVariableName___State)
         } background: {
             Color.backgroundPrimary
         }
@@ -40,16 +37,16 @@ public struct MealProductListView: ViewProtocol {
     }
 
     @ViewBuilder
-    private func stateView(_ state: SearchableLoadingState<[MealProduct]>) -> some View {
+    private func stateView(_ state: SearchableLoadingState<[___VARIABLE_modelName___]>) -> some View {
         switch state {
         case .idle, .loading, .search:
-            MealProductPlaceholderView(
+            ___VARIABLE_modelName___PlaceholderView(
                 displayType: viewState.storage.displayType,
                 gridSize: viewState.storage.gridSize
             )
-        case let .searchResult(_, mealProducts), let .result(mealProducts):
-            MealProductListContentView(
-                mealProducts: mealProducts,
+        case let .searchResult(_, ___VARIABLE_modelPluralVariableName___), let .result(___VARIABLE_modelPluralVariableName___):
+            ___VARIABLE_modelName___ListContentView(
+                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
                 categories: viewState.categoriesState.successResult ?? [],
                 displayType: viewState.storage.displayType,
                 viewOption: viewState.storage.viewOption,
@@ -69,7 +66,7 @@ public struct MealProductListView: ViewProtocol {
                 subtitle: viewState.filterType.emptyStateSubtitle,
                 actions: {
                     Button("Add item") {
-                        reducer.callAsFunction(.onTapCreateMealProduct)
+                        reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
                     }
                 }
             )
@@ -81,11 +78,11 @@ public struct MealProductListView: ViewProtocol {
 
 // MARK: - Toolbar
 
-private extension MealProductListView {
+private extension ___VARIABLE_modelName___ListView {
     @ViewBuilder
     private func createButton() -> some View {
         Button {
-            reducer.callAsFunction(.onTapCreateMealProduct)
+            reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
         } label: {
             Image.Base.plus.icon()
         }
@@ -102,13 +99,13 @@ private extension MealProductListView {
                     }
                 },
             )) {
-                Text(MealProductFilterType.standard.title)
+                Text(___VARIABLE_modelName___FilterType.standard.title)
             }
 
             Separator()
 
             Picker("Filter", selection: $viewState.filterType) {
-                ForEach(MealProductFilterType.allCases.dropFirst()) { type in
+                ForEach(___VARIABLE_modelName___FilterType.allCases.dropFirst()) { type in
                     Label {
                         Text(type.title)
 
@@ -141,7 +138,7 @@ private extension MealProductListView {
             }
 
             Picker("Display", selection: $viewState.storage.displayType) {
-                ForEach(MealProductListDisplayType.allCases) { type in
+                ForEach(___VARIABLE_modelName___ListDisplayType.allCases) { type in
                     type.icon.icon()
                         .tag(type)
                 }
@@ -150,7 +147,7 @@ private extension MealProductListView {
 
             Menu {
                 Picker("View Option", selection: $viewState.storage.viewOption) {
-                    ForEach(MealProductViewOption.allCases) { view in
+                    ForEach(___VARIABLE_modelName___ViewOption.allCases) { view in
                         Text(view.title)
                             .tag(view)
                     }
@@ -177,7 +174,7 @@ private extension MealProductListView {
             Menu {
                 Section {
                     Picker("Display", selection: $viewState.storage.displayType) {
-                        ForEach(MealProductListDisplayType.allCases) { type in
+                        ForEach(___VARIABLE_modelName___ListDisplayType.allCases) { type in
                             Label {
                                 Text(type.title)
                             } icon: {
@@ -191,7 +188,7 @@ private extension MealProductListView {
                 Menu {
                     Section("Sort by \(viewState.storage.sortType.title)") {
                         Picker("Sort by", selection: $viewState.storage.sortType) {
-                            ForEach(MealProductSortType.allCases) { type in
+                            ForEach(___VARIABLE_modelName___SortType.allCases) { type in
                                 Text(type.title)
                                     .tag(type)
                             }
@@ -203,7 +200,7 @@ private extension MealProductListView {
 
                     Section("Sort order") {
                         Picker("Sort order", selection: $viewState.storage.sortOrder) {
-                            ForEach(MealProductSortOrder.allCases) { order in
+                            ForEach(___VARIABLE_modelName___SortOrder.allCases) { order in
                                 Text(order.title)
                                     .tag(order)
                             }
@@ -219,7 +216,7 @@ private extension MealProductListView {
 
                 Menu {
                     Picker("View Option", selection: $viewState.storage.viewOption) {
-                        ForEach(MealProductViewOption.allCases) { view in
+                        ForEach(___VARIABLE_modelName___ViewOption.allCases) { view in
                             Text(view.title)
                                 .tag(view)
                         }
@@ -232,7 +229,7 @@ private extension MealProductListView {
 
                     if viewState.storage.displayType == .grid {
                         Picker("Grid Size", selection: $viewState.storage.gridSize) {
-                            ForEach(MealProductGridSize.allCases) { size in
+                            ForEach(___VARIABLE_modelName___GridSize.allCases) { size in
                                 Text(size.title)
                                     .tag(size)
                             }
@@ -260,17 +257,17 @@ private extension MealProductListView {
 
 #Preview("List") {
     NavigationStack {
-        MealProductList.build()
+        ___VARIABLE_modelName___List.build()
     }
 }
 
 #Preview("Favorites") {
     NavigationStack {
-        MealProductList.build(input: MealProductListInput(categoryId: nil))
+        ___VARIABLE_modelName___List.build(input: ___VARIABLE_modelName___ListInput(categoryId: nil))
     }
 }
 
 #Preview("Placeholders") {
-    MealProductPlaceholderView(displayType: .list)
-    MealProductPlaceholderView(displayType: .grid, gridSize: .medium)
+    ___VARIABLE_modelName___PlaceholderView(displayType: .list)
+    ___VARIABLE_modelName___PlaceholderView(displayType: .grid, gridSize: .medium)
 }

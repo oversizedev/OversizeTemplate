@@ -1,37 +1,34 @@
-//
-// Copyright © 2025 Alexander Romanov
-// MealProductCell.swift, created on 10.07.2025
-//
+// ___FILEHEADER___
 
 import Database
 import OversizeCore
 import OversizeUI
 import SwiftUI
 
-struct MealProductCell: View {
-    private let mealProduct: MealProduct
-    private let viewOption: MealProductViewOption
+struct ___VARIABLE_modelName___Cell: View {
+    private let ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___
+    private let viewOption: ___VARIABLE_modelName___ViewOption
     private let action: (() -> Void)?
 
     init(
-        _ mealProduct: MealProduct,
-        viewOption: MealProductViewOption = .standard,
-        action: (() -> Void)? = nil
+        _ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___,
+        viewOption: ___VARIABLE_modelName___ViewOption = .standard,
+        action: (() -> Void)? = nil,
     ) {
-        self.mealProduct = mealProduct
+        self.___VARIABLE_modelVariableName___ = ___VARIABLE_modelVariableName___
         self.viewOption = viewOption
         self.action = action
     }
 
     var body: some View {
         VStack {
-            Text(mealProduct.name)
+            Text(___VARIABLE_modelVariableName___.name)
 
             if viewOption == .standard {
                 HStack {
-                    Text(mealProduct.date.formatted(date: .abbreviated, time: .shortened))
+                    Text(___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened))
 
-                    if mealProduct.isFavorite {
+                    if ___VARIABLE_modelVariableName___.isFavorite {
                         Image.Base.Star.fill.icon(Color.warning)
                     }
                 }
