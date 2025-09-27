@@ -14,7 +14,7 @@ import SwiftUI
 public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     /// Services
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
-    @Injected(\.___VARIABLE_modelVariableName___CategoryStorageService) var ___VARIABLE_modelVariableName___CategoryStorageService: ___VARIABLE_modelName___CategoryStorageService
+    @Injected(\.___VARIABLE_modelVariableName___CategoryStorageService) var ___VARIABLE_modelVariableName___CategoryStorageService: ___VARIABLE_categoryName___StorageService
 
     func onAppear() async {
         await fetchData()
@@ -132,7 +132,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
         }
     }
 
-    private func onTapSelectCategory(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, _ category: ___VARIABLE_modelName___Category?) async {
+    private func onTapSelectCategory(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, _ category: ___VARIABLE_categoryName___?) async {
         do {
             _ = try await ___VARIABLE_modelVariableName___StorageService.updateCategory(___VARIABLE_modelVariableName___, categoryId: category?.id)
             await state.update { $0.hud = category != nil ? .success("Category assigned") : .success("Category removed") }

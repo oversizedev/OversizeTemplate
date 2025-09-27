@@ -17,6 +17,7 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
 
     /// User Interface
     public var ___VARIABLE_modelPluralVariableName___State: SearchableLoadingState<[___VARIABLE_modelName___]> = .idle
+    public var categoriesState: LoadingState<[___VARIABLE_categoryName___]> = .idle
     public var searchTerm: String = ""
     public var isSearch: Bool = false
     public var destination: ___VARIABLE_modelName___Destinations?
@@ -30,10 +31,6 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
         filterType = .standard
     }
 }
-
-// MARK: - User Actions
-
-public extension ___VARIABLE_modelName___ListViewState {}
 
 // MARK: - App Storage
 

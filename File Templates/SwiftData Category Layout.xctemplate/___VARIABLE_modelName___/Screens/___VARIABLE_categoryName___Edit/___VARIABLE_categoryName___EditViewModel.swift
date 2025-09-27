@@ -12,7 +12,7 @@ import SwiftUI
 @ViewModel(module: ___VARIABLE_categoryName___Edit.self)
 public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
     /// Services
-    @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_modelVariableName___CategoryStorageService) var ___VARIABLE_modelVariableName___CategoryStorageService: ___VARIABLE_categoryName___StorageService
 
     /// User Actions
 
@@ -100,8 +100,8 @@ private extension ___VARIABLE_categoryName___EditViewModel {
     }
 
     func create___VARIABLE_categoryName___() async throws -> ___VARIABLE_categoryName___ {
-        let count = try await ___VARIABLE_categoryVariableName___StorageService.count()
-        return try await ___VARIABLE_categoryVariableName___StorageService.save(
+        let count = try await ___VARIABLE_modelVariableName___CategoryStorageService.count()
+        return try await ___VARIABLE_modelVariableName___CategoryStorageService.save(
             name: state.name,
             emoji: state.emoji,
             color: state.color,
@@ -120,7 +120,7 @@ private extension ___VARIABLE_categoryName___EditViewModel {
         }
 
         do {
-            let updatedCategory = try await ___VARIABLE_categoryVariableName___StorageService.update(
+            let updatedCategory = try await ___VARIABLE_modelVariableName___CategoryStorageService.update(
                 ___VARIABLE_categoryVariableName___,
                 name: state.name,
                 emoji: state.emoji,
@@ -139,6 +139,6 @@ private extension ___VARIABLE_categoryName___EditViewModel {
     }
 
     func fetch___VARIABLE_categoryName___Internal() async throws -> ___VARIABLE_categoryName___ {
-        try await ___VARIABLE_categoryVariableName___StorageService.fetch(by: state.___VARIABLE_categoryVariableName___Id)
+        try await ___VARIABLE_modelVariableName___CategoryStorageService.fetch(by: state.___VARIABLE_categoryVariableName___Id)
     }
 }

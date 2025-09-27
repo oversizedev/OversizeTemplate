@@ -179,7 +179,7 @@ public actor ___VARIABLE_modelName___StorageService {
         image: Data? = nil,
         note: String? = nil,
         isFavorite: Bool? = nil,
-        ___VARIABLE_categoryVariableName___Id: UUID? = nil
+        categoryId: UUID? = nil
     ) async throws -> ___VARIABLE_modelName___ {
         do {
             let ___VARIABLE_modelVariableName___Entity = try await fetch___VARIABLE_modelName___(by: ___VARIABLE_modelVariableName___.id)
@@ -190,11 +190,11 @@ public actor ___VARIABLE_modelName___StorageService {
             if let image { ___VARIABLE_modelVariableName___Entity.imageData = image }
             if let note { ___VARIABLE_modelVariableName___Entity.note = note }
             if let isFavorite { ___VARIABLE_modelVariableName___Entity.isFavorite = isFavorite }
-            if let ___VARIABLE_categoryVariableName___Id {
-                let ___VARIABLE_categoryVariableName___Descriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
-                    predicate: #Predicate { $0.id == ___VARIABLE_categoryVariableName___Id }
+            if let categoryId {
+                let categoryDescriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
+                    predicate: #Predicate { $0.id == categoryId }
                 )
-                ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___ = try modelContext.fetch(___VARIABLE_categoryVariableName___Descriptor).first
+                ___VARIABLE_modelVariableName___Entity.category = try modelContext.fetch(categoryDescriptor).first
             }
             try modelContext.save()
             return ___VARIABLE_modelName___(from: ___VARIABLE_modelVariableName___Entity)
@@ -204,8 +204,8 @@ public actor ___VARIABLE_modelName___StorageService {
         }
     }
 
-    public func update___VARIABLE_categoryName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, ___VARIABLE_categoryVariableName___Id: UUID?) async throws -> ___VARIABLE_modelName___ {
-        try await update(___VARIABLE_modelVariableName___, ___VARIABLE_categoryVariableName___Id: ___VARIABLE_categoryVariableName___Id)
+    public func updateCategory(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, categoryId: UUID?) async throws -> ___VARIABLE_modelName___ {
+        try await update(___VARIABLE_modelVariableName___, categoryId: categoryId)
     }
 
     public func toggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async throws -> ___VARIABLE_modelName___ {

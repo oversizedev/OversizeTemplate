@@ -13,7 +13,7 @@ import SwiftUI
 public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     /// Services
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
-    @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_modelVariableName___CategoryStorageService) var ___VARIABLE_modelVariableName___CategoryStorageService: ___VARIABLE_categoryName___StorageService
 
     func onAppear() async {
         if await state.___VARIABLE_modelVariableName___State.successResult == nil {
@@ -107,7 +107,7 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
 
     func onTapCreateCategory() async {
         await state.update { viewState in
-            viewState.destination = .___VARIABLE_categoryVariableName___Create(
+            viewState.destination = .___VARIABLE_modelVariableName___CategoryCreate(
                 onSave: { _ in
                     Task {
                         logSuccess("New Category created")
@@ -136,7 +136,7 @@ public extension ___VARIABLE_modelName___DetailViewModel {
 
     func fetchCategories() async {
         do {
-            let categories = try await ___VARIABLE_categoryVariableName___StorageService.fetch()
+            let categories = try await ___VARIABLE_modelVariableName___CategoryStorageService.fetch()
             await state.update { $0.categoriesState = .result(categories) }
         } catch {
             await state.update { $0.categoriesState = .error(error) }

@@ -2,7 +2,6 @@
 
 import Database
 import OversizeLocalizable
-import OversizeResources
 import OversizeUI
 import SwiftUI
 
@@ -14,12 +13,12 @@ public struct ___VARIABLE_modelName___ListContentView: View {
         case toggleFavorite(___VARIABLE_modelName___)
         case duplicateProduct(___VARIABLE_modelName___)
         case deleteProduct(___VARIABLE_modelName___)
-        case selectCategory(___VARIABLE_modelName___, ___VARIABLE_modelName___Category?)
+        case selectCategory(___VARIABLE_modelName___, ___VARIABLE_categoryName___?)
         case createCategoryForProduct(___VARIABLE_modelName___)
     }
 
     private let ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]
-    private let categories: [___VARIABLE_modelName___Category]
+    private let categories: [___VARIABLE_categoryName___]
     private let displayType: ___VARIABLE_modelName___ListDisplayType
     private let viewOption: ___VARIABLE_modelName___ViewOption
     private let gridSize: ___VARIABLE_modelName___GridSize
@@ -27,7 +26,7 @@ public struct ___VARIABLE_modelName___ListContentView: View {
 
     public init(
         ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___],
-        categories: [___VARIABLE_modelName___Category] = [],
+        categories: [___VARIABLE_categoryName___] = [],
         displayType: ___VARIABLE_modelName___ListDisplayType = .list,
         viewOption: ___VARIABLE_modelName___ViewOption = .standard,
         gridSize: ___VARIABLE_modelName___GridSize = .medium,
@@ -57,7 +56,7 @@ public struct ___VARIABLE_modelName___ListContentView: View {
                 ___VARIABLE_modelName___Row(___VARIABLE_modelVariableName___, viewOption: viewOption) {
                     onAction(.tapItem(___VARIABLE_modelVariableName___))
                 }
-                .contextMenu { contextMenu(for: ___VARIABLE_modelVariableName___) }
+                .contextMenu { contextMenu(for: ___VARIABLE_modelVariableName___).tint(Color.onSurfacePrimary) }
             }
         }
     }
@@ -69,7 +68,7 @@ public struct ___VARIABLE_modelName___ListContentView: View {
                 ___VARIABLE_modelName___Cell(___VARIABLE_modelVariableName___, viewOption: viewOption) {
                     onAction(.tapItem(___VARIABLE_modelVariableName___))
                 }
-                .contextMenu { contextMenu(for: ___VARIABLE_modelVariableName___) }
+                .contextMenu { contextMenu(for: ___VARIABLE_modelVariableName___).tint(Color.onSurfacePrimary) }
             }
         }
         .paddingContent()
@@ -88,6 +87,54 @@ public struct ___VARIABLE_modelName___ListContentView: View {
         }
         .tint(.onSurfacePrimary)
 
+        Menu {
+            Button(action: {
+                onAction(.selectCategory(product, nil))
+            }) {
+                Label {
+                    Text("No Category")
+                } icon: {
+                    if product.categoryId == nil {
+                        Image.Base.Check.mini
+                    }
+                }
+            }
+
+            ForEach(categories) { category in
+                Button(action: {
+                    onAction(.selectCategory(product, category))
+                }) {
+                    Label {
+                        Text(category.name)
+                    } icon: {
+                        if product.categoryId == category.id {
+                            Image.Base.Check.mini
+                        }
+                    }
+                }
+            }
+
+            Divider()
+
+            Button(action: {
+                onAction(.createCategoryForProduct(product))
+            }) {
+                Label {
+                    Text("Create New")
+                } icon: {
+                    Image.Base.Plus.mini
+                }
+            }
+        } label: {
+            Label {
+                Text("Category")
+            } icon: {
+                Image.Base.Folder.mini
+            }
+        }
+        .menuStyle(.button)
+        .tint(.onSurfacePrimary)
+
         Button(action: {
             onAction(.toggleFavorite(product))
         }) {
@@ -102,33 +149,6 @@ public struct ___VARIABLE_modelName___ListContentView: View {
             }
         }
         .tint(.onSurfacePrimary)
-
-        if !categories.isEmpty {
-            Menu {
-                Button("None") {
-                    onAction(.selectCategory(product, nil))
-                }
-
-                ForEach(categories) { category in
-                    Button(category.name) {
-                        onAction(.selectCategory(product, category))
-                    }
-                }
-
-                Divider()
-
-                Button("Create new...") {
-                    onAction(.createCategoryForProduct(product))
-                }
-            } label: {
-                Label {
-                    Text("Category")
-                } icon: {
-                    Image.Design.Tag.mini
-                }
-            }
-            .tint(.onSurfacePrimary)
-        }
 
         Button(action: {
             onAction(.duplicateProduct(product))
@@ -150,6 +170,6 @@ public struct ___VARIABLE_modelName___ListContentView: View {
                 Image.Editor.TrashWithLines.mini
             }
         }
-        .tint(.error)
+        .tint(Color.error)
     }
 }

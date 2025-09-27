@@ -15,7 +15,7 @@ import SwiftUI
 public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
     // MARK: - Services
 
-    @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_modelVariableName___CategoryStorageService) var ___VARIABLE_modelVariableName___CategoryStorageService: ___VARIABLE_categoryName___StorageService
 
     func onAppear() async {
         await fetchData()
@@ -39,7 +39,7 @@ public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
 
     func onTapCreate___VARIABLE_categoryName___() async {
         await state.update { viewState in
-            viewState.destination = .___VARIABLE_categoryVariableName___Create(
+            viewState.destination = .___VARIABLE_modelVariableName___CategoryCreate(
                 onSave: { _ in
                     Task {
                         logSuccess("New ___VARIABLE_categoryName___ created")
@@ -55,7 +55,7 @@ public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
     }
 
     func onTapDetail___VARIABLE_categoryName___(_ category: ___VARIABLE_categoryName___) async {
-        await state.update { $0.destination = .___VARIABLE_categoryVariableName___Details___VARIABLE_categoryName___(___VARIABLE_categoryVariableName___: category) }
+        await state.update { $0.destination = .___VARIABLE_modelVariableName___CategoryDetails___VARIABLE_categoryName___(___VARIABLE_modelVariableName___Category: category) }
     }
 
     func onChangeSortType(_ sortType: ___VARIABLE_categoryName___SortType) async {
@@ -105,7 +105,7 @@ private extension ___VARIABLE_categoryName___ListViewModel {
             viewState.alert = .delete {
                 Task {
                     do {
-                        try await self.___VARIABLE_categoryVariableName___StorageService.delete(category)
+                        try await self.___VARIABLE_modelVariableName___CategoryStorageService.delete(category)
                         await self.state.update { $0.hud = .delete() }
                         await self.fetchData()
                     } catch {
@@ -119,7 +119,7 @@ private extension ___VARIABLE_categoryName___ListViewModel {
     func onTapEdit___VARIABLE_categoryName___(_ category: ___VARIABLE_categoryName___) async {
         logUI("Edit action triggered for ___VARIABLE_categoryName___: \(category.name)")
         await state.update {
-            $0.destination = .___VARIABLE_categoryVariableName___Edit(
+            $0.destination = .___VARIABLE_modelVariableName___CategoryEdit(
                 category,
                 onSave: { _ in
                     Task {
@@ -134,7 +134,7 @@ private extension ___VARIABLE_categoryName___ListViewModel {
     func onTapToggleFavorite(_ category: ___VARIABLE_categoryName___) async {
         let wasFavorite = category.isFavorite
         do {
-            _ = try await ___VARIABLE_categoryVariableName___StorageService.toggleFavorite(category)
+            _ = try await ___VARIABLE_modelVariableName___CategoryStorageService.toggleFavorite(category)
             await state.update { $0.hud = wasFavorite ? .unfavorite() : .favorite() }
             await fetchData()
         } catch {
@@ -144,7 +144,7 @@ private extension ___VARIABLE_categoryName___ListViewModel {
 
     func onTapDuplicate___VARIABLE_categoryName___(_ category: ___VARIABLE_categoryName___) async {
         do {
-            _ = try await ___VARIABLE_categoryVariableName___StorageService.duplicate(category)
+            _ = try await ___VARIABLE_modelVariableName___CategoryStorageService.duplicate(category)
             await state.update { $0.hud = .success("Duplicated") }
             await fetchData()
         } catch {
@@ -158,7 +158,7 @@ private extension ___VARIABLE_categoryName___ListViewModel {
         let filterType = await state.filterType
 
         do {
-            let categories = try await ___VARIABLE_categoryVariableName___StorageService.search(
+            let categories = try await ___VARIABLE_modelVariableName___CategoryStorageService.search(
                 query: searchTerm,
                 filterType: filterType,
                 sortType: sortType,
@@ -182,7 +182,7 @@ private extension ___VARIABLE_categoryName___ListViewModel {
         let filterType = await state.filterType
 
         do {
-            let categories = try await ___VARIABLE_categoryVariableName___StorageService.fetch(
+            let categories = try await ___VARIABLE_modelVariableName___CategoryStorageService.fetch(
                 filterType: filterType,
                 sortType: sortType,
                 sortOrder: sortOrder

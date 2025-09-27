@@ -85,7 +85,7 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
         case let .result(___VARIABLE_modelPluralVariableName___):
             ___VARIABLE_modelName___ListContentView(
                 ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
-                ___VARIABLE_categoryPluralVariableName___: viewState.___VARIABLE_categoryPluralVariableName___State.successResult ?? [],
+                categories: viewState.___VARIABLE_categoryPluralVariableName___State.successResult ?? [],
                 displayType: .list,
                 viewOption: .standard,
                 gridSize: .medium,

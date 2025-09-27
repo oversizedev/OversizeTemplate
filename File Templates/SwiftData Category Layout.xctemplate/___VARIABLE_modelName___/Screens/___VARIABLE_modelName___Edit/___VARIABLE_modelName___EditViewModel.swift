@@ -13,7 +13,7 @@ import SwiftUI
 public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
     /// Services
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
-    @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_modelVariableName___CategoryStorageService) var ___VARIABLE_modelVariableName___CategoryStorageService: ___VARIABLE_categoryName___StorageService
 
     func onAppear() async {
         await fetchCategories()
@@ -53,7 +53,7 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
     func onTapCreateCategory() async {
         await state.update { viewState in
             viewState.isShowCategoryPicker = false
-            viewState.destination = .___VARIABLE_categoryVariableName___Create(
+            viewState.destination = .___VARIABLE_modelVariableName___CategoryCreate(
                 onSave: { category in
                     Task {
                         await self.onCategoryCreated(category)
@@ -109,7 +109,7 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
 public extension ___VARIABLE_modelName___EditViewModel {
     func fetchCategories() async {
         do {
-            let categories = try await ___VARIABLE_categoryVariableName___StorageService.fetch()
+            let categories = try await ___VARIABLE_modelVariableName___CategoryStorageService.fetch()
             await state.update { viewState in
                 viewState.categoriesState = .result(categories)
                 viewState.setCategories(categories)
