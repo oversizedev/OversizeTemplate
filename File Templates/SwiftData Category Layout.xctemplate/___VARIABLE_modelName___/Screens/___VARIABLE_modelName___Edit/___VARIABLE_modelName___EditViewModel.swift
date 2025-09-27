@@ -165,7 +165,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
 
             let finalProduct = try await ___VARIABLE_modelVariableName___StorageService.updateCategory(
                 updatedProduct,
-                ___VARIABLE_categoryVariableName___Id: state.selectedCategory?.id
+                categoryId: state.selectedCategory?.id
             )
             return finalProduct
         } catch {
