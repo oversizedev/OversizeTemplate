@@ -132,7 +132,7 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
                 filterType: .standard,
                 sortType: .date,
                 sortOrder: .descending,
-                categoryId: state.___VARIABLE_categoryVariableName___Id
+                ___VARIABLE_categoryVariableName___Id: state.___VARIABLE_categoryVariableName___Id
             )
             if ___VARIABLE_modelPluralVariableName___.isEmpty {
                 await state.update { $0.___VARIABLE_modelPluralVariableName___State = .empty }

@@ -26,13 +26,13 @@ extension ___VARIABLE_modelName___Destinations: NavigationDestination {
         case let .___VARIABLE_modelVariableName___CategoryDetails(id):
             ___VARIABLE_categoryName___Detail.build(input: ___VARIABLE_categoryName___DetailInput(id: id))
         case let .___VARIABLE_modelVariableName___CategoryDetails___VARIABLE_categoryName___(___VARIABLE_modelVariableName___Category: ___VARIABLE_modelVariableName___Category):
-            ___VARIABLE_categoryName___Detail.build(input: ___VARIABLE_categoryName___DetailInput(category: ___VARIABLE_modelVariableName___Category))
+            ___VARIABLE_categoryName___Detail.build(input: ___VARIABLE_categoryName___DetailInput(___VARIABLE_categoryVariableName___: ___VARIABLE_modelVariableName___Category))
         case let .___VARIABLE_modelVariableName___CategoryCreate(onSave: onSave):
             ___VARIABLE_categoryName___Edit.build(input: ___VARIABLE_categoryName___EditInput(), output: ___VARIABLE_categoryName___EditOutput(onSave: onSave))
         case let .___VARIABLE_modelVariableName___CategoryEditId(id: id, onSave: onSave):
             ___VARIABLE_categoryName___Edit.build(input: ___VARIABLE_categoryName___EditInput(id: id), output: ___VARIABLE_categoryName___EditOutput(onSave: onSave))
         case let .___VARIABLE_modelVariableName___CategoryEdit(___VARIABLE_modelVariableName___Category, onSave: onSave):
-            ___VARIABLE_categoryName___Edit.build(input: ___VARIABLE_categoryName___EditInput(category: ___VARIABLE_modelVariableName___Category), output: ___VARIABLE_categoryName___EditOutput(onSave: onSave))
+            ___VARIABLE_categoryName___Edit.build(input: ___VARIABLE_categoryName___EditInput(___VARIABLE_categoryVariableName___: ___VARIABLE_modelVariableName___Category), output: ___VARIABLE_categoryName___EditOutput(onSave: onSave))
         }
     }
 

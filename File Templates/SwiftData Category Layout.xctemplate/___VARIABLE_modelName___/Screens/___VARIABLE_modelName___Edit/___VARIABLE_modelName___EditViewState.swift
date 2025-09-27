@@ -83,7 +83,7 @@ public extension ___VARIABLE_modelName___EditViewState {
             image = UIImage(data: data)
             #endif
         }
-        if let categoryId = ___VARIABLE_modelVariableName___.categoryId {
+        if let categoryId = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id {
             selectedCategory = categoriesState.successResult?.first { $0.id == categoryId }
         } else {
             selectedCategory = nil

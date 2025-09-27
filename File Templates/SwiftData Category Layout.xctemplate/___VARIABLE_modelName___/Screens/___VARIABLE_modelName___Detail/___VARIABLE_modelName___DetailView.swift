@@ -98,7 +98,7 @@ private extension ___VARIABLE_modelName___DetailView {
                             Label {
                                 Text("No Category")
                             } icon: {
-                                if ___VARIABLE_modelVariableName___.categoryId == nil {
+                                if ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id == nil {
                                     Image.Base.Check.mini
                                 }
                             }
@@ -109,7 +109,7 @@ private extension ___VARIABLE_modelName___DetailView {
                                 Label {
                                     Text(category.name)
                                 } icon: {
-                                    if ___VARIABLE_modelVariableName___.categoryId == category.id {
+                                    if ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id == category.id {
                                         Image.Base.Check.mini
                                     }
                                 }

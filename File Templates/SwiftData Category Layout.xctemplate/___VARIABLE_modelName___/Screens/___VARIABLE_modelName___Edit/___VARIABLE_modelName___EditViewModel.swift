@@ -143,7 +143,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
             date: state.date ?? Date(),
             imageData: state.image?.jpegData(compressionQuality: 0.5),
             note: state.note.isEmpty ? nil : state.note,
-            categoryId: state.selectedCategory?.id
+            ___VARIABLE_categoryVariableName___Id: state.selectedCategory?.id
         )
     }
 
@@ -165,7 +165,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
 
             let finalProduct = try await ___VARIABLE_modelVariableName___StorageService.updateCategory(
                 updatedProduct,
-                categoryId: state.selectedCategory?.id
+                ___VARIABLE_categoryVariableName___Id: state.selectedCategory?.id
             )
             return finalProduct
         } catch {

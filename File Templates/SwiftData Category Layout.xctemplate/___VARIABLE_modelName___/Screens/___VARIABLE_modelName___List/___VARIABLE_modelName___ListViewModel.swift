@@ -215,7 +215,7 @@ public extension ___VARIABLE_modelName___ListViewModel {
                 filterType: filterType,
                 sortType: sortType,
                 sortOrder: sortOrder,
-                categoryId: input?.categoryId
+                ___VARIABLE_categoryVariableName___Id: input?.categoryId
             )
 
             if products.isEmpty {

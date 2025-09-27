@@ -94,7 +94,7 @@ public struct ___VARIABLE_modelName___ListContentView: View {
                 Label {
                     Text("No Category")
                 } icon: {
-                    if product.categoryId == nil {
+                    if product.___VARIABLE_categoryVariableName___Id == nil {
                         Image.Base.Check.mini
                     }
                 }
@@ -107,7 +107,7 @@ public struct ___VARIABLE_modelName___ListContentView: View {
                     Label {
                         Text(category.name)
                     } icon: {
-                        if product.categoryId == category.id {
+                        if product.___VARIABLE_categoryVariableName___Id == category.id {
                             Image.Base.Check.mini
                         }
                     }

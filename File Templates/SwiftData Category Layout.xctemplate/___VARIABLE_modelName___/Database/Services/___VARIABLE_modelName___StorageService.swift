@@ -194,7 +194,7 @@ public actor ___VARIABLE_modelName___StorageService {
                 let categoryDescriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
                     predicate: #Predicate { $0.id == categoryId }
                 )
-                ___VARIABLE_modelVariableName___Entity.category = try modelContext.fetch(categoryDescriptor).first
+                ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___ = try modelContext.fetch(categoryDescriptor).first
             }
             try modelContext.save()
             return ___VARIABLE_modelName___(from: ___VARIABLE_modelVariableName___Entity)
