@@ -2,6 +2,7 @@
 
 import ___VARIABLE_modelPackage___
 import FactoryKit
+import NavigatorUI
 import ObservableDefaults
 import Observation
 import OversizeCore
@@ -10,9 +11,8 @@ import OversizeModels
 import OversizeNavigation
 import SwiftUI
 
-@MainActor
 @Observable
-public final class ___VARIABLE_modelName___EditViewState: Sendable {
+public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
     /// Forms
     public var name: String = .init()
     public var note: String = .init()
@@ -26,22 +26,20 @@ public final class ___VARIABLE_modelName___EditViewState: Sendable {
     #endif
 
     /// User Interface
-    public var ___VARIABLE_modelVariableName___State: LoadingViewState<___VARIABLE_modelName___> = .idle
+    public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
     public var focusedField: FocusField?
-    public var isSaving: Bool = false
+    public var isSaving: Bool = .init()
+    public var isDismissed: Bool = .init()
+    public var isEmptyForm: Bool = true
+    public var isValidForm: Bool = false
+    public var hud: OversizeNavigation.HUD?
+
+    /// Callback
+    let handler: Callback<CallbackAction>
 
     /// Constants
     public let mode: EditMode
     public let ___VARIABLE_modelVariableName___Id: UUID
-
-    /// Checks
-    var isEmptyForm: Bool {
-        name.isEmpty && note.isEmpty && url == nil
-    }
-
-    var isValidForm: Bool {
-        !name.isEmpty
-    }
 
     /// View
     var title: String {
@@ -49,13 +47,14 @@ public final class ___VARIABLE_modelName___EditViewState: Sendable {
         case .create:
             "Create ___VARIABLE_modelVariableName___"
         case .edit, .editId:
-            "Edit ___VARIABLE_modelVariableName___"
+            "Edit \(___VARIABLE_modelVariableName___State.successResult?.name ?? "")"
         }
     }
 
     /// Initialization
-    public init(_ mode: EditMode) {
+    public init(_ mode: EditMode, handler: Callback<CallbackAction>) {
         self.mode = mode
+        self.handler = handler
         switch mode {
         case let .edit(___VARIABLE_modelVariableName___):
             ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id
@@ -72,29 +71,34 @@ public final class ___VARIABLE_modelName___EditViewState: Sendable {
 // MARK: - User Actions
 
 public extension ___VARIABLE_modelName___EditViewState {
-    func update(_ handler: @Sendable @MainActor (___VARIABLE_modelName___EditViewState) -> Void) async {
-        await MainActor.run { handler(self) }
-    }
-
     func setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        // Uncomment and modify based on your model properties
-        // name = ___VARIABLE_modelVariableName___.name ?? ""
-        // note = ___VARIABLE_modelVariableName___.note ?? ""
-        // color = Color(___VARIABLE_modelVariableName___.color ?? "blue")
-        // url = ___VARIABLE_modelVariableName___.url
-        // date = ___VARIABLE_modelVariableName___.date
+        name = ___VARIABLE_modelVariableName___.name
+        note = ___VARIABLE_modelVariableName___.note ?? ""
+        color = ___VARIABLE_modelVariableName___.color
+        date = ___VARIABLE_modelVariableName___.date
+        if let data = ___VARIABLE_modelVariableName___.imageData {
+            #if os(macOS)
+            image = NSImage(data: data)
+            #else
+            image = UIImage(data: data)
+            #endif
+        }
     }
 }
 
 // MARK: - EditMode types
 
 public extension ___VARIABLE_modelName___EditViewState {
-    enum EditMode {
+    enum EditMode: Sendable {
         case create, edit(___VARIABLE_modelName___), editId(UUID)
     }
 
     /// FocusFields
-    enum FocusField: Hashable, Sendable {
+    enum FocusField: String, Hashable, Sendable {
         case name, note, url
+    }
+
+    enum CallbackAction: Sendable {
+        case save
     }
 }

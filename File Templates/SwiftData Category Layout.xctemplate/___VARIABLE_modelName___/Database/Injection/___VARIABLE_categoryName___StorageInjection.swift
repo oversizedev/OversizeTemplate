@@ -1,0 +1,13 @@
+// ___FILEHEADER___
+
+import FactoryKit
+import OversizeCore
+
+public extension Container {
+    var ___VARIABLE_modelVariableName___CategoryStorageService: Factory<___VARIABLE_categoryName___StorageService> {
+        self {
+            logInfo("Creating ___VARIABLE_categoryName___StorageService instance")
+            return ___VARIABLE_categoryName___StorageService(modelContainer: self.modelContainerService())
+        }.singleton
+    }
+}

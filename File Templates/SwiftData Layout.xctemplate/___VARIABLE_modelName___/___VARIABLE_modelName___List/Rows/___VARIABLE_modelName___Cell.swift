@@ -7,21 +7,34 @@ import SwiftUI
 
 struct ___VARIABLE_modelName___Cell: View {
     private let ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___
+    private let viewOption: ___VARIABLE_modelName___ViewOption
     private let action: (() -> Void)?
 
     init(
         _ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___,
-        action: (() -> Void)? = nil
+        viewOption: ___VARIABLE_modelName___ViewOption = .standard,
+        action: (() -> Void)? = nil,
     ) {
         self.___VARIABLE_modelVariableName___ = ___VARIABLE_modelVariableName___
+        self.viewOption = viewOption
         self.action = action
     }
 
     var body: some View {
         VStack {
-            Text("Title")
-                .padding()
+            Text(___VARIABLE_modelVariableName___.name)
+
+            if viewOption == .standard {
+                HStack {
+                    Text(___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened))
+
+                    if ___VARIABLE_modelVariableName___.isFavorite {
+                        Image.Base.Star.fill.icon(Color.warning)
+                    }
+                }
+            }
         }
+        .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
             RoundedRectangle(cornerRadius: .medium)
