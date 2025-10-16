@@ -7,9 +7,9 @@
 	<key>Kind</key>
 	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
 	<key>Description</key>
-	<string>A SwiftUI custom view with preview and library content provider</string>
+	<string>A SwiftUI screen with MVVM architecture using OversizeArchitecture</string>
 	<key>Summary</key>
-	<string>SwiftUI View</string>
+	<string>MVVM Screen</string>
 	<key>SortOrder</key>
 	<string>1</string>
 	<key>AllowedTypes</key>
@@ -19,9 +19,9 @@
 	<key>Platforms</key>
 	<array/>
 	<key>DefaultCompletionName</key>
-	<string>___VARIABLE_productName___Screen</string>
+	<string>Screen</string>
 	<key>MainTemplateFile</key>
-	<string>___VARIABLE_productName___Screen.swift</string>
+	<string>___VARIABLE_productName___.swift</string>
 	<key>CFBundleIdentifier</key>
 	<string></string>
 	<key>Image</key>
