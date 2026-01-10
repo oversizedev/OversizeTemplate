@@ -1,0 +1,7 @@
+name: ___VARIABLE_productName:RFC1034Identifier___
+
+include:
+  - Configs/Base.yml
+  - Configs/Packages.yml
+  - Configs/Targets.yml
+  - Configs/Settings.yml

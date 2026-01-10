@@ -1,0 +1,13 @@
+options:
+  bundleIdPrefix: ___VARIABLE_bundleIdentifierPrefix:bundleIdentifier___
+  xcodeVersion: 16.3
+  deploymentTarget:
+    iOS: 17.2
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  findCarthageFrameworks: true
+  minimumXcodeGenVersion: 2.3.0
+
+configs:
+  Debug: debug
+  Release: release
