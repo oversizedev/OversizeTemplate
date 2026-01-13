@@ -1,9 +1,10 @@
 //___FILEHEADER___
 
-import SwiftUI
-import FactoryKit
+import Factory
+import OversizeKit
 import OversizeServices
-import NavigatorUI
+import OversizeUI
+import SwiftUI
 import TipKit
 
 @main
@@ -13,59 +14,13 @@ struct ___PACKAGENAME:identifier___App: App {
     init() {
         try? Tips.configure()
     }
-    
+
     var body: some Scene {
         WindowGroup {
-            ApplicationRootView()
-                .navigationBarAppearanceConfiguration()
+            RootView()
                 .appLaunch {
-                    VStack {
-                        Text("Welcome")
-                        Button("Complete") {
-                            appStateService.completedOnboarding()
-                        }
-                    }
+                    Text("Welcome")
                 }
         }
     }
 }
-
-struct ApplicationRootView: View {
-    @SceneStorage("appRootType") var appRootType: AppRootType = UIDevice.current.userInterfaceIdiom == .pad ? .split : .tabbed
-
-    var body: some View {
-        appRootType
-            .onNavigationOpenURL()
-            .onNavigationReceive { (_: ToogleAppRootType) in
-                appRootType = appRootType == .split ? .tabbed : .split
-                return .auto
-            }
-    }
-
-    func applicationNavigator() -> Navigator {
-        let configuration: NavigationConfiguration = .init(
-            restorationKey: nil,
-            executionDelay: 0.3,
-            verbosity: .info
-        )
-        return Navigator(configuration: configuration)
-    }
-}
-
-enum AppRootType: Int {
-    case tabbed
-    case split
-}
-
-extension AppRootType: NavigationDestination {
-    var body: some View {
-        switch self {
-        case .tabbed:
-            RootTabView()
-        case .split:
-            RootSplitView()
-        }
-    }
-}
-
-struct ToogleAppRootType: Hashable {}

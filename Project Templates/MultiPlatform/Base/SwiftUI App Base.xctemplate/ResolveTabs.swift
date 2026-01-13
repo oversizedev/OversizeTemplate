@@ -3,7 +3,6 @@
 import App
 import Env
 import Foundation
-import NavigatorUI
 import OversizeKit
 import OversizeRouter
 import SwiftUI

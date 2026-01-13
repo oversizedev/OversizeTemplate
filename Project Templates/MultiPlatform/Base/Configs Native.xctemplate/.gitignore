@@ -1,6 +1,0 @@
-.DS_Store
-/.build
-xcuserdata/
-DerivedData/
-.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
-/.idea/

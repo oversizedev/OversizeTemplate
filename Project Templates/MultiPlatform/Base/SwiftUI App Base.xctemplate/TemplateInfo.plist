@@ -291,7 +291,9 @@
 	<array>
 		<string>Router/ResolveScreens.swift</string>
 		<string>Resources/Assets.xcassets</string>
-		<string>Resources/Preview Assets.xcassets</string>
+		<string>Resources/Development/Preview Assets.xcassets</string>
+		<string>Resources/Icons/AppIcon.icon</string>
+		<string>Resources/Icons/AppIcon(Dev).icon</string>
 	</array>
 	<key>Definitions</key>
 	<dict>
@@ -447,14 +449,41 @@
 			<key>SortOrder</key>
 			<integer>100</integer>
 		</dict>
-		<key>Resources/Preview Assets.xcassets</key>
+		<key>Resources/Development/Preview Assets.xcassets</key>
 		<dict>
+			<key>Group</key>
+			<array>
+				<string>Resources</string>
+				<string>Development</string>
+			</array>
 			<key>SortOrder</key>
 			<integer>100</integer>
 			<key>Path</key>
 			<string>Preview Assets.xcassets</string>
+		</dict>
+		<key>Resources/Icons/AppIcon.icon</key>
+		<dict>
 			<key>Group</key>
-			<string>Resources</string>
+			<array>
+				<string>Resources</string>
+				<string>Icons</string>
+			</array>
+			<key>SortOrder</key>
+			<integer>100</integer>
+			<key>Path</key>
+			<string>AppIcon.icon</string>
+		</dict>
+		<key>Resources/Icons/AppIcon(Dev).icon</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>Resources</string>
+				<string>Icons</string>
+			</array>
+			<key>SortOrder</key>
+			<integer>100</integer>
+			<key>Path</key>
+			<string>AppIcon(Dev).icon</string>
 		</dict>
 	</dict>
 	<key>Image</key>
