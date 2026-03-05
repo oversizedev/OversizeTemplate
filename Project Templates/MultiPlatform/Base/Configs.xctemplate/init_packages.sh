@@ -83,7 +83,7 @@ let commonDependencies: [PackageDescription.Package.Dependency] = [
     .package(name: "Database", path: "../Database"),
     .package(name: "Env", path: "../Env"),
     .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
-    .package(url: "https://github.com/fatbobman/ObservableDefaults.git", .upToNextMinor(from: "0.6.2")),
+    .package(url: "https://github.com/fatbobman/ObservableDefaults.git", .upToNextMinor(from: "1.6.0")),
     .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10"))
 ]
 
@@ -97,6 +97,7 @@ let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependen
     .package(url: "https://github.com/oversizedev/OversizeServices.git", .upToNextMajor(from: "1.4.0")),
     .package(url: "https://github.com/oversizedev/OversizeNavigation.git", .upToNextMajor(from: "0.3.0")),
     .package(url: "https://github.com/oversizedev/OversizeComponents.git", .upToNextMajor(from: "2.0.0")),
+    .package(url: "https://github.com/oversizedev/OversizeArchitecture.git", .upToNextMajor(from: "0.2.0")),
 ]
 
 let localDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
@@ -108,7 +109,8 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeUI", path: "../../../Packages/OversizeUI"),
     .package(name: "OversizeServices", path: "../../../Packages/OversizeServices"),
     .package(name: "OversizeNavigation", path: "../../../Packages/OversizeNavigation"),
-    .package(name: "OversizeComponents", path: "../../../OversizeComponents"),
+    .package(name: "OversizeComponents", path: "../../../Packages/OversizeComponents"),
+    .package(name: "OversizeArchitecture", path: "../../../Packages/OversizeArchitecture"),
 ]
 
 let dependencies: [PackageDescription.Package.Dependency] = localDependencies
@@ -148,6 +150,7 @@ let package = Package(
                 .product(name: "OversizeNavigation", package: "OversizeNavigation"),
                 .product(name: "ObservableDefaults", package: "ObservableDefaults"),
                 .product(name: "OversizePhotoComponents", package: "OversizeComponents"),
+                .product(name: "OversizeArchitecture", package: "OversizeArchitecture"),
             ]
         ),
         .testTarget(

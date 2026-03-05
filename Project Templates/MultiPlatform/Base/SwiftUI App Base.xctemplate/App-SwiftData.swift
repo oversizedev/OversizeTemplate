@@ -1,12 +1,15 @@
 //___FILEHEADER___
 
+import Database
+import FactoryKit
+import NavigatorUI
+import OversizeKit
+import OversizeNavigation
+import OversizeServices
 import SwiftData
 import SwiftUI
-import FactoryKit
-import OversizeServices
-import NavigatorUI
 import TipKit
-import Database
+import App
 
 
 @main

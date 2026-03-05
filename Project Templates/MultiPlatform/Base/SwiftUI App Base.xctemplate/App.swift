@@ -5,6 +5,8 @@ import FactoryKit
 import OversizeServices
 import NavigatorUI
 import TipKit
+import OversizeNavigation
+import OversizeKit
 
 @main
 struct ___PACKAGENAME:identifier___App: App {

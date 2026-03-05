@@ -9,6 +9,8 @@ GREEN := \033[0;32m
 YELLOW := \033[0;33m
 NC := \033[0m
 
+.PHONY: all init build build-prod format gen clean test run reload help
+
 # Default target
 all: help
 
@@ -21,16 +23,16 @@ init:
 	@$(PROJECT_ROOT)/scripts/init_packages_files.sh
 	@$(MAKE) gen
 	@$(MAKE) build
-	@$(MAKE) rerun
+	@$(MAKE) reload
 	@echo "$(GREEN)Init project complete.$(NC)"
 
-build: format gen
-	@echo "$(YELLOW)Building project...$(NC)"
+build-prod: format gen
+	@echo "$(YELLOW)Building project for production...$(NC)"
 	$(PROJECT_ROOT)/scripts/build.sh
 	@xcodegen
 	@echo "$(GREEN)Building complete.$(NC)"
-	
-build-local: format gen
+
+build: format gen
 	@echo "$(YELLOW)Building project...$(NC)"
 	$(PROJECT_ROOT)/scripts/build_local.sh
 	@xcodegen --spec project_local.yml
@@ -50,8 +52,25 @@ gen:
 	@cd $(PACKAGES_DIR)/OversizeResources && swiftgen config run
 	@echo "$(GREEN)Code generation complete.$(NC)"
 
+clean:
+	@echo "$(YELLOW)Cleaning build artifacts...$(NC)"
+	@rm -rf ~/Library/Developer/Xcode/DerivedData/$(PROJECT_NAME)-*
+	@echo "$(GREEN)Clean complete.$(NC)"
 
-rerun:
+test:
+	@echo "$(YELLOW)Running tests...$(NC)"
+	@xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.0,name=iPhone 16e'
+	@echo "$(GREEN)Tests complete.$(NC)"
+
+run:
+	@echo "$(YELLOW)Building and running in simulator...$(NC)"
+	@xcodebuild -project $(PROJECT_NAME).xcodeproj -scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.0,name=iPhone 16e' \
+		-derivedDataPath build
+	@echo "$(GREEN)Run complete.$(NC)"
+
+reload:
 	@echo "🔄 Reload Xcode..."
 	@osascript -e 'tell application "Xcode" to quit'
 	@sleep 2
@@ -63,10 +82,14 @@ help:
 	@echo ""
 	@echo "Available targets:"
 	@echo "  init         - Create local dependencies and initialize project"
-	@echo "  build        - Format code and build the project"
-	@echo "  build-local  - Format code and build the project with local configuration"
+	@echo "  build        - Format code and build the project with local dependencies"
+	@echo "  build-prod   - Format code and build the project for production with remote dependencies"
 	@echo "  format       - Format code in Packages and Project directories"
 	@echo "  gen          - Generate network code from OpenAPI spec and resources with SwiftGen"
+	@echo "  clean        - Clean build artifacts from DerivedData"
+	@echo "  test         - Run tests in iOS Simulator"
+	@echo "  run          - Build and run the project in iOS Simulator"
+	@echo "  reload       - Reload Xcode project"
 	@echo "  help         - Show this help message"
 	@echo ""
 	@echo "Current Date and Time (UTC): $(shell date '+%Y-%m-%d %H:%M:%S')"
