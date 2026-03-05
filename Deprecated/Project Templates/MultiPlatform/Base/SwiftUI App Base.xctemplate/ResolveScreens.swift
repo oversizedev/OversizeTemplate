@@ -1,13 +1,10 @@
-//
-// Copyright © 2024 Alexander Romanov
-// ResolveRouter.swift, created on 04.07.2024
-//
+//___FILEHEADER___
 
 import App
 import Env
 import OversizeKit
-import OversizeRouter
 import SwiftUI
+import OversizeRouter
 
 extension Screen: @retroactive RoutableView {
     public func view() -> some View {
@@ -17,3 +14,4 @@ extension Screen: @retroactive RoutableView {
         }
     }
 }
+

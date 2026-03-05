@@ -24,13 +24,13 @@ init:
 	@$(MAKE) rerun
 	@echo "$(GREEN)Init project complete.$(NC)"
 
-build-prod: format gen
+build: format gen
 	@echo "$(YELLOW)Building project...$(NC)"
 	$(PROJECT_ROOT)/scripts/build.sh
 	@xcodegen
 	@echo "$(GREEN)Building complete.$(NC)"
 	
-build: format gen
+build-local: format gen
 	@echo "$(YELLOW)Building project...$(NC)"
 	$(PROJECT_ROOT)/scripts/build_local.sh
 	@xcodegen --spec project_local.yml
@@ -63,8 +63,8 @@ help:
 	@echo ""
 	@echo "Available targets:"
 	@echo "  init         - Create local dependencies and initialize project"
-	@echo "  build-prod   - Format code and build the project"
-	@echo "  build        - Format code and build the project with local configuration"
+	@echo "  build        - Format code and build the project"
+	@echo "  build-local  - Format code and build the project with local configuration"
 	@echo "  format       - Format code in Packages and Project directories"
 	@echo "  gen          - Generate network code from OpenAPI spec and resources with SwiftGen"
 	@echo "  help         - Show this help message"

@@ -5,11 +5,11 @@
 	<key>Kind</key>
 	<string>Xcode.Xcode3.ProjectTemplateUnitKind</string>
 	<key>Identifier</key>
-	<string>app.oversize.multiplatform.swiftui.native</string>
+	<string>app.oversize.multiplatform.swiftui</string>
 	<key>Ancestors</key>
 	<array>
-		<string>app.oversize.multiplatform.baseapp.swiftui.native</string>
-		<string>app.oversize.configs.native</string>
+		<string>app.oversize.multiplatform.baseapp.swiftui</string>
+		<string>app.oversize.configs</string>
 	</array>
 	<key>Concrete</key>
 	<true/>

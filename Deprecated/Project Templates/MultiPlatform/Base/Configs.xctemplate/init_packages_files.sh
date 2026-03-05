@@ -1,25 +1,31 @@
 # Create Swift files in App package
 rm -rf Packages/Env/Sources/Env/Env.swift
-touch Packages/Env/Sources/Env/MainTabs.swift
-cat <<EOF >Packages/Env/Sources/Env/MainTabs.swift
+touch Packages/Env/Sources/Env/RootTabs.swift
+cat <<EOF >Packages/Env/Sources/Env/RootTabs.swift
 //
 // Copyright © $(date +%Y) Alexander Romanov
 // Tabs.swift, created on $(date +%d.%m.%Y)
 //
 
+import OversizeUI
 import OversizeResources
-import OversizeRouter
 import SwiftUI
 
-public enum MainTab: Tabable {
-    public static let allCases: [MainTab] = [MainTab.main, MainTab.settings]
-
+public enum RootTabs: Int, Codable {
     case main
     case settings
 }
 
-public extension MainTab {
-    var icon: Image {
+extension RootTabs: Identifiable {
+    public static var tabs: [RootTabs] {
+        [.main, .settings]
+    }
+
+    public static var sidebar: [RootTabs] {
+        [.main, .settings]
+    }
+
+    public var icon: Image {
         switch self {
         case .main:
             Image.GridsAndLayout.grid
@@ -28,7 +34,7 @@ public extension MainTab {
         }
     }
 
-    var title: String {
+    public var title: String {
         switch self {
         case .main:
             .init("Main")
@@ -37,37 +43,30 @@ public extension MainTab {
         }
     }
 
-    var id: String {
-        switch self {
-        case .main:
-            "main"
-        case .settings:
-            "settings"
-        }
+    public var id: String {
+        "\(self)"
     }
 }
+
 EOF
 
 touch Packages/Env/Sources/Env/Screens.swift
 cat <<EOF >Packages/Env/Sources/Env/Screens.swift
 //
 // Copyright © $(date +%Y) Alexander Romanov
-// AccountListRouter.swift, created on $(date +%d.%m.%Y)
+// Screens.swift, created on $(date +%d.%m.%Y)
 //
 
-import OversizeRouter
 import SwiftUI
 
-public enum Screen: Routable {
+public enum Screen: Int {
     case main
 }
 
-public extension Screen {
-    var id: String {
-        switch self {
-        case .main:
-            "main"
-        }
+extension Screen: Identifiable {
+    public var id: String {
+        "\(self)"
     }
 }
+
 EOF

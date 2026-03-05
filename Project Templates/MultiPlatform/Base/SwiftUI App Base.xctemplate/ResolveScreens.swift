@@ -4,9 +4,8 @@ import App
 import Env
 import OversizeKit
 import SwiftUI
-import OversizeRouter
 
-extension Screen: @retroactive RoutableView {
+extension Screen {
     public func view() -> some View {
         switch self {
         case .main:
@@ -14,4 +13,3 @@ extension Screen: @retroactive RoutableView {
         }
     }
 }
-

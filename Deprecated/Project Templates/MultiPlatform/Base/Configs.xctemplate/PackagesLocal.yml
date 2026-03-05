@@ -13,12 +13,14 @@ packages:
     path: ../../Packages/OversizeCore
   OversizeComponents:
     path: ../../Packages/OversizeComponents
+  OversizeRouter:
+    path: ../../Packages/OversizeRouter
   Database:
     path: ../Packages/Database
   Env:
     path: ../Packages/Env
   App:
     path: ../Packages/App
-  Factory:
+  FactoryKit:
     url: https://github.com/hmlongco/Factory.git
     majorVersion: 2.1.3

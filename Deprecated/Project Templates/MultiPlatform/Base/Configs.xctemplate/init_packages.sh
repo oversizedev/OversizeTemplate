@@ -15,14 +15,19 @@ cat <<EOF >Package.swift
 import Foundation
 import PackageDescription
 
-let remoteDependencies: [PackageDescription.Package.Dependency] = [
-    .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
+let commonDependencies: [PackageDescription.Package.Dependency] = [
     .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10")),
+    .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
 ]
 
-let localDependencies: [PackageDescription.Package.Dependency] = [
+let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
+    .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
+    .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
+]
+
+let localDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
     .package(name: "OversizeCore", path: "../../../Packages/OversizeCore"),
-    .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10")),
+    .package(name: "OversizeModels", path: "../../../Packages/OversizeModels"),
 ]
 
 let dependencies: [PackageDescription.Package.Dependency] = remoteDependencies
@@ -48,6 +53,8 @@ let package = Package(
             name: "Database",
             dependencies: [
                 .product(name: "OversizeCore", package: "OversizeCore"),
+                .product(name: "FactoryKit", package: "Factory"),
+                .product(name: "OversizeModels", package: "OversizeModels"),
             ]
         ),
         .testTarget(
@@ -72,35 +79,40 @@ cat <<EOF >Package.swift
 import Foundation
 import PackageDescription
 
-let remoteDependencies: [PackageDescription.Package.Dependency] = [
+let commonDependencies: [PackageDescription.Package.Dependency] = [
     .package(name: "Database", path: "../Database"),
     .package(name: "Env", path: "../Env"),
+    .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
+    .package(url: "https://github.com/fatbobman/ObservableDefaults.git", .upToNextMinor(from: "1.6.0")),
+    .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10"))
+]
+
+let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
+    .package(url: "https://github.com/oversizedev/OversizeLocalizable.git", .upToNextMajor(from: "1.4.0")),
+    .package(url: "https://github.com/oversizedev/OversizeResources.git", .upToNextMajor(from: "2.0.0")),
+    .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
+    .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
     .package(url: "https://github.com/oversizedev/OversizeKit.git", .upToNextMajor(from: "2.0.0")),
     .package(url: "https://github.com/oversizedev/OversizeUI.git", .upToNextMajor(from: "3.0.2")),
     .package(url: "https://github.com/oversizedev/OversizeServices.git", .upToNextMajor(from: "1.4.0")),
-    .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
-    .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
-    .package(url: "https://github.com/oversizedev/OversizeResources.git", .upToNextMajor(from: "2.0.0")),
-    .package(url: "https://github.com/oversizedev/OversizeLocalizable.git", .upToNextMajor(from: "1.4.0")),
-    .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
-    .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10")),
+    .package(url: "https://github.com/oversizedev/OversizeComponents.git", .upToNextMajor(from: "2.0.0")),
+    .package(url: "https://github.com/oversizedev/OversizeRouter.git", .upToNextMajor(from: "0.1.0")),
 ]
 
-let localDependencies: [PackageDescription.Package.Dependency] = [
-    .package(name: "Database", path: "../Database"),
-    .package(name: "Env", path: "../Env"),
+let localDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
     .package(name: "OversizeLocalizable", path: "../../../Packages/OversizeLocalizable"),
     .package(name: "OversizeResources", path: "../../../Packages/OversizeResources"),
     .package(name: "OversizeCore", path: "../../../Packages/OversizeCore"),
     .package(name: "OversizeModels", path: "../../../Packages/OversizeModels"),
     .package(name: "OversizeKit", path: "../../../Packages/OversizeKit"),
-    .package(name: "OversizeServices", path: "../../../Packages/OversizeServices"),
     .package(name: "OversizeUI", path: "../../../Packages/OversizeUI"),
-    .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
-    .package(url: "https://github.com/nicklockwood/SwiftFormat", .upToNextMajor(from: "0.52.10")),
+    .package(name: "OversizeServices", path: "../../../Packages/OversizeServices"),
+    .package(name: "OversizeComponents", path: "../../../Packages/OversizeComponents"),
+    .package(name: "OversizeArchitecture", path: "../../../Packages/OversizeArchitecture"),
+    .package(name: "OversizeRouter", path: "../../../Packages/OversizeRouter"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = remoteDependencies
+let dependencies: [PackageDescription.Package.Dependency] = localDependencies
 
 let package = Package(
     name: "App",
@@ -130,11 +142,14 @@ let package = Package(
                 .product(name: "OversizeLocalizable", package: "OversizeLocalizable"),
                 .product(name: "OversizeKit", package: "OversizeKit"),
                 .product(name: "OversizeServices", package: "OversizeServices"),
-                .product(name: "OversizeHealthService", package: "OversizeServices"),
                 .product(name: "OversizeStoreService", package: "OversizeServices"),
-                .product(name: "Factory", package: "Factory"),
+                .product(name: "FactoryKit", package: "Factory"),
                 .product(name: "OversizeUI", package: "OversizeUI"),
                 .product(name: "OversizeNoticeKit", package: "OversizeKit"),
+                .product(name: "ObservableDefaults", package: "ObservableDefaults"),
+                .product(name: "OversizePhotoComponents", package: "OversizeComponents"),
+                .product(name: "OversizeArchitecture", package: "OversizeArchitecture"),
+                .product(name: "OversizeRouter", package: "OversizeRouter"),
             ]
         ),
         .testTarget(
@@ -164,6 +179,8 @@ let remoteDependencies: [PackageDescription.Package.Dependency] = [
     .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
     .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
     .package(url: "https://github.com/oversizedev/OversizeLocalizable.git", .upToNextMajor(from: "1.4.0")),
+    .package(url: "https://github.com/oversizedev/OversizeUI.git", .upToNextMajor(from: "3.0.2")),
+    .package(url: "https://github.com/oversizedev/OversizeRouter.git", .upToNextMajor(from: "0.1.0")),
     .package(name: "Database", path: "../Database"),
 ]
 
@@ -172,6 +189,8 @@ let localDependencies: [PackageDescription.Package.Dependency] = [
     .package(name: "OversizeCore", path: "../../../Packages/OversizeCore"),
     .package(name: "OversizeModels", path: "../../../Packages/OversizeModels"),
     .package(name: "OversizeResources", path: "../../../Packages/OversizeResources"),
+    .package(name: "OversizeUI", path: "../../../Packages/OversizeUI"),
+    .package(name: "OversizeRouter", path: "../../../Packages/OversizeRouter"),
     .package(name: "Database", path: "../Database"),
 ]
 
@@ -202,6 +221,8 @@ let package = Package(
                 .product(name: "OversizeCore", package: "OversizeCore"),
                 .product(name: "OversizeLocalizable", package: "OversizeLocalizable"),
                 .product(name: "OversizeResources", package: "OversizeResources"),
+                .product(name: "OversizeUI", package: "OversizeUI"),
+                .product(name: "OversizeRouter", package: "OversizeRouter"),
             ]
         ),
         .testTarget(

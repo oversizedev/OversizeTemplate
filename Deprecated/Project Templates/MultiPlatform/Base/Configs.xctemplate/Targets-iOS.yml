@@ -46,7 +46,6 @@ targets:
           SWIFT_ACTIVE_COMPILATION_CONDITIONS: APPSTORE
 
     dependencies:
-      - package: NavigatorUI
       - package: FactoryKit
       - package: OversizeUI
       - package: OversizeServices
@@ -58,6 +57,7 @@ targets:
           - OversizeNoticeKit
       - package: OversizeCore
       - package: OversizeComponents
+      - package: OversizeRouter
       - package: Database
       - package: Env
       - package: App
@@ -124,4 +124,3 @@ schemes:
       config: AppStore
     archive:
       config: AppStore
-
