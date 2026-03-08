@@ -1,8 +1,8 @@
 {
   "fill" : {
     "linear-gradient" : [
-      "display-p3:0.25882,0.61961,0.95294,1.00000",
-      "display-p3:0.19608,0.42353,0.89804,1.00000"
+      "srgb:0.38824,0.38824,0.38824,1.00000",
+      "extended-srgb:0.68627,0.32157,0.87059,1.00000"
     ],
     "orientation" : {
       "start" : {
@@ -31,22 +31,6 @@
               0.0022534000769383056
             ]
           }
-        }
-      ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
-    },
-    {
-      "layers" : [
-        {
-          "image-name" : "Frame 1.png",
-          "name" : "Frame 1"
         }
       ],
       "shadow" : {

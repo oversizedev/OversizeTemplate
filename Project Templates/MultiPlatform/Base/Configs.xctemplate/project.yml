@@ -5,3 +5,4 @@ include:
   - Configs/Packages.yml
   - Configs/Targets.yml
   - Configs/Settings.yml
+  - Configs/Schemes.yml

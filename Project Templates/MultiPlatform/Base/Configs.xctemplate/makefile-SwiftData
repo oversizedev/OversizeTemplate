@@ -9,7 +9,7 @@ GREEN := \033[0;32m
 YELLOW := \033[0;33m
 NC := \033[0m
 
-.PHONY: all init build build-prod format gen clean test run reload help
+.PHONY: all init build build-prod format gen gen-icons clean test run reload help
 
 # Default target
 all: help
@@ -51,7 +51,16 @@ gen:
 	@cd $(PACKAGES_DIR)/OversizeNetwork && swift package plugin --allow-writing-to-package-directory generate-code-from-openapi
 	@echo "$(YELLOW)Generating resources...$(NC)"
 	@cd $(PACKAGES_DIR)/OversizeResources && swiftgen config run
+	@echo "$(YELLOW)Generating alternative icon previews...$(NC)"
+	@chmod +x $(PROJECT_ROOT)/scripts/generate_alt_icons.sh
+	@$(PROJECT_ROOT)/scripts/generate_alt_icons.sh
 	@echo "$(GREEN)Code generation complete.$(NC)"
+
+gen-icons:
+	@echo "$(YELLOW)Generating alternative icon previews...$(NC)"
+	@chmod +x $(PROJECT_ROOT)/scripts/generate_alt_icons.sh
+	@$(PROJECT_ROOT)/scripts/generate_alt_icons.sh
+	@echo "$(GREEN)Icon previews generation complete.$(NC)"
 
 clean:
 	@echo "$(YELLOW)Cleaning build artifacts...$(NC)"
@@ -86,7 +95,8 @@ help:
 	@echo "  build        - Format code and build the project with local dependencies"
 	@echo "  build-prod   - Format code and build the project for production with remote dependencies"
 	@echo "  format       - Format code in Packages and Project directories"
-	@echo "  gen          - Generate network code from OpenAPI spec and resources with SwiftGen"
+	@echo "  gen          - Generate network code, resources and icon previews"
+	@echo "  gen-icons    - Generate alternative icon previews from .icon files"
 	@echo "  clean        - Clean build artifacts from DerivedData"
 	@echo "  test         - Run tests in iOS Simulator"
 	@echo "  run          - Build and run the project in iOS Simulator"

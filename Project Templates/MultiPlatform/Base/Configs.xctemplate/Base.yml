@@ -13,5 +13,4 @@ options:
 
 configs:
   Debug: debug
-  TestFlight: release
   AppStore: release

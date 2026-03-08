@@ -22,15 +22,15 @@ let commonDependencies: [PackageDescription.Package.Dependency] = [
 
 let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
     .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
-    .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
 ]
 
 let localDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
     .package(name: "OversizeCore", path: "../../../Packages/OversizeCore"),
-    .package(name: "OversizeModels", path: "../../../Packages/OversizeModels"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = remoteDependencies
+let dependencies: [PackageDescription.Package.Dependency] = FileManager.default.fileExists(atPath: "../../../Packages/OversizeCore")
+    ? localDependencies
+    : remoteDependencies
 
 let package = Package(
     name: "Database",
@@ -54,7 +54,6 @@ let package = Package(
             dependencies: [
                 .product(name: "OversizeCore", package: "OversizeCore"),
                 .product(name: "FactoryKit", package: "Factory"),
-                .product(name: "OversizeModels", package: "OversizeModels"),
             ]
         ),
         .testTarget(
@@ -113,7 +112,9 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeArchitecture", path: "../../../Packages/OversizeArchitecture"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = localDependencies
+let dependencies: [PackageDescription.Package.Dependency] = FileManager.default.fileExists(atPath: "../../../Packages/OversizeCore")
+    ? localDependencies
+    : remoteDependencies
 
 let package = Package(
     name: "App",
@@ -125,15 +126,14 @@ let package = Package(
         .watchOS(.v10),
     ],
     products: [
-        .library(
-            name: "App",
-            targets: ["App"]
-        ),
+        .library(name: "Main", targets: ["Main"]),
+        .library(name: "Onboarding", targets: ["Onboarding"]),
+        .library(name: "Settings", targets: ["Settings"]),
     ],
     dependencies: dependencies,
     targets: [
         .target(
-            name: "App",
+            name: "Main",
             dependencies: [
                 .product(name: "Database", package: "Database"),
                 .product(name: "Env", package: "Env"),
@@ -153,10 +153,34 @@ let package = Package(
                 .product(name: "OversizeArchitecture", package: "OversizeArchitecture"),
             ]
         ),
-        .testTarget(
-            name: "AppTests",
-            dependencies: ["App"]
+        .target(
+            name: "Onboarding",
+            dependencies: [
+                .product(name: "Database", package: "Database"),
+                .product(name: "Env", package: "Env"),
+                .product(name: "OversizeOnboardingKit", package: "OversizeKit"),
+                .product(name: "OversizeUI", package: "OversizeUI"),
+                .product(name: "OversizeServices", package: "OversizeServices"),
+                .product(name: "OversizeNavigation", package: "OversizeNavigation"),
+                .product(name: "OversizeArchitecture", package: "OversizeArchitecture"),
+                .product(name: "OversizeCore", package: "OversizeCore"),
+                .product(name: "FactoryKit", package: "Factory"),
+            ]
         ),
+        .target(
+            name: "Settings",
+            dependencies: [
+                .product(name: "Database", package: "Database"),
+                .product(name: "Env", package: "Env"),
+                .product(name: "OversizeUI", package: "OversizeUI"),
+                .product(name: "OversizeArchitecture", package: "OversizeArchitecture"),
+                .product(name: "FactoryKit", package: "Factory"),
+                .product(name: "OversizeNavigation", package: "OversizeNavigation"),
+            ]
+        ),
+        .testTarget(name: "MainTests", dependencies: ["Main"]),
+        .testTarget(name: "OnboardingTests", dependencies: ["Onboarding"]),
+        .testTarget(name: "SettingsTests", dependencies: ["Settings"]),
     ]
 )
 EOF
@@ -181,6 +205,7 @@ let remoteDependencies: [PackageDescription.Package.Dependency] = [
     .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
     .package(url: "https://github.com/oversizedev/OversizeLocalizable.git", .upToNextMajor(from: "1.4.0")),
     .package(url: "https://github.com/oversizedev/OversizeUI.git", .upToNextMajor(from: "3.0.2")),
+    .package(url: "https://github.com/oversizedev/OversizeNavigation.git", .upToNextMajor(from: "0.3.0")),
     .package(name: "Database", path: "../Database"),
 ]
 
@@ -190,10 +215,13 @@ let localDependencies: [PackageDescription.Package.Dependency] = [
     .package(name: "OversizeModels", path: "../../../Packages/OversizeModels"),
     .package(name: "OversizeResources", path: "../../../Packages/OversizeResources"),
     .package(name: "OversizeUI", path: "../../../Packages/OversizeUI"),
+    .package(name: "OversizeNavigation", path: "../../../Packages/OversizeNavigation"),
     .package(name: "Database", path: "../Database"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = remoteDependencies
+let dependencies: [PackageDescription.Package.Dependency] = FileManager.default.fileExists(atPath: "../../../Packages/OversizeCore")
+    ? localDependencies
+    : remoteDependencies
 
 let package = Package(
     name: "Env",
@@ -221,6 +249,7 @@ let package = Package(
                 .product(name: "OversizeLocalizable", package: "OversizeLocalizable"),
                 .product(name: "OversizeResources", package: "OversizeResources"),
                 .product(name: "OversizeUI", package: "OversizeUI"),
+                .product(name: "OversizeNavigation", package: "OversizeNavigation"),
             ]
         ),
         .testTarget(
