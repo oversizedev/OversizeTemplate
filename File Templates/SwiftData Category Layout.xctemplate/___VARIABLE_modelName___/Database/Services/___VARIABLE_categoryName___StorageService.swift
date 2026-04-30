@@ -16,7 +16,7 @@ public actor ___VARIABLE_categoryName___StorageService {
         image: Data? = nil,
         note: String? = nil,
         index: Int = 0
-    ) async throws -> ___VARIABLE_categoryName___ {
+    ) throws -> ___VARIABLE_categoryName___ {
         let ___VARIABLE_categoryVariableName___ = ___VARIABLE_categoryName___(
             imageData: image,
             name: name,
@@ -27,14 +27,14 @@ public actor ___VARIABLE_categoryName___StorageService {
             index: index
         )
 
-        let results = try await save([___VARIABLE_categoryVariableName___])
+        let results = try save([___VARIABLE_categoryVariableName___])
         guard let result = results.first else {
-            throw SwiftDataError.saveFailed
+            throw PersistenceError.saveFailed
         }
         return result
     }
 
-    public func save(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) async throws -> [___VARIABLE_categoryName___] {
+    public func save(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) throws -> [___VARIABLE_categoryName___] {
         let count = ___VARIABLE_categoryPluralVariableName___.count
         logData("Saving \(count) ___VARIABLE_categoryName___(s)")
 
@@ -51,11 +51,11 @@ public actor ___VARIABLE_categoryName___StorageService {
             return saved___VARIABLE_categoryName___s.map { ___VARIABLE_categoryName___(from: $0) }
         } catch {
             logError("Save failed:", error: error)
-            throw count == 1 ? SwiftDataError.saveFailed : SwiftDataError.batchOperationFailed
+            throw count == 1 ? PersistenceError.saveFailed : PersistenceError.batchOperationFailed
         }
     }
 
-    public func duplicate(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async throws -> ___VARIABLE_categoryName___ {
+    public func duplicate(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
         let duplicated___VARIABLE_categoryName___ = ___VARIABLE_categoryName___(
             imageData: ___VARIABLE_categoryVariableName___.imageData,
             name: "\(___VARIABLE_categoryVariableName___.name) (Copy)",
@@ -66,9 +66,9 @@ public actor ___VARIABLE_categoryName___StorageService {
             index: 0
         )
 
-        let results = try await save([duplicated___VARIABLE_categoryName___])
+        let results = try save([duplicated___VARIABLE_categoryName___])
         guard let result = results.first else {
-            throw SwiftDataError.saveFailed
+            throw PersistenceError.saveFailed
         }
         return result
     }
@@ -79,7 +79,7 @@ public actor ___VARIABLE_categoryName___StorageService {
         filterType: ___VARIABLE_categoryName___FilterType? = nil,
         sortType: ___VARIABLE_categoryName___SortType = .date,
         sortOrder: ___VARIABLE_categoryName___SortOrder = .descending
-    ) async throws -> [___VARIABLE_categoryName___] {
+    ) throws -> [___VARIABLE_categoryName___] {
         do {
             var predicate: Predicate<___VARIABLE_categoryName___Entity>?
 
@@ -97,17 +97,17 @@ public actor ___VARIABLE_categoryName___StorageService {
             return ___VARIABLE_categoryPluralVariableName___.map { ___VARIABLE_categoryName___(from: $0) }
         } catch {
             logError("Fetch failed:", error: error)
-            throw SwiftDataError.fetchFailed
+            throw PersistenceError.fetchFailed
         }
     }
 
-    public func fetch(by id: UUID) async throws -> ___VARIABLE_categoryName___ {
+    public func fetch(by id: UUID) throws -> ___VARIABLE_categoryName___ {
         do {
-            let ___VARIABLE_categoryVariableName___ = try await fetch___VARIABLE_categoryName___(by: id)
+            let ___VARIABLE_categoryVariableName___ = try fetch___VARIABLE_categoryName___(by: id)
             return ___VARIABLE_categoryName___(from: ___VARIABLE_categoryVariableName___)
         } catch {
             logError("Fetch by id failed:", error: error)
-            throw SwiftDataError.fetchFailed
+            throw PersistenceError.fetchFailed
         }
     }
 
@@ -118,7 +118,7 @@ public actor ___VARIABLE_categoryName___StorageService {
         filterType: ___VARIABLE_categoryName___FilterType? = nil,
         sortType: ___VARIABLE_categoryName___SortType = .date,
         sortOrder: ___VARIABLE_categoryName___SortOrder = .descending
-    ) async throws -> [___VARIABLE_categoryName___] {
+    ) throws -> [___VARIABLE_categoryName___] {
         do {
             let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
             let descriptor = if filterType == .favorites {
@@ -144,7 +144,7 @@ public actor ___VARIABLE_categoryName___StorageService {
             return ___VARIABLE_categoryPluralVariableName___.map { ___VARIABLE_categoryName___(from: $0) }
         } catch {
             logError("Search failed:", error: error)
-            throw SwiftDataError.fetchFailed
+            throw PersistenceError.fetchFailed
         }
     }
 
@@ -160,9 +160,9 @@ public actor ___VARIABLE_categoryName___StorageService {
         note: String? = nil,
         isFavorite: Bool? = nil,
         index: Int? = nil
-    ) async throws -> ___VARIABLE_categoryName___ {
+    ) throws -> ___VARIABLE_categoryName___ {
         do {
-            let entity = try await fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
+            let entity = try fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
 
             if let name { entity.name = name }
             if let emoji { entity.emoji = emoji }
@@ -177,36 +177,36 @@ public actor ___VARIABLE_categoryName___StorageService {
             return ___VARIABLE_categoryName___(from: entity)
         } catch {
             logError("Update failed:", error: error)
-            throw SwiftDataError.saveFailed
+            throw PersistenceError.saveFailed
         }
     }
 
-    public func toggleFavorite(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async throws -> ___VARIABLE_categoryName___ {
-        try await update(___VARIABLE_categoryVariableName___, isFavorite: !___VARIABLE_categoryVariableName___.isFavorite)
+    public func toggleFavorite(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
+        try update(___VARIABLE_categoryVariableName___, isFavorite: !___VARIABLE_categoryVariableName___.isFavorite)
     }
 
-    public func incrementViewCount(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async throws -> ___VARIABLE_categoryName___ {
+    public func incrementViewCount(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
         do {
-            let entity = try await fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
+            let entity = try fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
             entity.viewCount += 1
             try modelContext.save()
             return ___VARIABLE_categoryName___(from: entity)
         } catch {
             logError("Increment view count failed:", error: error)
-            throw SwiftDataError.saveFailed
+            throw PersistenceError.saveFailed
         }
     }
 
     // MARK: - Delete Operations
 
-    public func delete(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async throws {
-        try await delete([___VARIABLE_categoryVariableName___])
+    public func delete(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws {
+        try delete([___VARIABLE_categoryVariableName___])
     }
 
-    public func delete(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) async throws {
+    public func delete(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) throws {
         do {
             for ___VARIABLE_categoryVariableName___ in ___VARIABLE_categoryPluralVariableName___ {
-                let entity = try await fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
+                let entity = try fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
                 for ___VARIABLE_modelVariableName___ in entity.___VARIABLE_modelPluralVariableName___ {
                     ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ = nil
                 }
@@ -215,15 +215,15 @@ public actor ___VARIABLE_categoryName___StorageService {
             try modelContext.save()
         } catch {
             logError("Delete failed:", error: error)
-            throw SwiftDataError.batchOperationFailed
+            throw PersistenceError.deleteFailed
         }
     }
 
     // MARK: - Relationship Management
 
-    public func add___VARIABLE_modelName___s(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___], to ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async throws -> ___VARIABLE_categoryName___ {
+    public func add___VARIABLE_modelName___s(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___], to ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
         do {
-            let ___VARIABLE_categoryVariableName___Entity = try await fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
+            let ___VARIABLE_categoryVariableName___Entity = try fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
 
             for ___VARIABLE_modelVariableName___ in ___VARIABLE_modelPluralVariableName___ {
                 let ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id
@@ -239,13 +239,13 @@ public actor ___VARIABLE_categoryName___StorageService {
             return ___VARIABLE_categoryName___(from: ___VARIABLE_categoryVariableName___Entity)
         } catch {
             logError("Add ___VARIABLE_modelPluralVariableName___ to ___VARIABLE_categoryVariableName___ failed:", error: error)
-            throw SwiftDataError.saveFailed
+            throw PersistenceError.saveFailed
         }
     }
 
-    public func remove___VARIABLE_modelName___s(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___], from ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async throws -> ___VARIABLE_categoryName___ {
+    public func remove___VARIABLE_modelName___s(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___], from ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
         do {
-            let ___VARIABLE_categoryVariableName___Entity = try await fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
+            let ___VARIABLE_categoryVariableName___Entity = try fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
 
             for ___VARIABLE_modelVariableName___ in ___VARIABLE_modelPluralVariableName___ {
                 let ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id
@@ -261,25 +261,25 @@ public actor ___VARIABLE_categoryName___StorageService {
             return ___VARIABLE_categoryName___(from: ___VARIABLE_categoryVariableName___Entity)
         } catch {
             logError("Remove ___VARIABLE_modelPluralVariableName___ from ___VARIABLE_categoryVariableName___ failed:", error: error)
-            throw SwiftDataError.saveFailed
+            throw PersistenceError.saveFailed
         }
     }
 
     // MARK: - Count Operations
 
-    public func count() async throws -> Int {
+    public func count() throws -> Int {
         do {
             let descriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>()
             return try modelContext.fetchCount(descriptor)
         } catch {
             logError("Count failed:", error: error)
-            throw SwiftDataError.fetchFailed
+            throw PersistenceError.fetchFailed
         }
     }
 
     // MARK: - Lazy Loading
 
-    public func fetch___VARIABLE_modelName___s(for ___VARIABLE_categoryVariableName___Id: UUID) async throws -> [___VARIABLE_modelName___] {
+    public func fetch___VARIABLE_modelName___s(for ___VARIABLE_categoryVariableName___Id: UUID) throws -> [___VARIABLE_modelName___] {
         do {
             let descriptor = FetchDescriptor<___VARIABLE_modelName___Entity>(
                 predicate: #Predicate { ___VARIABLE_modelVariableName___ in
@@ -292,18 +292,18 @@ public actor ___VARIABLE_categoryName___StorageService {
             return ___VARIABLE_modelPluralVariableName___.map { ___VARIABLE_modelName___(from: $0) }
         } catch {
             logError("Lazy load ___VARIABLE_modelPluralVariableName___ failed:", error: error)
-            throw SwiftDataError.fetchFailed
+            throw PersistenceError.fetchFailed
         }
     }
 
     // MARK: - Private Helper Methods
 
-    private func fetch___VARIABLE_categoryName___(by id: UUID) async throws -> ___VARIABLE_categoryName___Entity {
+    private func fetch___VARIABLE_categoryName___(by id: UUID) throws -> ___VARIABLE_categoryName___Entity {
         let descriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
             predicate: #Predicate { $0.id == id }
         )
         guard let ___VARIABLE_categoryVariableName___ = try modelContext.fetch(descriptor).first else {
-            throw SwiftDataError.itemNotFound
+            throw PersistenceError.itemNotFound
         }
         return ___VARIABLE_categoryVariableName___
     }

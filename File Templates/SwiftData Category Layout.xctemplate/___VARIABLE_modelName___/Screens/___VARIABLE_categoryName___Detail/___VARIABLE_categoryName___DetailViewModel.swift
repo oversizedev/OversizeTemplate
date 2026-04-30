@@ -1,10 +1,9 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Database
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
-import OversizeModels
 import OversizeUI
 import SwiftUI
 
@@ -15,10 +14,9 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
 
     func onAppear() async {
-        if await state.___VARIABLE_categoryVariableName___State.successResult == nil {
+        if await state.___VARIABLE_categoryVariableName___State.result == nil {
             await fetchData()
         } else {
-            await fetch___VARIABLE_categoryPluralVariableName___()
             await incrementViewCount()
             await fetch___VARIABLE_modelName___s()
         }
@@ -29,22 +27,19 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
     }
 
     func onTapEdit___VARIABLE_categoryName___() async {
-        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.successResult else { return }
+        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else { return }
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___CategoryEdit(
                 ___VARIABLE_categoryVariableName___,
-                onSave: { _ in
-                    Task {
-                        logSuccess("___VARIABLE_categoryName___ edit completed")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
     }
 
     func onTapDelete___VARIABLE_categoryName___() async {
-        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.successResult else { return }
+        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else { return }
         await state.update { viewState in
             viewState.alert = .delete {
                 Task {
@@ -74,7 +69,7 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
     }
 
     func onTapToggleFavorite() async {
-        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.successResult else {
+        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else {
             logWarning("Cannot toggle favorite - no ___VARIABLE_categoryName___ loaded")
             return
         }
@@ -113,7 +108,6 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
     func fetchData() async {
         await fetch___VARIABLE_categoryName___()
         await fetch___VARIABLE_modelName___s()
-        await fetch___VARIABLE_categoryPluralVariableName___()
     }
 
     func fetch___VARIABLE_categoryName___() async {
@@ -126,35 +120,26 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
     }
 
     func fetch___VARIABLE_modelName___s() async {
-        await state.update { $0.___VARIABLE_modelPluralVariableName___State = .loading }
         do {
-            let ___VARIABLE_modelPluralVariableName___ = try await ___VARIABLE_modelVariableName___StorageService.fetch(
+            async let ___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelVariableName___StorageService.fetch(
                 filterType: .standard,
                 sortType: .date,
                 sortOrder: .descending,
                 ___VARIABLE_categoryVariableName___Id: state.___VARIABLE_categoryVariableName___Id
             )
-            if ___VARIABLE_modelPluralVariableName___.isEmpty {
-                await state.update { $0.___VARIABLE_modelPluralVariableName___State = .empty }
-            } else {
-                await state.update { $0.___VARIABLE_modelPluralVariableName___State = .result(___VARIABLE_modelPluralVariableName___) }
-            }
+            async let ___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_modelVariableName___CategoryStorageService.fetch()
+            let model = try await ___VARIABLE_categoryName___DetailViewState.___VARIABLE_modelName___sModel(
+                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
+                ___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___
+            )
+            await state.update { $0.___VARIABLE_modelPluralVariableName___State = .result(model) }
         } catch {
             await state.update { $0.___VARIABLE_modelPluralVariableName___State = .error(error) }
         }
     }
 
-    func fetch___VARIABLE_categoryPluralVariableName___() async {
-        do {
-            let ___VARIABLE_categoryPluralVariableName___ = try await ___VARIABLE_modelVariableName___CategoryStorageService.fetch()
-            await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .result(___VARIABLE_categoryPluralVariableName___) }
-        } catch {
-            await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .error(error) }
-        }
-    }
-
     func incrementViewCount() async {
-        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.successResult else { return }
+        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else { return }
         do {
             _ = try await ___VARIABLE_modelVariableName___CategoryStorageService.incrementViewCount(___VARIABLE_categoryVariableName___)
         } catch {
@@ -171,11 +156,8 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
-                onSave: { _ in
-                    Task {
-                        logSuccess("___VARIABLE_modelName___ edit completed: \(___VARIABLE_modelVariableName___.name)")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -233,11 +215,8 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
     func onTapCreate___VARIABLE_categoryName___For___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___CategoryCreate(
-                onSave: { _ in
-                    Task {
-                        logSuccess("New ___VARIABLE_categoryName___ created, refreshing data")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }

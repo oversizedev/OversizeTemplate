@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Database
 import OversizeArchitecture
 import OversizeComponents
 import OversizeCore
@@ -16,16 +16,19 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
             stateView(viewState.___VARIABLE_categoryVariableName___State)
         } cover: {
             cover
+        } contentBackground: {
+            Color.backgroundPrimary
+        } coverBackground: {
+            coverBackground
         } background: {
-            Color.backgroundSecondary
+            Color.backgroundPrimary
         }
         .toolbar { toolbarContent }
         .presentationAlert($viewState.alert)
         .presentationHUD($viewState.hud)
-        .task { reducer.callAsFunction(.onAppear) }
-        .refreshable { reducer.callAsFunction(.onRefresh) }
         .navigationMove($viewState.destination)
         .navigationBack($viewState.isDismissed)
+        .task { reducer.callAsFunction(.onAppear) }
     }
 
     @ViewBuilder
@@ -41,20 +44,18 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
     }
 
     private var cover: some View {
-        VStack {
-            Text("Cover")
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background {
-            LinearGradient(
-                colors: [
-                    Color.surfacePrimary,
-                    Color.blue,
-                ],
-                startPoint: .top,
-                endPoint: .bottom,
-            )
-        }
+        Text("Cover")
+    }
+
+    private var coverBackground: some View {
+        LinearGradient(
+            colors: [
+                Color.surfacePrimary,
+                Color.blue,
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 
     private func content(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) -> some View {
@@ -82,26 +83,28 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
         case .idle, .loading:
             ProgressView()
                 .frame(maxWidth: .infinity, alignment: .center)
-        case let .result(___VARIABLE_modelPluralVariableName___):
-            ___VARIABLE_modelName___ListContentView(
-                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
-                categories: viewState.___VARIABLE_categoryPluralVariableName___State.successResult ?? [],
-                displayType: .list,
-                viewOption: .standard,
-                gridSize: .medium,
-                onAction: { action in
-                    reducer.callAsFunction(.on___VARIABLE_modelName___Action(action))
-                }
-            )
-        case .empty:
-            TextBox(
-                title: "No ___VARIABLE_modelPluralVariableName___ found",
-                subtitle: "This ___VARIABLE_categoryVariableName___ doesn't contain any ___VARIABLE_modelPluralVariableName___",
-            )
-            .textBoxSize(.small)
-            .multilineTextAlignment(.center)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.large)
+        case let .result(model):
+            if model.isEmpty {
+                TextBox(
+                    title: "No ___VARIABLE_modelPluralVariableName___ found",
+                    subtitle: "This ___VARIABLE_categoryVariableName___ doesn't contain any ___VARIABLE_modelPluralVariableName___"
+                )
+                .textBoxSize(.small)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.large)
+            } else {
+                ___VARIABLE_modelName___ListContentView(
+                    ___VARIABLE_modelPluralVariableName___: model.___VARIABLE_modelPluralVariableName___,
+                    categories: model.___VARIABLE_categoryPluralVariableName___,
+                    displayType: .list,
+                    viewOption: .standard,
+                    gridSize: .medium,
+                    onAction: { action in
+                        reducer.callAsFunction(.on___VARIABLE_modelName___Action(action))
+                    }
+                )
+            }
         case let .error(error):
             ErrorView(error: error)
         }
@@ -136,7 +139,7 @@ private extension ___VARIABLE_categoryName___DetailView {
                     }
                 }
 
-                if let ___VARIABLE_categoryVariableName___ = viewState.___VARIABLE_categoryVariableName___State.successResult {
+                if let ___VARIABLE_categoryVariableName___ = viewState.___VARIABLE_categoryVariableName___State.result {
                     Button(action: { reducer.callAsFunction(.onTapToggleFavorite) }) {
                         Label {
                             Text(___VARIABLE_categoryVariableName___.isFavorite ? "Unfavorite" : "Favorite")

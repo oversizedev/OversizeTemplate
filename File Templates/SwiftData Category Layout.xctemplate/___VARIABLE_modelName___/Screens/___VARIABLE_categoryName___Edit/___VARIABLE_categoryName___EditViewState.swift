@@ -1,13 +1,11 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import FactoryKit
 import ObservableDefaults
 import Observation
 import OversizeArchitecture
 import OversizeCore
-import OversizeModels
 import OversizeNavigation
 import SwiftUI
 
@@ -46,7 +44,7 @@ public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
         if source == nil {
             "Create ___VARIABLE_categoryVariableName___"
         } else {
-            "Edit \(___VARIABLE_categoryVariableName___State.successResult?.name ?? "")"
+            "Edit \(___VARIABLE_categoryVariableName___State.result?.name ?? "")"
         }
     }
 

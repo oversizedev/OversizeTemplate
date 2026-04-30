@@ -1,11 +1,9 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
-import OversizeModels
 import OversizeUI
 import SwiftUI
 
@@ -16,7 +14,7 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     @Injected(\.___VARIABLE_modelVariableName___CategoryStorageService) var ___VARIABLE_modelVariableName___CategoryStorageService: ___VARIABLE_categoryName___StorageService
 
     func onAppear() async {
-        if await state.___VARIABLE_modelVariableName___State.successResult == nil {
+        if await state.___VARIABLE_modelVariableName___State.result == nil {
             await fetchData()
         } else {
             await incrementViewCount()
@@ -29,22 +27,19 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     }
 
     func onTapEdit___VARIABLE_modelName___() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.successResult else { return }
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else { return }
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
-                onSave: { _ in
-                    Task {
-                        logSuccess("___VARIABLE_modelName___ edit completed")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
     }
 
     func onTapDelete___VARIABLE_modelName___() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.successResult else { return }
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else { return }
         await state.update { viewState in
             viewState.alert = .delete {
                 Task {
@@ -66,7 +61,7 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     }
 
     func onTapToggleFavorite() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.successResult else {
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
             logWarning("Cannot toggle favorite - no ___VARIABLE_modelName___ loaded")
             return
         }
@@ -82,7 +77,7 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     }
 
     func incrementViewCount() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.successResult else { return }
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else { return }
         do {
             _ = try await ___VARIABLE_modelVariableName___StorageService.incrementViewCount(___VARIABLE_modelVariableName___)
         } catch {
@@ -91,7 +86,7 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     }
 
     func onTapSelectCategory(_ category: ___VARIABLE_categoryName___?) async {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.successResult else {
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
             logWarning("Cannot select category - no ___VARIABLE_modelName___ loaded")
             return
         }
@@ -108,11 +103,8 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     func onTapCreateCategory() async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___CategoryCreate(
-                onSave: { _ in
-                    Task {
-                        logSuccess("New Category created")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }

@@ -1,6 +1,5 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import OversizeArchitecture
 import OversizeCore
@@ -12,10 +11,14 @@ import SwiftUI
 @View(module: ___VARIABLE_modelName___Detail.self)
 public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
     public var body: some View {
-        NavigationCoverLayoutView(viewState.___VARIABLE_modelVariableName___State.successResult?.name ?? "") {
+        NavigationCoverLayoutView(viewState.___VARIABLE_modelVariableName___State.result?.name ?? "") {
             stateView(viewState.___VARIABLE_modelVariableName___State)
         } cover: {
             cover
+        } contentBackground: {
+            Color.backgroundPrimary
+        } coverBackground: {
+            coverBackground
         } background: {
             Color.backgroundPrimary
         }
@@ -41,20 +44,18 @@ public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
     }
 
     private var cover: some View {
-        VStack {
-            Text("Cover")
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background {
-            LinearGradient(
-                colors: [
-                    Color.surfacePrimary,
-                    Color.blue,
-                ],
-                startPoint: .top,
-                endPoint: .bottom,
-            )
-        }
+        Text("Cover")
+    }
+
+    private var coverBackground: some View {
+        LinearGradient(
+            colors: [
+                Color.surfacePrimary,
+                Color.blue,
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
     }
 
     private func content(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
@@ -92,7 +93,7 @@ private extension ___VARIABLE_modelName___DetailView {
                     }
                 }
 
-                if let ___VARIABLE_modelVariableName___ = viewState.___VARIABLE_modelVariableName___State.successResult {
+                if let ___VARIABLE_modelVariableName___ = viewState.___VARIABLE_modelVariableName___State.result {
                     Menu {
                         Button(action: { reducer.callAsFunction(.onTapSelectCategory(nil)) }) {
                             Label {
@@ -104,7 +105,7 @@ private extension ___VARIABLE_modelName___DetailView {
                             }
                         }
 
-                        ForEach(viewState.categoriesState.successResult ?? []) { category in
+                        ForEach(viewState.categoriesState.result ?? []) { category in
                             Button(action: { reducer.callAsFunction(.onTapSelectCategory(category)) }) {
                                 Label {
                                     Text(category.name)

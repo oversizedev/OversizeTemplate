@@ -1,11 +1,9 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
-import OversizeModels
 import OversizeUI
 import SwiftUI
 
@@ -54,10 +52,8 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
         await state.update { viewState in
             viewState.isShowCategoryPicker = false
             viewState.destination = .___VARIABLE_modelVariableName___CategoryCreate(
-                onSave: { category in
-                    Task {
-                        await self.onCategoryCreated(category)
-                    }
+                onSave: Callback { category in
+                    Task { await self.onCategoryCreated(category) }
                 }
             )
         }
@@ -148,7 +144,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
     }
 
     func update___VARIABLE_modelName___() async -> ___VARIABLE_modelName___? {
-        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.successResult else {
+        guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
             logError("Cannot update ___VARIABLE_modelName___ - no product loaded")
             await state.update { $0.hud = .destructive("Failed to load product data") }
             return nil

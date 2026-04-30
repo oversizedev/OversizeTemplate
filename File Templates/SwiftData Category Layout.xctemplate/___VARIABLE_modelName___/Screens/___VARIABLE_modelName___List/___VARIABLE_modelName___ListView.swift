@@ -15,7 +15,7 @@ import SwiftUI
 public struct ___VARIABLE_modelName___ListView: ViewProtocol {
     public var body: some View {
         NavigationLayoutView(viewState.filterType.title) {
-            stateView(viewState.___VARIABLE_modelPluralVariableName___State)
+            stateView(viewState.state)
         } background: {
             Color.backgroundPrimary
         }
@@ -24,11 +24,24 @@ public struct ___VARIABLE_modelName___ListView: ViewProtocol {
         .searchable(
             text: $viewState.searchTerm,
             isPresented: $viewState.isSearch,
-            placement: .navigationBarDrawer(displayMode: .automatic),
+            placement: .navigationBarDrawer(displayMode: .automatic)
         )
+        .emptyState(viewState.state) {
+            EmptyStateView(
+                image: viewState.isSearch ? Illustration.Objects.search : viewState.filterType.emptyStateImage,
+                title: viewState.isSearch ? "Nothing found" : viewState.filterType.emptyStateTitle,
+                subtitle: viewState.isSearch ? "Try changing your search" : viewState.filterType.emptyStateSubtitle,
+                actions: {
+                    if !viewState.isSearch {
+                        Button("Add item") {
+                            reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
+                        }
+                    }
+                }
+            )
+        }
         .presentationHUD($viewState.hud)
         .presentationAlert($viewState.alert)
-        .refreshable { reducer.callAsFunction(.onRefresh) }
         .navigationMove($viewState.destination)
         .onChangeValue(of: viewState.searchTerm) {
             reducer.callAsFunction(.onChangeSearchTerm($0))
@@ -37,38 +50,21 @@ public struct ___VARIABLE_modelName___ListView: ViewProtocol {
     }
 
     @ViewBuilder
-    private func stateView(_ state: SearchableLoadingState<[___VARIABLE_modelName___]>) -> some View {
+    private func stateView(_ state: LoadingState<___VARIABLE_modelName___ListViewState.StateModel>) -> some View {
         switch state {
-        case .idle, .loading, .search:
+        case .idle, .loading:
             ___VARIABLE_modelName___PlaceholderView(
                 displayType: viewState.storage.displayType,
                 gridSize: viewState.storage.gridSize
             )
-        case let .searchResult(_, ___VARIABLE_modelPluralVariableName___), let .result(___VARIABLE_modelPluralVariableName___):
+        case let .result(model):
             ___VARIABLE_modelName___ListContentView(
-                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
-                categories: viewState.categoriesState.successResult ?? [],
+                ___VARIABLE_modelPluralVariableName___: model.___VARIABLE_modelPluralVariableName___,
+                categories: model.categories,
                 displayType: viewState.storage.displayType,
                 viewOption: viewState.storage.viewOption,
                 gridSize: viewState.storage.gridSize,
                 onAction: { reducer.callAsFunction(.onProductAction($0)) }
-            )
-        case .searchEmpty:
-            EmptyStateView(
-                image: Illustration.Objects.search,
-                title: "Nothing found",
-                subtitle: "Try changing your search"
-            )
-        case .empty:
-            EmptyStateView(
-                image: viewState.filterType.emptyStateImage,
-                title: viewState.filterType.emptyStateTitle,
-                subtitle: viewState.filterType.emptyStateSubtitle,
-                actions: {
-                    Button("Add item") {
-                        reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
-                    }
-                }
             )
         case let .error(error):
             ErrorView(error: error)
@@ -97,7 +93,7 @@ private extension ___VARIABLE_modelName___ListView {
                     if isOn {
                         reducer.callAsFunction(.onChangeFilterType(.standard))
                     }
-                },
+                }
             )) {
                 Text(___VARIABLE_modelName___FilterType.standard.title)
             }

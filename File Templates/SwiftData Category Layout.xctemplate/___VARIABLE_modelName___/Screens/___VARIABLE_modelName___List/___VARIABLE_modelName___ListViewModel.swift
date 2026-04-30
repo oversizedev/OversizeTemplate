@@ -5,7 +5,6 @@ import FactoryKit
 import Observation
 import OversizeArchitecture
 import OversizeCore
-import OversizeModels
 import OversizeUI
 import SwiftData
 import SwiftUI
@@ -39,11 +38,8 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     func onTapCreate___VARIABLE_modelName___() async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Create(
-                onSave: { _ in
-                    Task {
-                        logSuccess("New ___VARIABLE_modelName___ created")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -101,11 +97,8 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
-                onSave: { _ in
-                    Task {
-                        logSuccess("___VARIABLE_modelName___ edit completed: \(___VARIABLE_modelVariableName___.name)")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -145,11 +138,8 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     private func onTapCreateCategoryForProduct(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___CategoryCreate(
-                onSave: { _ in
-                    Task {
-                        logSuccess("New Category created, fetching categories")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -177,31 +167,50 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
 
 public extension ___VARIABLE_modelName___ListViewModel {
     func fetchData() async {
-        await fetch___VARIABLE_modelName___s()
-        await fetchCategories()
+        let sortType = await state.storage.sortType
+        let sortOrder = await state.storage.sortOrder
+        let filterType = await state.filterType
+
+        do {
+            async let ___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelVariableName___StorageService.fetch(
+                filterType: filterType,
+                sortType: sortType,
+                sortOrder: sortOrder,
+                ___VARIABLE_categoryVariableName___Id: input?.categoryId
+            )
+            async let categories = ___VARIABLE_modelVariableName___CategoryStorageService.fetch()
+            let model = try await ___VARIABLE_modelName___ListViewState.StateModel(
+                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
+                categories: categories
+            )
+            await state.update { $0.state = .result(model) }
+        } catch {
+            await state.update { $0.state = .error(error) }
+        }
     }
 
     func fetchSearched___VARIABLE_modelName___s(searchTerm: String) async {
         let sortType = await state.storage.sortType
         let sortOrder = await state.storage.sortOrder
         let filterType = await state.filterType
+        let existingCategories = await state.state.result?.categories ?? []
 
         do {
-            let products = try await ___VARIABLE_modelVariableName___StorageService.search(
+            let ___VARIABLE_modelPluralVariableName___ = try await ___VARIABLE_modelVariableName___StorageService.search(
                 query: searchTerm,
                 filterType: filterType,
                 sortType: sortType,
                 sortOrder: sortOrder
             )
 
-            if products.isEmpty {
-                await state.update { $0.___VARIABLE_modelPluralVariableName___State = .searchEmpty(query: searchTerm) }
-            } else {
-                await state.update { $0.___VARIABLE_modelPluralVariableName___State = .searchResult(query: searchTerm, result: products) }
-            }
+            let model = ___VARIABLE_modelName___ListViewState.StateModel(
+                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
+                categories: existingCategories
+            )
+            await state.update { $0.state = .result(model) }
 
         } catch {
-            await state.update { $0.___VARIABLE_modelPluralVariableName___State = .error(error) }
+            await state.update { $0.state = .error(error) }
         }
     }
 
@@ -209,31 +218,23 @@ public extension ___VARIABLE_modelName___ListViewModel {
         let sortType = await state.storage.sortType
         let sortOrder = await state.storage.sortOrder
         let filterType = await state.filterType
+        let existingCategories = await state.state.result?.categories ?? []
 
         do {
-            let products = try await ___VARIABLE_modelVariableName___StorageService.fetch(
+            let ___VARIABLE_modelPluralVariableName___ = try await ___VARIABLE_modelVariableName___StorageService.fetch(
                 filterType: filterType,
                 sortType: sortType,
                 sortOrder: sortOrder,
                 ___VARIABLE_categoryVariableName___Id: input?.categoryId
             )
 
-            if products.isEmpty {
-                await state.update { $0.___VARIABLE_modelPluralVariableName___State = .empty }
-            } else {
-                await state.update { $0.___VARIABLE_modelPluralVariableName___State = .result(products) }
-            }
+            let model = ___VARIABLE_modelName___ListViewState.StateModel(
+                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
+                categories: existingCategories
+            )
+            await state.update { $0.state = .result(model) }
         } catch {
-            await state.update { $0.___VARIABLE_modelPluralVariableName___State = .error(error) }
-        }
-    }
-
-    func fetchCategories() async {
-        do {
-            let categories = try await ___VARIABLE_modelVariableName___CategoryStorageService.fetch()
-            await state.update { $0.categoriesState = .result(categories) }
-        } catch {
-            await state.update { $0.categoriesState = .error(error) }
+            await state.update { $0.state = .error(error) }
         }
     }
 }

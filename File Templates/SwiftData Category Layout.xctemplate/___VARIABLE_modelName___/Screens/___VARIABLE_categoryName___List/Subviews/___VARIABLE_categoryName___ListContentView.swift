@@ -1,6 +1,5 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import OversizeLocalizable
 import OversizeResources

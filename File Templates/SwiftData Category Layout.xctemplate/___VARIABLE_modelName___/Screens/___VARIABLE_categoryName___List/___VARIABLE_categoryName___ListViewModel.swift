@@ -1,12 +1,10 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import FactoryKit
 import Observation
 import OversizeArchitecture
 import OversizeCore
-import OversizeModels
 import OversizeUI
 import SwiftData
 import SwiftUI
@@ -40,11 +38,8 @@ public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
     func onTapCreate___VARIABLE_categoryName___() async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___CategoryCreate(
-                onSave: { _ in
-                    Task {
-                        logSuccess("New ___VARIABLE_categoryName___ created")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -121,11 +116,8 @@ private extension ___VARIABLE_categoryName___ListViewModel {
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___CategoryEdit(
                 category,
-                onSave: { _ in
-                    Task {
-                        logSuccess("___VARIABLE_categoryName___ edit completed: \(category.name)")
-                        await self.fetchData()
-                    }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -165,14 +157,14 @@ private extension ___VARIABLE_categoryName___ListViewModel {
                 sortOrder: sortOrder
             )
 
-            if categories.isEmpty {
-                await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .searchEmpty(query: searchTerm) }
-            } else {
-                await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .searchResult(query: searchTerm, result: categories) }
-            }
+            let model = ___VARIABLE_categoryName___ListViewState.StateModel(
+                ___VARIABLE_categoryPluralVariableName___: categories,
+                isSearch: !searchTerm.isEmpty
+            )
+            await state.update { $0.state = .result(model) }
 
         } catch {
-            await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .error(error) }
+            await state.update { $0.state = .error(error) }
         }
     }
 
@@ -188,13 +180,13 @@ private extension ___VARIABLE_categoryName___ListViewModel {
                 sortOrder: sortOrder
             )
 
-            if categories.isEmpty {
-                await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .empty }
-            } else {
-                await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .result(categories) }
-            }
+            let model = ___VARIABLE_categoryName___ListViewState.StateModel(
+                ___VARIABLE_categoryPluralVariableName___: categories,
+                isSearch: false
+            )
+            await state.update { $0.state = .result(model) }
         } catch {
-            await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .error(error) }
+            await state.update { $0.state = .error(error) }
         }
     }
 }

@@ -1,12 +1,11 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import OversizeArchitecture
 import OversizeComponents
 import OversizeCore
 import OversizeLocalizable
 import OversizeNavigation
-import OversizePhotoComponents
+import OversizeMediaKit
 import OversizeUI
 import SwiftUI
 
@@ -112,7 +111,7 @@ private extension ___VARIABLE_categoryName___EditView {
 
     #if os(iOS)
     private var imageField: some View {
-        PhotoFieldView($viewState.image)
+        PhotoField($viewState.image)
     }
     #endif
 

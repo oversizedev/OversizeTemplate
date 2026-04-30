@@ -1,6 +1,5 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import FactoryKit
 import ObservableDefaults
@@ -17,7 +16,7 @@ public final class ___VARIABLE_categoryName___ListViewState: ViewStateProtocol {
     public var storage = Storage()
 
     /// User Interface
-    public var ___VARIABLE_categoryPluralVariableName___State: SearchableLoadingState<[___VARIABLE_categoryName___]> = .idle
+    public var state: LoadingState<StateModel> = .idle
     public var searchTerm: String = ""
     public var isSearch: Bool = false
     public var destination: ___VARIABLE_modelName___Destinations?
@@ -34,7 +33,17 @@ public final class ___VARIABLE_categoryName___ListViewState: ViewStateProtocol {
 
 // MARK: - User Actions
 
-public extension ___VARIABLE_categoryName___ListViewState {}
+public extension ___VARIABLE_categoryName___ListViewState {
+    struct StateModel: Emptyable, SearchableState, Sendable {
+        public var ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]
+
+        public var isEmpty: Bool {
+            ___VARIABLE_categoryPluralVariableName___.isEmpty
+        }
+
+        public var isSearch: Bool
+    }
+}
 
 // MARK: - App Storage
 

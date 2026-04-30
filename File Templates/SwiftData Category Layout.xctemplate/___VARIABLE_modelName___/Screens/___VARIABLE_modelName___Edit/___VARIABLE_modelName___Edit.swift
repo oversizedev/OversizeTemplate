@@ -1,6 +1,5 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import Foundation
 import OversizeArchitecture
@@ -41,9 +40,9 @@ public struct ___VARIABLE_modelName___EditInput: Sendable {
 }
 
 public struct ___VARIABLE_modelName___EditOutput: Sendable {
-    public let onSave: (@Sendable (___VARIABLE_modelName___) -> Void)?
+    public let onSave: Callback<___VARIABLE_modelName___>?
 
-    public init(onSave: (@Sendable (___VARIABLE_modelName___) -> Void)? = nil) {
+    public init(onSave: Callback<___VARIABLE_modelName___>? = nil) {
         self.onSave = onSave
     }
 }

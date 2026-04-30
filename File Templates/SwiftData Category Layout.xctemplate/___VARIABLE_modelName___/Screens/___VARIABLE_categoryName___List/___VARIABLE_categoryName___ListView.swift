@@ -1,6 +1,5 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import OversizeArchitecture
 import OversizeComponents
@@ -16,7 +15,7 @@ import SwiftUI
 public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
     public var body: some View {
         NavigationLayoutView(viewState.filterType.title) {
-            stateView(viewState.___VARIABLE_categoryPluralVariableName___State)
+            stateView(viewState.state)
         } background: {
             Color.backgroundPrimary
         }
@@ -25,47 +24,15 @@ public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
         .searchable(
             text: $viewState.searchTerm,
             isPresented: $viewState.isSearch,
-            placement: .navigationBarDrawer(displayMode: .automatic),
+            placement: .navigationBarDrawer(displayMode: .automatic)
         )
-        .presentationHUD($viewState.hud)
-        .presentationAlert($viewState.alert)
-        .task(priority: .background) {
-            reducer.callAsFunction(.onAppear)
-        }
-        .refreshable(action: {
-            reducer.callAsFunction(.onRefresh)
-        })
-        .navigationMove($viewState.destination)
-        .onChangeValue(of: viewState.searchTerm) {
-            reducer.callAsFunction(.onChangeSearchTerm($0))
-        }
-    }
-
-    @ViewBuilder
-    private func stateView(_ state: SearchableLoadingState<[___VARIABLE_categoryName___]>) -> some View {
-        switch state {
-        case .idle, .loading, .search:
-            ___VARIABLE_categoryName___PlaceholderView(
-                displayType: viewState.storage.displayType,
-                gridSize: viewState.storage.gridSize
-            )
-        case let .result(___VARIABLE_categoryPluralVariableName___), let .searchResult(_, ___VARIABLE_categoryPluralVariableName___):
-            content(___VARIABLE_categoryPluralVariableName___)
-        case .searchEmpty:
+        .emptyState(viewState.state) {
             EmptyStateView(
-                image: Illustration.Objects.search,
-                title: "Nothing found",
-                subtitle: "Try changing your search"
-            )
-        case let .error(error):
-            ErrorView(error: error)
-        case .empty:
-            EmptyStateView(
-                image: viewState.filterType.emptyStateImage,
-                title: viewState.filterType.emptyStateTitle,
-                subtitle: viewState.filterType.emptyStateSubtitle,
+                image: viewState.isSearch ? Illustration.Objects.search : viewState.filterType.emptyStateImage,
+                title: viewState.isSearch ? "Nothing found" : viewState.filterType.emptyStateTitle,
+                subtitle: viewState.isSearch ? "Try changing your search" : viewState.filterType.emptyStateSubtitle,
                 actions: {
-                    if viewState.filterType == .standard {
+                    if !viewState.isSearch, viewState.filterType == .standard {
                         Button("Add item") {
                             reducer.callAsFunction(.onTapCreate___VARIABLE_categoryName___)
                         }
@@ -73,9 +40,32 @@ public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
                 }
             )
         }
+        .presentationHUD($viewState.hud)
+        .presentationAlert($viewState.alert)
+        .navigationMove($viewState.destination)
+        .onChangeValue(of: viewState.searchTerm) {
+            reducer.callAsFunction(.onChangeSearchTerm($0))
+        }
+        .task {
+            reducer.callAsFunction(.onAppear)
+        }
     }
 
     @ViewBuilder
+    private func stateView(_ state: LoadingState<___VARIABLE_categoryName___ListViewState.StateModel>) -> some View {
+        switch state {
+        case .idle, .loading:
+            ___VARIABLE_categoryName___PlaceholderView(
+                displayType: viewState.storage.displayType,
+                gridSize: viewState.storage.gridSize
+            )
+        case let .result(model):
+            content(model.___VARIABLE_categoryPluralVariableName___)
+        case let .error(error):
+            ErrorView(error: error)
+        }
+    }
+
     private func content(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) -> some View {
         ___VARIABLE_categoryName___ListContentView(
             ___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___,
@@ -90,7 +80,6 @@ public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
 // MARK: - Toolbar
 
 private extension ___VARIABLE_categoryName___ListView {
-    @ViewBuilder
     private func createButton() -> some View {
         Button {
             reducer.callAsFunction(.onTapCreate___VARIABLE_categoryName___)
@@ -99,7 +88,6 @@ private extension ___VARIABLE_categoryName___ListView {
         }
     }
 
-    @ViewBuilder
     private func filterPicker() -> some View {
         Menu {
             Toggle(isOn: Binding(
@@ -108,7 +96,7 @@ private extension ___VARIABLE_categoryName___ListView {
                     if isOn {
                         reducer.callAsFunction(.onChangeFilterType(.standard))
                     }
-                },
+                }
             )) {
                 Text(___VARIABLE_categoryName___FilterType.standard.title)
             }

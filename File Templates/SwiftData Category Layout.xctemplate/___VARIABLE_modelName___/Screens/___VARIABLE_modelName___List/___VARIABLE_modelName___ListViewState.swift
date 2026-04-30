@@ -16,8 +16,7 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
     public var storage = Storage()
 
     /// User Interface
-    public var ___VARIABLE_modelPluralVariableName___State: SearchableLoadingState<[___VARIABLE_modelName___]> = .idle
-    public var categoriesState: LoadingState<[___VARIABLE_categoryName___]> = .idle
+    public var state: LoadingState<StateModel> = .idle
     public var searchTerm: String = ""
     public var isSearch: Bool = false
     public var destination: ___VARIABLE_modelName___Destinations?
@@ -29,6 +28,19 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
     /// Initialization
     public init(input: ___VARIABLE_modelName___List.Input?) {
         filterType = .standard
+    }
+}
+
+// MARK: - State Model
+
+public extension ___VARIABLE_modelName___ListViewState {
+    struct StateModel: Emptyable, Sendable {
+        public var ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]
+        public var categories: [___VARIABLE_categoryName___]
+
+        public var isEmpty: Bool {
+            ___VARIABLE_modelPluralVariableName___.isEmpty
+        }
     }
 }
 

@@ -1,13 +1,12 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import OversizeArchitecture
 import OversizeComponents
 import OversizeCore
 import OversizeLocalizable
 import OversizeNavigation
-import OversizePhotoComponents
+import OversizeMediaKit
 import OversizeResources
 import OversizeUI
 import SwiftUI
@@ -84,7 +83,7 @@ private extension ___VARIABLE_modelName___EditView {
     private var categoryField: some View {
         Select(
             "Select category",
-            viewState.categoriesState.successResult ?? [],
+            viewState.categoriesState.result ?? [],
             selection: $viewState.selectedCategory,
             activeModal: $viewState.isShowCategoryPicker
         ) { category, _ in
@@ -152,7 +151,7 @@ private extension ___VARIABLE_modelName___EditView {
 
     #if os(iOS)
     private var imageField: some View {
-        PhotoFieldView($viewState.image)
+        PhotoField($viewState.image)
     }
     #endif
 }

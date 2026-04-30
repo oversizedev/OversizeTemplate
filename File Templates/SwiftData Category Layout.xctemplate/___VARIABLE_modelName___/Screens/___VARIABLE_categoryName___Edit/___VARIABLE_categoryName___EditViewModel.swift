@@ -1,11 +1,9 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Database
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
-import OversizeModels
 import OversizeUI
 import SwiftUI
 
@@ -113,7 +111,7 @@ private extension ___VARIABLE_categoryName___EditViewModel {
     }
 
     func update___VARIABLE_categoryName___() async throws -> ___VARIABLE_categoryName___ {
-        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.successResult else {
+        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else {
             logError("Cannot update ___VARIABLE_categoryName___ - no product loaded")
             await state.update { $0.hud = .default("No category loaded") }
             throw SwiftDataError.itemNotFound

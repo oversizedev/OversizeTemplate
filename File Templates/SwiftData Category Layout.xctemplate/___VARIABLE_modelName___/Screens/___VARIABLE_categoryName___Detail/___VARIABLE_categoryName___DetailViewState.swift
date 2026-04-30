@@ -1,12 +1,11 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Database
 import FactoryKit
 import ObservableDefaults
 import Observation
 import OversizeArchitecture
 import OversizeCore
-import OversizeModels
 import OversizeNavigation
 import SwiftData
 import SwiftUI
@@ -15,8 +14,7 @@ import SwiftUI
 public final class ___VARIABLE_categoryName___DetailViewState: ViewStateProtocol {
     // User Interface
     public var ___VARIABLE_categoryVariableName___State: LoadingState<___VARIABLE_categoryName___> = .idle
-    public var ___VARIABLE_modelPluralVariableName___State: EmptyableLoadingState<[___VARIABLE_modelName___]> = .idle
-    public var ___VARIABLE_categoryPluralVariableName___State: LoadingState<[___VARIABLE_categoryName___]> = .idle
+    public var ___VARIABLE_modelPluralVariableName___State: LoadingState<___VARIABLE_modelName___sModel> = .idle
     public var headerVisibleRatio: CGFloat = .zero
     public var offset: CGPoint = .zero
 
@@ -43,6 +41,19 @@ public final class ___VARIABLE_categoryName___DetailViewState: ViewStateProtocol
         case let .id(id):
             ___VARIABLE_categoryVariableName___Id = id
             ___VARIABLE_categoryVariableName___State = .loading
+        }
+    }
+}
+
+// MARK: - Items Model
+
+public extension ___VARIABLE_categoryName___DetailViewState {
+    struct ___VARIABLE_modelName___sModel: Emptyable, Sendable {
+        public var ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]
+        public var ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]
+
+        public var isEmpty: Bool {
+            ___VARIABLE_modelPluralVariableName___.isEmpty
         }
     }
 }
