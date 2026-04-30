@@ -22,7 +22,7 @@ struct ___PACKAGENAME:identifier___App: App {
     var body: some Scene {
         WindowGroup {
             Launcher {
-                MainNavigationStack()
+                RootView()
             }
             .onboarding {
                 OnboardingNavigationStack()

@@ -1,2 +1,4 @@
---swiftversion 5.9
+--swiftversion 6.2
 --disable preferKeyPath,redundantSendable
+--exclude build
+--trailing-commas collections-only

@@ -31,4 +31,4 @@ packages:
     majorVersion: 2.1.3
   NavigatorUI:
     url: https://github.com/hmlongco/Navigator.git
-    majorVersion: 1.0.0
+    majorVersion: 2.0.2

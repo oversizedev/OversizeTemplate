@@ -9,12 +9,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 make init          # Initialize project with local dependencies (run once after clone)
 make build         # Format, generate code, build with local packages
 make build-prod    # Build for production with remote packages
-make test          # Run tests in iOS Simulator (iPhone 16e, iOS 26.0)
+make compile       # Compile only (no format/gen, Xcode Cmd+B equivalent)
+make test          # Run tests in iOS Simulator (iPhone 16e, iOS 26.4.1)
 make run           # Build and run in simulator
 make format        # Format code with SwiftFormat
 make gen           # Generate code from OpenAPI specs and SwiftGen
 make clean         # Clean DerivedData
 make reload        # Quit and reopen Xcode
+make up-build      # Increment build number and rebuild
+make up-version    # Bump app version (patch/minor/major) and rebuild
 ```
 
 ### Local vs Remote Development
@@ -23,7 +26,7 @@ make reload        # Quit and reopen Xcode
 - Dependency mode is **resolved automatically** via `FileManager.default.fileExists` in each `Package.swift` — no manual switching needed
 
 ### Testing
-- Tests run on iOS Simulator: iPhone 16e, iOS 26.0
+- Tests run on iOS Simulator: iPhone 16e, iOS 26.4.1
 - Scheme: "___PACKAGENAME___ (Dev)"
 - Command: `make test`
 
@@ -165,7 +168,7 @@ Three build configurations:
 
 ### Third-party
 - Factory (2.1.3) - Dependency injection
-- Navigator (1.1.1) - Navigation management
+- Navigator (2.0.2) - Navigation management
 - ObservableDefaults (1.6.0) - UserDefaults wrapper
 
 ## Project Setup

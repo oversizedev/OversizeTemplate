@@ -28,9 +28,8 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeCore", path: "../../../Packages/OversizeCore"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = FileManager.default.fileExists(atPath: "../../../Packages/OversizeCore")
-    ? localDependencies
-    : remoteDependencies
+let isLocalDev = FileManager.default.fileExists(atPath: "\(NSHomeDirectory())/Developer/Packages/OversizeCore")
+let dependencies: [PackageDescription.Package.Dependency] = isLocalDev ? localDependencies : remoteDependencies
 
 let package = Package(
     name: "Database",
@@ -90,7 +89,6 @@ let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependen
     .package(url: "https://github.com/oversizedev/OversizeLocalizable.git", .upToNextMajor(from: "1.4.0")),
     .package(url: "https://github.com/oversizedev/OversizeResources.git", .upToNextMajor(from: "2.0.0")),
     .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
-    .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
     .package(url: "https://github.com/oversizedev/OversizeKit.git", .upToNextMajor(from: "2.0.0")),
     .package(url: "https://github.com/oversizedev/OversizeUI.git", .upToNextMajor(from: "3.0.2")),
     .package(url: "https://github.com/oversizedev/OversizeServices.git", .upToNextMajor(from: "1.4.0")),
@@ -103,7 +101,6 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeLocalizable", path: "../../../Packages/OversizeLocalizable"),
     .package(name: "OversizeResources", path: "../../../Packages/OversizeResources"),
     .package(name: "OversizeCore", path: "../../../Packages/OversizeCore"),
-    .package(name: "OversizeModels", path: "../../../Packages/OversizeModels"),
     .package(name: "OversizeKit", path: "../../../Packages/OversizeKit"),
     .package(name: "OversizeUI", path: "../../../Packages/OversizeUI"),
     .package(name: "OversizeServices", path: "../../../Packages/OversizeServices"),
@@ -112,9 +109,8 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeArchitecture", path: "../../../Packages/OversizeArchitecture"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = FileManager.default.fileExists(atPath: "../../../Packages/OversizeCore")
-    ? localDependencies
-    : remoteDependencies
+let isLocalDev = FileManager.default.fileExists(atPath: "\(NSHomeDirectory())/Developer/Packages/OversizeCore")
+let dependencies: [PackageDescription.Package.Dependency] = isLocalDev ? localDependencies : remoteDependencies
 
 let package = Package(
     name: "App",
@@ -138,7 +134,6 @@ let package = Package(
                 .product(name: "Database", package: "Database"),
                 .product(name: "Env", package: "Env"),
                 .product(name: "OversizeResources", package: "OversizeResources"),
-                .product(name: "OversizeModels", package: "OversizeModels"),
                 .product(name: "OversizeCore", package: "OversizeCore"),
                 .product(name: "OversizeLocalizable", package: "OversizeLocalizable"),
                 .product(name: "OversizeKit", package: "OversizeKit"),
@@ -149,7 +144,6 @@ let package = Package(
                 .product(name: "OversizeNoticeKit", package: "OversizeKit"),
                 .product(name: "OversizeNavigation", package: "OversizeNavigation"),
                 .product(name: "ObservableDefaults", package: "ObservableDefaults"),
-                .product(name: "OversizePhotoComponents", package: "OversizeComponents"),
                 .product(name: "OversizeArchitecture", package: "OversizeArchitecture"),
             ]
         ),
@@ -201,7 +195,6 @@ import PackageDescription
 
 let remoteDependencies: [PackageDescription.Package.Dependency] = [
     .package(url: "https://github.com/oversizedev/OversizeResources.git", .upToNextMajor(from: "2.0.0")),
-    .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
     .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
     .package(url: "https://github.com/oversizedev/OversizeLocalizable.git", .upToNextMajor(from: "1.4.0")),
     .package(url: "https://github.com/oversizedev/OversizeUI.git", .upToNextMajor(from: "3.0.2")),
@@ -212,16 +205,14 @@ let remoteDependencies: [PackageDescription.Package.Dependency] = [
 let localDependencies: [PackageDescription.Package.Dependency] = [
     .package(name: "OversizeLocalizable", path: "../../../Packages/OversizeLocalizable"),
     .package(name: "OversizeCore", path: "../../../Packages/OversizeCore"),
-    .package(name: "OversizeModels", path: "../../../Packages/OversizeModels"),
     .package(name: "OversizeResources", path: "../../../Packages/OversizeResources"),
     .package(name: "OversizeUI", path: "../../../Packages/OversizeUI"),
     .package(name: "OversizeNavigation", path: "../../../Packages/OversizeNavigation"),
     .package(name: "Database", path: "../Database"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = FileManager.default.fileExists(atPath: "../../../Packages/OversizeCore")
-    ? localDependencies
-    : remoteDependencies
+let isLocalDev = FileManager.default.fileExists(atPath: "\(NSHomeDirectory())/Developer/Packages/OversizeCore")
+let dependencies: [PackageDescription.Package.Dependency] = isLocalDev ? localDependencies : remoteDependencies
 
 let package = Package(
     name: "Env",
@@ -244,7 +235,6 @@ let package = Package(
             name: "Env",
             dependencies: [
                 .product(name: "Database", package: "Database"),
-                .product(name: "OversizeModels", package: "OversizeModels"),
                 .product(name: "OversizeCore", package: "OversizeCore"),
                 .product(name: "OversizeLocalizable", package: "OversizeLocalizable"),
                 .product(name: "OversizeResources", package: "OversizeResources"),

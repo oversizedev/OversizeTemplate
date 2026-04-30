@@ -113,12 +113,11 @@
 		<string>../scripts/init_packages.sh</string>
 		<string>../scripts/init_packages_files.sh</string>
 		<string>../scripts/generate_alt_icons.sh</string>
-		<string>../scripts/build.sh</string>
-		<string>../scripts/build_local.sh</string>
 		<string>../ci_scripts/ci_post_clone.sh</string>
 		<string>../AGENTS.md</string>
 		<string>../CLAUDE.md</string>
 		<string>../.claude/settings.json</string>
+		<string>../.claude/settings.local.json</string>
 	</array>
 	<key>Definitions</key>
 	<dict>
@@ -236,24 +235,6 @@
 				<string>scripts</string>
 			</array>
 		</dict>
-		<key>../scripts/build.sh</key>
-		<dict>
-			<key>Path</key>
-			<string>build.sh</string>
-			<key>Group</key>
-			<array>
-				<string>scripts</string>
-			</array>
-		</dict>
-		<key>../scripts/build_local.sh</key>
-		<dict>
-			<key>Path</key>
-			<string>build_local.sh</string>
-			<key>Group</key>
-			<array>
-				<string>scripts</string>
-			</array>
-		</dict>
 		<key>../ci_scripts/ci_post_clone.sh</key>
 		<dict>
 			<key>Path</key>
@@ -277,6 +258,15 @@
 		<dict>
 			<key>Path</key>
 			<string>.claude/settings.json</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+			</array>
+		</dict>
+		<key>../.claude/settings.local.json</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/settings.local.json</string>
 			<key>Group</key>
 			<array>
 				<string>.claude</string>

@@ -19,7 +19,10 @@ Use the Makefile targets for common tasks:
 - `make gen`: runs OpenAPI codegen and SwiftGen.
 - `make test`: runs XCTest in the iOS Simulator.
 - `make run`: builds and launches the Dev scheme in the Simulator.
+- `make compile`: compiles without reformatting or code generation.
 - `make clean`: clears Xcode DerivedData for this project.
+- `make up-build`: increments build number (CURRENT_PROJECT_VERSION) and recompiles.
+- `make up-version`: bumps MARKETING_VERSION (patch/minor/major, default: minor) and recompiles.
 
 Dependency mode is resolved automatically in `Package.swift` files via `FileManager.default.fileExists`; no manual local/remote switching is required.
 
