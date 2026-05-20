@@ -2,31 +2,18 @@
 
 import Env
 import NavigatorUI
-import OversizeRouter
 import SwiftUI
 
-struct RootTabView: View {
-    @SceneStorage("AppState.SelectedRootTab") var selectedTab: RootTab = .main
+struct RootView: View {
+    let navigator: Navigator = .init(configuration: .init())
+    @SceneStorage("AppState.RootType") var appRootType: RootType = UIDevice.current.userInterfaceIdiom == .pad ? .split : .tabbed
+
     var body: some View {
-        TabView(selection: $selectedTab) {
-            ForEach(MainTab.tabs) { tab in
-                tab
-                    .tabItem {
-                        Label {
-                            Text(tab.title)
-                        } icon: {
-                            tab.icon
-                        }
-                    }
-                    .tag(tab)
+        appRootType
+            .onNavigationReceive { (_: ToogleAppRootType) in
+                appRootType = appRootType == .split ? .tabbed : .split
+                return .auto
             }
-        }
-        .onNavigationReceive { (tab: MainTab) in
-            if tab == selectedTab {
-                return .immediately
-            }
-            selectedTab = tab
-            return .after(0.7)
-        }
+            .navigationRoot(navigator)
     }
 }

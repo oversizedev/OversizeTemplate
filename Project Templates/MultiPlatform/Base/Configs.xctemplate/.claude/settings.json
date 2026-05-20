@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make build:*)",
+      "Bash(make build-prod:*)",
+      "Bash(make format:*)",
+      "Bash(make gen:*)",
+      "Bash(make gen-icons:*)",
+      "Bash(make test:*)",
+      "Bash(make run:*)",
+      "Bash(make clean:*)",
+      "Bash(make init:*)",
+      "Bash(make reload:*)",
+      "Bash(ls:*)",
+      "Bash(tree:*)",
+      "Bash(grep:*)",
+      "Bash(cp:*)",
+      "Bash(open:*)",
+      "Bash(xcrun:*)",
+      "Bash(swiftformat:*)",
+      "Bash(swiftlint:*)",
+      "Bash(swift -parse:*)",
+      "Bash(git diff:*)",
+      "Bash(codex review:*)"
+    ],
+    "additionalDirectories": [
+      "/Users/admin/Developer/Packages/OversizeUI",
+      "/Users/admin/Developer/Packages/OversizeCore",
+      "/Users/admin/Developer/Packages/OversizeArchitecture",
+      "/Users/admin/Developer/Packages/OversizeServices",
+      "/Users/admin/Developer/Packages/OversizeKit",
+      "/Users/admin/Developer/Packages/OversizeNetwork",
+      "/Users/admin/Developer/Packages/OversizeComponents",
+      "/Users/admin/Developer/Packages/OversizeNavigation",
+      "/Users/admin/Developer/Packages/OversizeLocalizable",
+      "/Users/admin/Developer/Packages/OversizeResources"
+    ]
+  }
+}

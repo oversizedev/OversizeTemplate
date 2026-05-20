@@ -12,7 +12,7 @@
 		<string>com.apple.dt.unit.storageType</string>
 	</array>
 	<key>NameOfInitialFileForEditor</key>
-	<string>RootView.swift</string>
+	<string>MainDestinations.swift</string>
 	<key>SortOrder</key>
 	<integer>1</integer>
 	<key>Targets</key>
@@ -87,91 +87,6 @@
 		</dict>
 		<dict>
 			<key>Identifier</key>
-			<string>navigation-type</string>
-			<key>Default</key>
-			<string>TabBar</string>
-			<key>Description</key>
-			<string>App Navigation type</string>
-			<key>Name</key>
-			<string>Navigation:</string>
-			<key>Type</key>
-			<string>popup</string>
-			<key>SortOrder</key>
-			<integer>101</integer>
-			<key>Values</key>
-			<array>
-				<string>Basic</string>
-				<string>TabBar</string>
-			</array>
-			<key>ValueTitles</key>
-			<array>
-				<string>Basic</string>
-				<string>TabBar</string>
-			</array>
-			<key>Units</key>
-			<dict>
-				<key>Basic</key>
-				<array>
-					<dict>
-						<key>Nodes</key>
-						<array>
-							<string>Router/RootView.swift</string>
-						</array>
-						<key>Definitions</key>
-						<dict>
-							<key>Router/RootView.swift</key>
-							<dict>
-								<key>Path</key>
-								<string>RootView.swift</string>
-								<key>Group</key>
-								<array>
-									<string>Router</string>
-								</array>
-								<key>SortOrder</key>
-								<integer>20</integer>
-							</dict>
-						</dict>
-					</dict>
-				</array>
-				<key>TabBar</key>
-				<array>
-					<dict>
-						<key>Nodes</key>
-						<array>
-							<string>Router/ResolveTabs.swift</string>
-							<string>Router/RootView.swift</string>
-						</array>
-						<key>Definitions</key>
-						<dict>
-							<key>Router/RootView.swift</key>
-							<dict>
-								<key>Path</key>
-								<string>RootView-Tabs.swift</string>
-								<key>Group</key>
-								<array>
-									<string>Router</string>
-								</array>
-								<key>SortOrder</key>
-								<integer>20</integer>
-							</dict>
-							<key>Router/ResolveTabs.swift</key>
-							<dict>
-								<key>Path</key>
-								<string>ResolveTabs.swift</string>
-								<key>Group</key>
-								<array>
-									<string>Router</string>
-								</array>
-								<key>SortOrder</key>
-								<integer>20</integer>
-							</dict>
-						</dict>
-					</dict>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>Identifier</key>
 			<string>languageChoice</string>
 			<key>Override</key>
 			<string>Swift</string>
@@ -192,16 +107,20 @@
 					<dict>
 						<key>Nodes</key>
 						<array>
-							<string>___PACKAGENAME:identifier___App.swift</string>
+							<string>App/___PACKAGENAME:identifier___App.swift</string>
 							<string>Persistence.swift</string>
 							<string>___PACKAGENAME:identifier___.xcdatamodeld</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
-							<key>___PACKAGENAME:identifier___App.swift</key>
+							<key>App/___PACKAGENAME:identifier___App.swift</key>
 							<dict>
 								<key>Path</key>
 								<string>App-CoreData.swift</string>
+								<key>Group</key>
+								<array>
+									<string>App</string>
+								</array>
 								<key>SortOrder</key>
 								<integer>10</integer>
 							</dict>
@@ -227,14 +146,18 @@
 					<dict>
 						<key>Nodes</key>
 						<array>
-							<string>___PACKAGENAME:identifier___App.swift</string>
+							<string>App/___PACKAGENAME:identifier___App.swift</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
-							<key>___PACKAGENAME:identifier___App.swift</key>
+							<key>App/___PACKAGENAME:identifier___App.swift</key>
 							<dict>
 								<key>Path</key>
 								<string>App-SwiftData.swift</string>
+								<key>Group</key>
+								<array>
+									<string>App</string>
+								</array>
 								<key>SortOrder</key>
 								<integer>10</integer>
 							</dict>
@@ -256,14 +179,18 @@
 					<dict>
 						<key>Nodes</key>
 						<array>
-							<string>___PACKAGENAME:identifier___App.swift</string>
+							<string>App/___PACKAGENAME:identifier___App.swift</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
-							<key>___PACKAGENAME:identifier___App.swift</key>
+							<key>App/___PACKAGENAME:identifier___App.swift</key>
 							<dict>
 								<key>Path</key>
 								<string>App.swift</string>
+								<key>Group</key>
+								<array>
+									<string>App</string>
+								</array>
 								<key>SortOrder</key>
 								<integer>10</integer>
 							</dict>
@@ -286,26 +213,223 @@
 			<key>Default</key>
 			<string>DataModel</string>
 		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>navigation-type</string>
+			<key>Default</key>
+			<string>Basic</string>
+			<key>Description</key>
+			<string>App Navigation type</string>
+			<key>Name</key>
+			<string>Navigation:</string>
+			<key>Type</key>
+			<string>popup</string>
+			<key>SortOrder</key>
+			<integer>101</integer>
+			<key>Values</key>
+			<array>
+				<string>Basic</string>
+				<string>TabBar</string>
+			</array>
+			<key>ValueTitles</key>
+			<array>
+				<string>Basic</string>
+				<string>TabBar</string>
+			</array>
+			<key>Units</key>
+			<dict>
+				<key>Basic</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>Navigation/MainDestinations.swift</string>
+							<string>Navigation/OnboardingDestinations.swift</string>
+							<string>Navigation/AppSettingsDestinations.swift</string>
+							<string>../scripts/init_packages_files.sh</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>Navigation/MainDestinations.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>MainDestinations-Basic.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Navigation</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>31</integer>
+							</dict>
+							<key>Navigation/OnboardingDestinations.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>OnboardingDestinations.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Navigation</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>32</integer>
+							</dict>
+							<key>Navigation/AppSettingsDestinations.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>AppSettingsDestinations-Basic.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Navigation</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>33</integer>
+							</dict>
+							<key>../scripts/init_packages_files.sh</key>
+							<dict>
+								<key>Path</key>
+								<string>init_packages_files_basic.sh</string>
+								<key>Group</key>
+								<array>
+									<string>scripts</string>
+								</array>
+							</dict>
+						</dict>
+					</dict>
+				</array>
+				<key>TabBar</key>
+				<array>
+					<dict>
+						<key>Nodes</key>
+						<array>
+							<string>App/___PACKAGENAME:identifier___App.swift</string>
+							<string>Root/RootView.swift</string>
+							<string>Root/RootTabView.swift</string>
+							<string>Root/RootSplitView.swift</string>
+							<string>Navigation/ResolveRoot.swift</string>
+							<string>Navigation/ResolveTabs.swift</string>
+							<string>Navigation/MainDestinations.swift</string>
+							<string>Navigation/OnboardingDestinations.swift</string>
+							<string>Navigation/AppSettingsDestinations.swift</string>
+						</array>
+						<key>Definitions</key>
+						<dict>
+							<key>App/___PACKAGENAME:identifier___App.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>App-SwiftData-Tabs.swift</string>
+								<key>Group</key>
+								<array>
+									<string>App</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>10</integer>
+							</dict>
+							<key>Root/RootView.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>RootView.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Root</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>20</integer>
+							</dict>
+							<key>Root/RootTabView.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>RootTabView.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Root</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>21</integer>
+							</dict>
+							<key>Root/RootSplitView.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>RootSplitView.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Root</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>22</integer>
+							</dict>
+							<key>Navigation/ResolveRoot.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>ResolveRoot.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Navigation</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>30</integer>
+							</dict>
+							<key>Navigation/ResolveTabs.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>ResolveTabs.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Navigation</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>31</integer>
+							</dict>
+							<key>Navigation/MainDestinations.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>MainDestinations.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Navigation</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>32</integer>
+							</dict>
+							<key>Navigation/OnboardingDestinations.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>OnboardingDestinations.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Navigation</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>33</integer>
+							</dict>
+							<key>Navigation/AppSettingsDestinations.swift</key>
+							<dict>
+								<key>Path</key>
+								<string>AppSettingsDestinations.swift</string>
+								<key>Group</key>
+								<array>
+									<string>Navigation</string>
+								</array>
+								<key>SortOrder</key>
+								<integer>34</integer>
+							</dict>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
 	</array>
 	<key>Nodes</key>
 	<array>
-		<string>Router/ResolveScreens.swift</string>
 		<string>Resources/Assets.xcassets</string>
-		<string>Resources/Preview Assets.xcassets</string>
+		<string>Resources/Development/Preview Assets.xcassets</string>
+		<string>Resources/Icons/AppIcon.icon</string>
+		<string>Resources/Icons/AppIcon(Dev).icon</string>
+		<string>Resources/AltIcons/AppIcon1.icon</string>
+		<string>Resources/AltIcons/AppIcon2.icon</string>
+		<string>Resources/AltIcons/AppIcon3.icon</string>
+		<string>Resources/AltIcons/AppIcon4.icon</string>
 	</array>
 	<key>Definitions</key>
 	<dict>
-		<key>Router/ResolveScreens.swift</key>
-		<dict>
-			<key>Group</key>
-			<array>
-				<string>Router</string>
-			</array>
-			<key>Path</key>
-			<string>ResolveScreens.swift</string>
-			<key>SortOrder</key>
-			<integer>100</integer>
-		</dict>
 		<key>Resources/Assets.xcassets</key>
 		<dict>
 			<key>Group</key>
@@ -316,109 +440,6 @@
 			<string>Assets.xcassets</string>
 			<key>AssetGeneration</key>
 			<array>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Name</key>
-					<string>AppIcon</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Group</key>
-					<array>
-						<string>Alternative</string>
-					</array>
-					<key>Name</key>
-					<string>AppIconDev</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Name</key>
-					<string>AlternateAppIcon1</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Name</key>
-					<string>AlternateAppIcon2</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Name</key>
-					<string>AlternateAppIcon3</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Name</key>
-					<string>AlternateAppIcon4</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Name</key>
-					<string>AlternateAppIcon5</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Name</key>
-					<string>AlternateAppIcon6</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
-				<dict>
-					<key>Type</key>
-					<string>appicon</string>
-					<key>Name</key>
-					<string>AlternateAppIcon7</string>
-					<key>Platforms</key>
-					<dict>
-						<key>iOS</key>
-						<string>true</string>
-					</dict>
-				</dict>
 				<dict>
 					<key>Type</key>
 					<string>image</string>
@@ -447,14 +468,89 @@
 			<key>SortOrder</key>
 			<integer>100</integer>
 		</dict>
-		<key>Resources/Preview Assets.xcassets</key>
+		<key>Resources/Development/Preview Assets.xcassets</key>
 		<dict>
+			<key>Group</key>
+			<array>
+				<string>Resources</string>
+				<string>Development</string>
+			</array>
 			<key>SortOrder</key>
 			<integer>100</integer>
 			<key>Path</key>
 			<string>Preview Assets.xcassets</string>
+		</dict>
+		<key>Resources/Icons/AppIcon.icon</key>
+		<dict>
 			<key>Group</key>
-			<string>Resources</string>
+			<array>
+				<string>Resources</string>
+				<string>Icons</string>
+			</array>
+			<key>SortOrder</key>
+			<integer>100</integer>
+			<key>Path</key>
+			<string>AppIcon.icon</string>
+		</dict>
+		<key>Resources/Icons/AppIcon(Dev).icon</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>Resources</string>
+				<string>Icons</string>
+			</array>
+			<key>SortOrder</key>
+			<integer>100</integer>
+			<key>Path</key>
+			<string>AppIcon(Dev).icon</string>
+		</dict>
+		<key>Resources/AltIcons/AppIcon1.icon</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>Resources</string>
+				<string>AltIcons</string>
+			</array>
+			<key>SortOrder</key>
+			<integer>101</integer>
+			<key>Path</key>
+			<string>AltIcons/AppIcon1.icon</string>
+		</dict>
+		<key>Resources/AltIcons/AppIcon2.icon</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>Resources</string>
+				<string>AltIcons</string>
+			</array>
+			<key>SortOrder</key>
+			<integer>102</integer>
+			<key>Path</key>
+			<string>AltIcons/AppIcon2.icon</string>
+		</dict>
+		<key>Resources/AltIcons/AppIcon3.icon</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>Resources</string>
+				<string>AltIcons</string>
+			</array>
+			<key>SortOrder</key>
+			<integer>103</integer>
+			<key>Path</key>
+			<string>AltIcons/AppIcon3.icon</string>
+		</dict>
+		<key>Resources/AltIcons/AppIcon4.icon</key>
+		<dict>
+			<key>Group</key>
+			<array>
+				<string>Resources</string>
+				<string>AltIcons</string>
+			</array>
+			<key>SortOrder</key>
+			<integer>104</integer>
+			<key>Path</key>
+			<string>AltIcons/AppIcon4.icon</string>
 		</dict>
 	</dict>
 	<key>Image</key>

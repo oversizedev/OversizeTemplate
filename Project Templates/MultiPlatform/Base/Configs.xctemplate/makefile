@@ -2,12 +2,24 @@
 PACKAGES_DIR := ~/Developer/Packages
 PROJECT_NAME := ___VARIABLE_productName:RFC1034Identifier___
 PROJECT_ROOT := ~/Developer/$(PROJECT_NAME)
+VERBOSE ?= 0
+VERSION_TYPE ?= minor
 
 # Color definitions
 RED := \033[0;31m
 GREEN := \033[0;32m
 YELLOW := \033[0;33m
 NC := \033[0m
+
+ifeq ($(VERBOSE),1)
+    XCODE_FLAGS :=
+    FMT_FLAGS   :=
+else
+    XCODE_FLAGS := -quiet
+    FMT_FLAGS   := --quiet
+endif
+
+.PHONY: all init build build-prod compile format gen gen-icons clean test run reload up-build up-version help
 
 # Default target
 all: help
@@ -16,42 +28,124 @@ init:
 	@echo "Init project"
 	@chmod +x $(PROJECT_ROOT)/scripts/init_packages.sh
 	@chmod +x $(PROJECT_ROOT)/scripts/init_packages_files.sh
-	@chmod +x $(PROJECT_ROOT)/scripts/init_packages_swiftdata_files.sh
 	@$(PROJECT_ROOT)/scripts/init_packages.sh
 	@$(PROJECT_ROOT)/scripts/init_packages_files.sh
 	@$(MAKE) gen
 	@$(MAKE) build
-	@$(MAKE) rerun
+	@$(MAKE) reload
 	@echo "$(GREEN)Init project complete.$(NC)"
+
+build-prod: format gen
+	@echo "$(YELLOW)Building project for production...$(NC)"
+	@xcodegen
+	@echo "$(YELLOW)Compiling project...$(NC)"
+	@xcodebuild build $(XCODE_FLAGS) \
+		-project $(PROJECT_NAME).xcodeproj \
+		-scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.4.1,name=iPhone 16e' \
+		-derivedDataPath build
+	@echo "$(GREEN)Building complete.$(NC)"
 
 build: format gen
 	@echo "$(YELLOW)Building project...$(NC)"
-	$(PROJECT_ROOT)/scripts/build.sh
-	@xcodegen
-	@echo "$(GREEN)Building complete.$(NC)"
-	
-build-local: format gen
-	@echo "$(YELLOW)Building project...$(NC)"
-	$(PROJECT_ROOT)/scripts/build_local.sh
 	@xcodegen --spec project_local.yml
+	@echo "$(YELLOW)Compiling project...$(NC)"
+	@xcodebuild build $(XCODE_FLAGS) \
+		-project $(PROJECT_NAME).xcodeproj \
+		-scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.4.1,name=iPhone 16e' \
+		-derivedDataPath build
 	@echo "$(GREEN)Building complete.$(NC)"
-	
+
+compile:
+	@echo "$(YELLOW)Compiling project...$(NC)"
+	@xcodebuild build $(XCODE_FLAGS) \
+		-project $(PROJECT_NAME).xcodeproj \
+		-scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.4.1,name=iPhone 16e' \
+		-derivedDataPath build
+	@echo "$(GREEN)Compile complete.$(NC)"
+
 format:
 	@echo "$(YELLOW)Formatting Packages code...$(NC)"
-	@swiftformat $(PACKAGES_DIR)
+	@swiftformat $(FMT_FLAGS) $(PACKAGES_DIR)
 	@echo "$(YELLOW)Formatting Project code...$(NC)"
-	@swiftformat $(PROJECT_ROOT)
+	@swiftformat $(FMT_FLAGS) $(PROJECT_ROOT)
 	@echo "$(GREEN)Code formatting complete.$(NC)"
-	
+
 gen:
 	@echo "$(YELLOW)Generating network...$(NC)"
 	@cd $(PACKAGES_DIR)/OversizeNetwork && swift package plugin --allow-writing-to-package-directory generate-code-from-openapi
 	@echo "$(YELLOW)Generating resources...$(NC)"
 	@cd $(PACKAGES_DIR)/OversizeResources && swiftgen config run
+	@echo "$(YELLOW)Generating alternative icon previews...$(NC)"
+	@chmod +x $(PROJECT_ROOT)/scripts/generate_alt_icons.sh
+	@$(PROJECT_ROOT)/scripts/generate_alt_icons.sh
 	@echo "$(GREEN)Code generation complete.$(NC)"
 
+gen-icons:
+	@echo "$(YELLOW)Generating alternative icon previews...$(NC)"
+	@chmod +x $(PROJECT_ROOT)/scripts/generate_alt_icons.sh
+	@$(PROJECT_ROOT)/scripts/generate_alt_icons.sh
+	@echo "$(GREEN)Icon previews generation complete.$(NC)"
 
-rerun:
+up-build:
+	@BUILD=$$(grep 'CURRENT_PROJECT_VERSION:' $(PROJECT_ROOT)/Configs/Settings.yml | awk '{print $$2}'); \
+	NEW=$$((BUILD + 1)); \
+	sed -i '' "s/CURRENT_PROJECT_VERSION: $$BUILD/CURRENT_PROJECT_VERSION: $$NEW/" $(PROJECT_ROOT)/Configs/Settings.yml; \
+	echo "$(GREEN)Build number: $$BUILD → $$NEW$(NC)"
+	@xcodegen --spec project_local.yml
+	@echo "$(YELLOW)Compiling project...$(NC)"
+	@xcodebuild build $(XCODE_FLAGS) \
+		-project $(PROJECT_NAME).xcodeproj \
+		-scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.4.1,name=iPhone 16e' \
+		-derivedDataPath build
+	@echo "$(GREEN)Up build complete.$(NC)"
+
+up-version:
+	@VER=$$(grep 'MARKETING_VERSION:' $(PROJECT_ROOT)/Configs/Settings.yml | awk '{print $$2}'); \
+	MAJOR=$$(echo $$VER | cut -d. -f1); \
+	MINOR=$$(echo $$VER | cut -d. -f2); \
+	PATCH=$$(echo $$VER | cut -d. -f3); PATCH=$${PATCH:-0}; \
+	if [ "$(VERSION_TYPE)" = "major" ]; then \
+		MAJOR=$$((MAJOR + 1)); MINOR=0; PATCH=0; \
+	elif [ "$(VERSION_TYPE)" = "minor" ]; then \
+		MINOR=$$((MINOR + 1)); PATCH=0; \
+	else \
+		PATCH=$$((PATCH + 1)); \
+	fi; \
+	if [ "$$PATCH" = "0" ]; then NEW="$$MAJOR.$$MINOR"; else NEW="$$MAJOR.$$MINOR.$$PATCH"; fi; \
+	sed -i '' "s/MARKETING_VERSION: $$VER/MARKETING_VERSION: $$NEW/" $(PROJECT_ROOT)/Configs/Settings.yml; \
+	echo "$(GREEN)Version: $$VER → $$NEW$(NC)"
+	@xcodegen --spec project_local.yml
+	@echo "$(YELLOW)Compiling project...$(NC)"
+	@xcodebuild build $(XCODE_FLAGS) \
+		-project $(PROJECT_NAME).xcodeproj \
+		-scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.4.1,name=iPhone 16e' \
+		-derivedDataPath build
+	@echo "$(GREEN)Up version complete.$(NC)"
+
+clean:
+	@echo "$(YELLOW)Cleaning build artifacts...$(NC)"
+	@rm -rf ~/Library/Developer/Xcode/DerivedData/$(PROJECT_NAME)-*
+	@echo "$(GREEN)Clean complete.$(NC)"
+
+test:
+	@echo "$(YELLOW)Running tests...$(NC)"
+	@xcodebuild test $(XCODE_FLAGS) -project $(PROJECT_NAME).xcodeproj -scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.4.1,name=iPhone 16e'
+	@echo "$(GREEN)Tests complete.$(NC)"
+
+run:
+	@echo "$(YELLOW)Building and running in simulator...$(NC)"
+	@xcodebuild $(XCODE_FLAGS) -project $(PROJECT_NAME).xcodeproj -scheme "$(PROJECT_NAME) (Dev)" \
+		-destination 'platform=iOS Simulator,OS=26.4.1,name=iPhone 16e' \
+		-derivedDataPath build
+	@echo "$(GREEN)Run complete.$(NC)"
+
+reload:
 	@echo "🔄 Reload Xcode..."
 	@osascript -e 'tell application "Xcode" to quit'
 	@sleep 2
@@ -63,11 +157,22 @@ help:
 	@echo ""
 	@echo "Available targets:"
 	@echo "  init         - Create local dependencies and initialize project"
-	@echo "  build        - Format code and build the project"
-	@echo "  build-local  - Format code and build the project with local configuration"
+	@echo "  build        - Format code and build the project with local dependencies"
+	@echo "  build-prod   - Format code and build the project for production with remote dependencies"
+	@echo "  compile      - Compile project only (no format/gen, Xcode Cmd+B equivalent)"
 	@echo "  format       - Format code in Packages and Project directories"
-	@echo "  gen          - Generate network code from OpenAPI spec and resources with SwiftGen"
+	@echo "  gen          - Generate network code, resources and icon previews"
+	@echo "  gen-icons    - Generate alternative icon previews from .icon files"
+	@echo "  clean        - Clean build artifacts from DerivedData"
+	@echo "  test         - Run tests in iOS Simulator"
+	@echo "  run          - Build and run the project in iOS Simulator"
+	@echo "  reload       - Reload Xcode project"
+	@echo "  up-build     - Increment build number (CURRENT_PROJECT_VERSION) and rebuild"
+	@echo "  up-version   - Bump app version (MARKETING_VERSION), TYPE=patch|minor|major (default: minor)"
 	@echo "  help         - Show this help message"
+	@echo ""
+	@echo "Parameters:"
+	@echo "  VERBOSE=1    - Show full xcodebuild/swiftformat output (default: quiet)"
 	@echo ""
 	@echo "Current Date and Time (UTC): $(shell date '+%Y-%m-%d %H:%M:%S')"
 	@echo "Current User's Login: $(shell whoami)"

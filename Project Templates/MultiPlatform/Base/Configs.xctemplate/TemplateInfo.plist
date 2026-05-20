@@ -100,7 +100,6 @@
 	<array>
 		<string>../makefile</string>
 		<string>../project.yml</string>
-		<string>../Configs/AppConfig.plist</string>
 		<string>../.gitignore</string>
 		<string>../.swiftformat</string>
 		<string>../.swiftlint.yml</string>
@@ -109,12 +108,16 @@
 		<string>../Configs/Packages.yml</string>
 		<string>../Configs/PackagesLocal.yml</string>
 		<string>../Configs/Settings.yml</string>
+		<string>../Configs/Schemes.yml</string>
 		<string>../Configs/Targets.yml</string>
 		<string>../scripts/init_packages.sh</string>
 		<string>../scripts/init_packages_files.sh</string>
-		<string>../scripts/build.sh</string>
-		<string>../scripts/build_local.sh</string>
+		<string>../scripts/generate_alt_icons.sh</string>
 		<string>../ci_scripts/ci_post_clone.sh</string>
+		<string>../AGENTS.md</string>
+		<string>../CLAUDE.md</string>
+		<string>../.claude/settings.json</string>
+		<string>../.claude/settings.local.json</string>
 	</array>
 	<key>Definitions</key>
 	<dict>
@@ -173,10 +176,10 @@
 				<string>Configs</string>
 			</array>
 		</dict>
-		<key>../Configs/AppConfig.plist</key>
+		<key>../Configs/Schemes.yml</key>
 		<dict>
 			<key>Path</key>
-			<string>AppConfig.plist</string>
+			<string>Schemes.yml</string>
 			<key>Group</key>
 			<array>
 				<string>Configs</string>
@@ -223,19 +226,10 @@
 				<string>scripts</string>
 			</array>
 		</dict>
-		<key>../scripts/build.sh</key>
+		<key>../scripts/generate_alt_icons.sh</key>
 		<dict>
 			<key>Path</key>
-			<string>build.sh</string>
-			<key>Group</key>
-			<array>
-				<string>scripts</string>
-			</array>
-		</dict>
-		<key>../scripts/build_local.sh</key>
-		<dict>
-			<key>Path</key>
-			<string>build_local.sh</string>
+			<string>generate_alt_icons.sh</string>
 			<key>Group</key>
 			<array>
 				<string>scripts</string>
@@ -248,6 +242,34 @@
 			<key>Group</key>
 			<array>
 				<string>ci_scripts</string>
+			</array>
+		</dict>
+		<key>../AGENTS.md</key>
+		<dict>
+			<key>Path</key>
+			<string>AGENTS.md</string>
+		</dict>
+		<key>../CLAUDE.md</key>
+		<dict>
+			<key>Path</key>
+			<string>CLAUDE.md</string>
+		</dict>
+		<key>../.claude/settings.json</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/settings.json</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+			</array>
+		</dict>
+		<key>../.claude/settings.local.json</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/settings.local.json</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
 			</array>
 		</dict>
 	</dict>

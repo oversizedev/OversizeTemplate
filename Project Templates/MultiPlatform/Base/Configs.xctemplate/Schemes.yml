@@ -1,0 +1,37 @@
+schemes:
+  ___VARIABLE_productName:RFC1034Identifier___ (Dev):
+    build:
+      targets:
+        ___VARIABLE_productName:RFC1034Identifier___: all
+    run:
+      config: Debug
+      commandLineArguments:
+        "-com.apple.CoreData.SQLDebug 1": true
+      environmentVariables:
+        OS_ACTIVITY_MODE: disable
+      #storeKitConfiguration: ___VARIABLE_productName:RFC1034Identifier___/Resources/StoreKit.storekit
+    test:
+      config: Debug
+      gatherCoverageData: true
+    analyze:
+      config: Debug
+    profile:
+      config: Debug
+    archive:
+      config: Debug
+
+  ___VARIABLE_productName:RFC1034Identifier___ (AppStore):
+    build:
+      targets:
+        ___VARIABLE_productName:RFC1034Identifier___: all
+    run:
+      config: AppStore
+    test:
+      config: AppStore
+      gatherCoverageData: true
+    analyze:
+      config: AppStore
+    profile:
+      config: AppStore
+    archive:
+      config: AppStore

@@ -2,7 +2,6 @@
 
 import Env
 import NavigatorUI
-import OversizeRouter
 import SwiftUI
 
 struct RootTabView: View {
@@ -21,13 +20,7 @@ struct RootTabView: View {
                     .tag(tab)
             }
         }
-        .onNavigationReceive { (tab: RootTabs) in
-            if tab == selectedTab {
-                return .immediately
-            }
-            selectedTab = tab
-            return .after(0.7)
-        }
+        .onNavigationReceive(assign: $selectedTab)
     }
 }
 
