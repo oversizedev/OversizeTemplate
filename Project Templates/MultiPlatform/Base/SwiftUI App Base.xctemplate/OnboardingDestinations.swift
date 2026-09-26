@@ -3,7 +3,6 @@
 import Env
 import NavigatorUI
 import Onboarding
-import OversizeKit
 import SwiftUI
 
 extension OnboardingDestinations: @retroactive NavigationDestination {
@@ -13,15 +12,5 @@ extension OnboardingDestinations: @retroactive NavigationDestination {
         case .setup:
             OnboardingSetup.build()
         }
-    }
-}
-
-struct OnboardingNavigationStack: View {
-    var body: some View {
-        ManagedNavigationStack(scene: "Onboarding") {
-            OnboardingGreeting.buildCached()
-                .navigationAutoReceive(OnboardingDestinations.self)
-        }
-        .coreServices()
     }
 }

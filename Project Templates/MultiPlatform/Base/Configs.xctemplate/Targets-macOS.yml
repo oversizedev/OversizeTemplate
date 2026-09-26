@@ -31,7 +31,6 @@ targets:
       - package: OversizeResources
       - package: OversizeLocalizable
       - package: OversizeCore
-      - package: OversizeComponents
       - package: Database
       - package: Env
       - package: App

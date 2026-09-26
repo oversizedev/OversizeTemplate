@@ -1,8 +1,12 @@
 options:
   bundleIdPrefix: ___VARIABLE_bundleIdentifierPrefix:bundleIdentifier___
-  xcodeVersion: 26.2
+  xcodeVersion: 27.0
   deploymentTarget:
-    iOS: 26.2
+    iOS: 18.0
+    macOS: 15.0
+    tvOS: 18.0
+    watchOS: 11.0
+    visionOS: 2.0
   groupSortPosition: top
   generateEmptyDirectories: true
   findCarthageFrameworks: true
@@ -14,3 +18,6 @@ options:
 configs:
   Debug: debug
   AppStore: release
+
+fileGroups:
+  - ../Configs

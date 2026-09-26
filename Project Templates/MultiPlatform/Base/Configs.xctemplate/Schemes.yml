@@ -8,11 +8,16 @@ schemes:
       commandLineArguments:
         "-com.apple.CoreData.SQLDebug 1": true
       environmentVariables:
-        OS_ACTIVITY_MODE: disable
+        CG_NUMERICS_SHOW_BACKTRACE: 1
       #storeKitConfiguration: ___VARIABLE_productName:RFC1034Identifier___/Resources/StoreKit.storekit
     test:
       config: Debug
       gatherCoverageData: true
+      targets:
+        - ___VARIABLE_productName:RFC1034Identifier___UITests
+        - package: Database/DatabaseTests
+        - package: Services/ServicesTests
+        - package: App/MainTests
     analyze:
       config: Debug
     profile:
@@ -27,8 +32,13 @@ schemes:
     run:
       config: AppStore
     test:
-      config: AppStore
+      config: Debug
       gatherCoverageData: true
+      targets:
+        - ___VARIABLE_productName:RFC1034Identifier___UITests
+        - package: Database/DatabaseTests
+        - package: Services/ServicesTests
+        - package: App/MainTests
     analyze:
       config: AppStore
     profile:

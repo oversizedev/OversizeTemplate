@@ -1,4 +1,4 @@
 --swiftversion 6.2
 --disable preferKeyPath,redundantSendable
---exclude build
+--exclude build,DerivedData,___VARIABLE_productName:RFC1034Identifier___.xcodeproj,**/.build,**/.swiftpm,**/Generated,**/*.generated.swift
 --trailing-commas collections-only
