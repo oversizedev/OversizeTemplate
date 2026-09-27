@@ -116,7 +116,7 @@ private extension ___VARIABLE_categoryName___EditView {
     #endif
 
     private var emojiField: some View {
-        EmojiPicker("Icon", emojis: viewState.emojis, selection: $viewState.emoji)
+        EmojiField("Icon", emojis: viewState.emojis, selection: $viewState.emoji)
             .iconPickerStyle(.circle)
     }
 }

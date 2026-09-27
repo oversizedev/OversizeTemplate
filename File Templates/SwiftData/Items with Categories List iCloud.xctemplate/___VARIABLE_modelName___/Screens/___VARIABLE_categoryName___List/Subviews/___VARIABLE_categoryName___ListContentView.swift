@@ -6,7 +6,6 @@ import OversizeResources
 import OversizeUI
 import SwiftUI
 
-/// Reusable content view component for displaying ___VARIABLE_categoryName___ lists
 public struct ___VARIABLE_categoryName___ListContentView: View {
     public enum Action: Sendable {
         case onTapItem(___VARIABLE_categoryName___)
@@ -14,18 +13,22 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
         case onTapToggleFavorite(___VARIABLE_categoryName___)
         case onTapDuplicateCategory(___VARIABLE_categoryName___)
         case onTapDeleteCategory(___VARIABLE_categoryName___)
+        case onTapUncategorized
     }
 
     private let ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]
+    private let hasUncategorized: Bool
     private let viewOption: ___VARIABLE_categoryName___ViewOption
     private let onAction: (Action) -> Void
 
     public init(
         ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___],
+        hasUncategorized: Bool = false,
         viewOption: ___VARIABLE_categoryName___ViewOption = .standard,
         onAction: @escaping (Action) -> Void
     ) {
         self.___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_categoryPluralVariableName___
+        self.hasUncategorized = hasUncategorized
         self.viewOption = viewOption
         self.onAction = onAction
     }
@@ -36,6 +39,8 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
                 ___VARIABLE_categoryName___Row(___VARIABLE_categoryVariableName___, viewOption: viewOption) {
                     onAction(.onTapItem(___VARIABLE_categoryVariableName___))
                 }
+                .navigatable()
+                .listRowSeparator(.hidden)
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
                         onAction(.onTapDeleteCategory(___VARIABLE_categoryVariableName___))
@@ -61,7 +66,24 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
                     .tint(.warning)
                 }
                 .contextMenu { contextMenu(for: ___VARIABLE_categoryVariableName___) }
-                .listRowSeparator(.hidden)
+            }
+
+            if hasUncategorized {
+                ListSection {
+                    ListRow("No Category") {
+                        onAction(.onTapUncategorized)
+                    } leading: {
+                        Text("🗂️")
+                            .frame(
+                                width: 24,
+                                height: 24,
+                                alignment: .center
+                            )
+                            .iconOnSurface()
+                    }
+                    .navigatable()
+                    .listRowSeparator(.hidden)
+                }
             }
         }
     }

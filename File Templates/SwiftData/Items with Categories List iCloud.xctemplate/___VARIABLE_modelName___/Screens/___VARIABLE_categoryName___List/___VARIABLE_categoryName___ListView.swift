@@ -58,15 +58,16 @@ public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
         case .idle, .loading:
             ___VARIABLE_categoryName___PlaceholderView()
         case let .result(model):
-            content(model.___VARIABLE_categoryPluralVariableName___)
+            content(model)
         default:
             EmptyView()
         }
     }
 
-    private func content(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) -> some View {
+    private func content(_ model: ___VARIABLE_categoryName___ListViewState.StateModel) -> some View {
         ___VARIABLE_categoryName___ListContentView(
-            ___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___,
+            ___VARIABLE_categoryPluralVariableName___: model.___VARIABLE_categoryPluralVariableName___,
+            hasUncategorized: model.hasUncategorized,
             viewOption: viewState.storage.viewOption,
             onAction: { reducer.callAsFunction(.onCategoryAction($0)) }
         )

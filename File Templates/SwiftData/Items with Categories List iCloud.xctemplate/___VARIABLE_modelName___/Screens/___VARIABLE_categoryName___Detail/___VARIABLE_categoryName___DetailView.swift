@@ -7,6 +7,7 @@ import OversizeComponents
 import OversizeCore
 import OversizeLocalizable
 import OversizeNavigation
+import OversizeResources
 import OversizeUI
 import SwiftData
 import SwiftUI
@@ -16,6 +17,8 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
     public var body: some View {
         NavigationListCoverLayoutView(coverHeight: 200) {
             stateView(viewState.state)
+                .listSectionSpacing(.xSmall)
+                .headerProminence(.increased)
         } cover: {
             cover
         } coverBackground: {
@@ -91,20 +94,23 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
                 )
             }
         }
+        .listSectionTitlePosition(.inside)
 
         if model.isEmpty {
             ListSection {
-                TextBox(
+                EmptyStateView(
+                    image: Illustration.Objects.box,
                     title: "Nothing Here Yet",
                     subtitle: "Items you add will appear here"
-                )
-                .textBoxSize(.small)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.large)
+                ) {
+                    Button("Add item") {
+                        reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
+                    }
+                }
+                .emptyStateSize(.compact)
             }
         } else {
-            ___VARIABLE_modelName___ListContentView(
+            ___VARIABLE_categoryName___DetailContentView(
                 ___VARIABLE_modelPluralVariableName___: model.___VARIABLE_modelPluralVariableName___,
                 ___VARIABLE_categoryPluralVariableName___: model.___VARIABLE_categoryPluralVariableName___,
                 viewOption: .standard,
@@ -112,6 +118,12 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
                     reducer.callAsFunction(.on___VARIABLE_modelName___Action(action))
                 }
             )
+            ListSection {
+                ListButton("Add item") {
+                    reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
+                }
+            }
+            .listSectionSpacing(.xxxSmall)
         }
     }
 }

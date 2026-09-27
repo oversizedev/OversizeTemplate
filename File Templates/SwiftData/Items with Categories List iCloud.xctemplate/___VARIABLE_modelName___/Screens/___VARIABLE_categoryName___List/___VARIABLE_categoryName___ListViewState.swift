@@ -35,9 +35,10 @@ public final class ___VARIABLE_categoryName___ListViewState: ViewStateProtocol {
 public extension ___VARIABLE_categoryName___ListViewState {
     struct StateModel: Emptyable, Sendable {
         public var ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]
+        public var hasUncategorized: Bool
 
         public var isEmpty: Bool {
-            ___VARIABLE_categoryPluralVariableName___.isEmpty
+            ___VARIABLE_categoryPluralVariableName___.isEmpty && !hasUncategorized
         }
     }
 }

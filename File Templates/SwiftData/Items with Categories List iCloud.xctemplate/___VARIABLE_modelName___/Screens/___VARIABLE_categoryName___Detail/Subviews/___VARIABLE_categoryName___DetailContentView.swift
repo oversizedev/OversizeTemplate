@@ -5,7 +5,7 @@ import OversizeLocalizable
 import OversizeUI
 import SwiftUI
 
-public struct ___VARIABLE_modelName___ListContentView: View {
+public struct ___VARIABLE_categoryName___DetailContentView: View {
     public enum Action: Sendable {
         case tapItem(___VARIABLE_modelName___)
         case editProduct(___VARIABLE_modelName___)
@@ -67,7 +67,10 @@ public struct ___VARIABLE_modelName___ListContentView: View {
                 }
                 .contextMenu { contextMenu(for: ___VARIABLE_modelVariableName___).tint(Color.onSurfacePrimary) }
             }
+        } header: {
+            ListSectionHeader(title: "Items")
         }
+        .listSectionTitlePosition(.inside)
     }
 
     @ViewBuilder
@@ -167,5 +170,11 @@ public struct ___VARIABLE_modelName___ListContentView: View {
             }
         }
         .tint(Color.error)
+    }
+}
+
+#Preview {
+    List {
+        ___VARIABLE_categoryName___DetailContentView(___VARIABLE_modelPluralVariableName___: [], onAction: { _ in })
     }
 }

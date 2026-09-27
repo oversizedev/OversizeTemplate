@@ -14,6 +14,7 @@ public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
     // MARK: - Services
 
     @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
 
     func onAppear() async {
         await fetchData()
@@ -34,8 +35,9 @@ public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
     func onTapCreate___VARIABLE_categoryName___() async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Create(
-                onSave: Callback { _ in
-                    Task { await self.fetchData() }
+                onSave: .init { [weak self] _ in
+                    guard let self else { return }
+                    await fetchData()
                 }
             )
         }
@@ -64,6 +66,10 @@ public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
         await state.update { $0.storage.viewOption = viewOption }
     }
 
+    func onTapUncategorized() async {
+        await state.update { $0.destination = .___VARIABLE_modelPluralVariableName___(filter: .uncategorized) }
+    }
+
     func onCategoryAction(_ action: ___VARIABLE_categoryName___ListContentView.Action) async {
         switch action {
         case let .onTapItem(category):
@@ -76,6 +82,8 @@ public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
             await tapDuplicate___VARIABLE_categoryName___(category)
         case let .onTapDeleteCategory(category):
             await tapDelete___VARIABLE_categoryName___(category)
+        case .onTapUncategorized:
+            await onTapUncategorized()
         }
     }
 }
@@ -86,13 +94,14 @@ private extension ___VARIABLE_categoryName___ListViewModel {
     func tapDelete___VARIABLE_categoryName___(_ category: ___VARIABLE_categoryName___) async {
         await state.update { viewState in
             viewState.alert = .delete {
-                Task {
+                Task { [weak self] in
+                    guard let self else { return }
                     do {
-                        try await self.___VARIABLE_categoryVariableName___StorageService.delete(category)
-                        await self.state.update { $0.hud = .delete() }
-                        await self.fetchData()
+                        try await ___VARIABLE_categoryVariableName___StorageService.delete(category)
+                        await state.update { $0.hud = .delete() }
+                        await fetchData()
                     } catch {
-                        await self.state.update { $0.alert = .error(error) }
+                        await state.update { $0.alert = .error(error) }
                     }
                 }
             }
@@ -100,12 +109,13 @@ private extension ___VARIABLE_categoryName___ListViewModel {
     }
 
     func tapEdit___VARIABLE_categoryName___(_ category: ___VARIABLE_categoryName___) async {
-        logUI("Edit action triggered for ___VARIABLE_categoryName___: \(category.name)")
+        Log.debug("Edit action triggered for ___VARIABLE_categoryName___: \(category.name)")
         await state.update {
             $0.destination = .___VARIABLE_categoryVariableName___Edit(
                 category,
-                onSave: Callback { _ in
-                    Task { await self.fetchData() }
+                onSave: .init { [weak self] _ in
+                    guard let self else { return }
+                    await fetchData()
                 }
             )
         }
@@ -145,8 +155,9 @@ private extension ___VARIABLE_categoryName___ListViewModel {
                 sortOrder: sortOrder
             )
 
+            let currentHasUncategorized = await state.state.result?.hasUncategorized ?? false
             await state.update {
-                $0.state = .result(.init(___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___))
+                $0.state = .result(.init(___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___, hasUncategorized: currentHasUncategorized))
             }
 
         } catch {
@@ -160,14 +171,16 @@ private extension ___VARIABLE_categoryName___ListViewModel {
         let filterType = await state.filterType
 
         do {
-            let ___VARIABLE_categoryPluralVariableName___ = try await ___VARIABLE_categoryVariableName___StorageService.fetch(
+            async let ___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_categoryVariableName___StorageService.fetch(
                 filterType: filterType,
                 sortType: sortType,
                 sortOrder: sortOrder
             )
-
+            async let uncategorized = ___VARIABLE_modelVariableName___StorageService.fetch(filterType: .uncategorized)
+            let fetched___VARIABLE_categoryName___ = try await ___VARIABLE_categoryPluralVariableName___
+            let hasUncategorized = await (try? uncategorized)?.isEmpty == false
             await state.update {
-                $0.state = .result(.init(___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___))
+                $0.state = .result(.init(___VARIABLE_categoryPluralVariableName___: fetched___VARIABLE_categoryName___, hasUncategorized: hasUncategorized))
             }
         } catch {
             await state.update { $0.state = .error(error) }

@@ -21,13 +21,27 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
         await fetchData()
     }
 
+    func onTapCreate___VARIABLE_modelName___() async {
+        let ___VARIABLE_categoryVariableName___Id = await state.___VARIABLE_categoryVariableName___Id
+        await state.update { viewState in
+            viewState.destination = .___VARIABLE_modelVariableName___Create(
+                ___VARIABLE_categoryVariableName___Id: ___VARIABLE_categoryVariableName___Id,
+                onSave: AsyncCallback { [weak self] _ in
+                    guard let self else { return }
+                    await fetchData()
+                }
+            )
+        }
+    }
+
     func onTapEdit___VARIABLE_categoryName___() async {
         guard let ___VARIABLE_categoryVariableName___ = await state.state.result?.___VARIABLE_categoryVariableName___ else { return }
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Edit(
                 ___VARIABLE_categoryVariableName___,
-                onSave: Callback { _ in
-                    Task { await self.fetchData() }
+                onSave: .init { [weak self] _ in
+                    guard let self else { return }
+                    await fetchData()
                 }
             )
         }
@@ -37,15 +51,16 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
         guard let ___VARIABLE_categoryVariableName___ = await state.state.result?.___VARIABLE_categoryVariableName___ else { return }
         await state.update { viewState in
             viewState.alert = .delete {
-                Task {
+                Task { [weak self] in
+                    guard let self else { return }
                     do {
-                        try await self.___VARIABLE_categoryVariableName___StorageService.delete(___VARIABLE_categoryVariableName___)
-                        await self.state.update { viewState in
+                        try await ___VARIABLE_categoryVariableName___StorageService.delete(___VARIABLE_categoryVariableName___)
+                        await state.update { viewState in
                             viewState.hud = .delete
                             viewState.isDismissed = true
                         }
                     } catch {
-                        await self.state.update { $0.alert = .error(error) }
+                        await state.update { $0.alert = .error(error) }
                     }
                 }
             }
@@ -68,7 +83,7 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
         }
     }
 
-    func on___VARIABLE_modelName___Action(_ action: ___VARIABLE_modelName___ListContentView.Action) async {
+    func on___VARIABLE_modelName___Action(_ action: ___VARIABLE_categoryName___DetailContentView.Action) async {
         switch action {
         case let .tapItem(___VARIABLE_modelVariableName___):
             await tapDetail___VARIABLE_modelName___(___VARIABLE_modelVariableName___)
@@ -116,12 +131,13 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
     }
 
     func tapEdit___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        logUI("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+        Log.debug("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
-                onSave: Callback { _ in
-                    Task { await self.fetchData() }
+                onSave: .init { [weak self] _ in
+                    guard let self else { return }
+                    await fetchData()
                 }
             )
         }
@@ -151,15 +167,16 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
     func tapDelete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update { viewState in
             viewState.alert = .delete {
-                Task {
+                Task { [weak self] in
+                    guard let self else { return }
                     do {
-                        logDeleted("___VARIABLE_modelName___")
-                        try await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
-                        await self.state.update { $0.hud = .delete() }
-                        await self.fetchData()
+                        Log.info("Deleted ___VARIABLE_modelName___")
+                        try await ___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
+                        await state.update { $0.hud = .delete() }
+                        await fetchData()
                     } catch {
-                        logError("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
-                        await self.state.update { $0.alert = .error(error) }
+                        Log.error("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
+                        await state.update { $0.alert = .error(error) }
                     }
                 }
             }
@@ -179,8 +196,9 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
     func tapCreate___VARIABLE_categoryName___For___VARIABLE_modelName___(_: ___VARIABLE_modelName___) async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Create(
-                onSave: Callback { _ in
-                    Task { await self.fetchData() }
+                onSave: .init { [weak self] _ in
+                    guard let self else { return }
+                    await fetchData()
                 }
             )
         }
