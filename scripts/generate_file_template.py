@@ -2,14 +2,17 @@
 # Regenerates the "Items with Categories List iCloud" file template from the
 # Recurio reference project by reverse variable substitution.
 # Usage: python3 scripts/generate_file_template.py [path-to-recurio]
+import shutil
 import sys
 from pathlib import Path
 
-RECURIO = Path(sys.argv[1] if len(sys.argv) > 1 else "/Users/admin/Developer/Recurio")
+RECURIO = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.home() / "Developer/Recurio"
 TEMPLATE = (
     Path(__file__).resolve().parent.parent
     / "File Templates/SwiftData/Items with Categories List iCloud.xctemplate/___VARIABLE_modelName___"
 )
+
+shutil.rmtree(TEMPLATE, ignore_errors=True)
 
 SUBS = [
     ("subscriptionCategories", "___VARIABLE_categoryPluralVariableName___"),

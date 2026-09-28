@@ -2,7 +2,7 @@ targets:
   ___VARIABLE_productName:RFC1034Identifier___:
     type: application
     platform: macOS
-    deploymentTarget: 14.0
+    deploymentTarget: 15.0
     sources:
       - path: ../Configs
       - path: ../___VARIABLE_productName:RFC1034Identifier___
