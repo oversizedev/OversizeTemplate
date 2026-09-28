@@ -16,9 +16,9 @@ public actor ___VARIABLE_modelName___StorageService {
         note: String? = nil,
         ___VARIABLE_categoryVariableName___Id: UUID? = nil
     ) throws -> ___VARIABLE_modelName___ {
-        let ___VARIABLE_modelVariableName___ = ___VARIABLE_modelName___(
+        let ___VARIABLE_modelVariableName___ = try ___VARIABLE_modelName___(
             imageData: imageData,
-            name: name,
+            name: validatedName(name),
             color: color,
             date: date,
             note: note,
@@ -34,24 +34,17 @@ public actor ___VARIABLE_modelName___StorageService {
 
     public func save(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) throws -> [___VARIABLE_modelName___] {
         let count = ___VARIABLE_modelPluralVariableName___.count
-        logData("Saving \(count) ___VARIABLE_modelName___(s)")
+        Log.debug("Saving \(count) ___VARIABLE_modelName___(s)")
 
         do {
             var saved___VARIABLE_modelName___s: [___VARIABLE_modelName___Entity] = []
 
             for ___VARIABLE_modelVariableName___ in ___VARIABLE_modelPluralVariableName___ {
-                var ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity? = nil
+                let ___VARIABLE_categoryVariableName___ = try ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id.map { try fetch___VARIABLE_categoryName___(by: $0) }
 
-                if let ___VARIABLE_categoryVariableName___Id = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id {
-                    let ___VARIABLE_categoryVariableName___Descriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
-                        predicate: #Predicate { $0.id == ___VARIABLE_categoryVariableName___Id }
-                    )
-                    ___VARIABLE_categoryVariableName___ = try modelContext.fetch(___VARIABLE_categoryVariableName___Descriptor).first
-                }
-
-                let entity = ___VARIABLE_modelName___Entity(
+                let entity = try ___VARIABLE_modelName___Entity(
                     id: ___VARIABLE_modelVariableName___.id,
-                    name: ___VARIABLE_modelVariableName___.name,
+                    name: validatedName(___VARIABLE_modelVariableName___.name),
                     color: ___VARIABLE_modelVariableName___.color,
                     date: ___VARIABLE_modelVariableName___.date,
                     image: ___VARIABLE_modelVariableName___.imageData,
@@ -65,8 +58,12 @@ public actor ___VARIABLE_modelName___StorageService {
 
             try modelContext.save()
             return saved___VARIABLE_modelName___s.map { ___VARIABLE_modelName___(from: $0) }
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Save failed:", error: error)
+            modelContext.rollback()
+            Log.error("Save failed:", error: error)
             throw count == 1 ? PersistenceError.saveFailed : PersistenceError.batchOperationFailed
         }
     }
@@ -117,7 +114,7 @@ public actor ___VARIABLE_modelName___StorageService {
             let ___VARIABLE_modelPluralVariableName___ = try modelContext.fetch(descriptor)
             return ___VARIABLE_modelPluralVariableName___.map { ___VARIABLE_modelName___(from: $0) }
         } catch {
-            logError("Fetch failed:", error: error)
+            Log.error("Fetch failed:", error: error)
             throw PersistenceError.fetchFailed
         }
     }
@@ -126,8 +123,10 @@ public actor ___VARIABLE_modelName___StorageService {
         do {
             let ___VARIABLE_modelVariableName___ = try fetch___VARIABLE_modelName___(by: id)
             return ___VARIABLE_modelName___(from: ___VARIABLE_modelVariableName___)
+        } catch let error as PersistenceError {
+            throw error
         } catch {
-            logError("Fetch by id failed:", error: error)
+            Log.error("Fetch by id failed:", error: error)
             throw PersistenceError.fetchFailed
         }
     }
@@ -151,6 +150,15 @@ public actor ___VARIABLE_modelName___StorageService {
                     },
                     sortBy: [sortDescriptor]
                 )
+            } else if filterType == .uncategorized {
+                FetchDescriptor<___VARIABLE_modelName___Entity>(
+                    predicate: #Predicate { ___VARIABLE_modelVariableName___ in
+                        ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ == nil &&
+                            (___VARIABLE_modelVariableName___.name.localizedStandardContains(query) ||
+                                (___VARIABLE_modelVariableName___.note?.localizedStandardContains(query) == true))
+                    },
+                    sortBy: [sortDescriptor]
+                )
             } else {
                 FetchDescriptor<___VARIABLE_modelName___Entity>(
                     predicate: #Predicate { ___VARIABLE_modelVariableName___ in
@@ -164,7 +172,7 @@ public actor ___VARIABLE_modelName___StorageService {
             let ___VARIABLE_modelPluralVariableName___ = try modelContext.fetch(descriptor)
             return ___VARIABLE_modelPluralVariableName___.map { ___VARIABLE_modelName___(from: $0) }
         } catch {
-            logError("Search failed:", error: error)
+            Log.error("Search failed:", error: error)
             throw PersistenceError.fetchFailed
         }
     }
@@ -176,36 +184,49 @@ public actor ___VARIABLE_modelName___StorageService {
         name: String? = nil,
         color: Color? = nil,
         date: Date? = nil,
-        image: Data? = nil,
-        note noteText: String? = nil,
+        image: Data?? = nil,
+        note noteText: String?? = nil,
         isFavorite: Bool? = nil,
-        categoryId: UUID? = nil
+        categoryId: UUID?? = nil
     ) throws -> ___VARIABLE_modelName___ {
         do {
             let ___VARIABLE_modelVariableName___Entity = try fetch___VARIABLE_modelName___(by: ___VARIABLE_modelVariableName___.id)
 
-            if let name { ___VARIABLE_modelVariableName___Entity.name = name }
-            if let color { ___VARIABLE_modelVariableName___Entity.colorData = .init(color: color) }
-            if let date { ___VARIABLE_modelVariableName___Entity.date = date }
-            if let image { ___VARIABLE_modelVariableName___Entity.imageData = image }
-            if let noteText { ___VARIABLE_modelVariableName___Entity.note = noteText }
-            if let isFavorite { ___VARIABLE_modelVariableName___Entity.isFavorite = isFavorite }
+            if let name {
+                ___VARIABLE_modelVariableName___Entity.name = try validatedName(name)
+            }
+            if let color {
+                ___VARIABLE_modelVariableName___Entity.colorData = .init(color: color)
+            }
+            if let date {
+                ___VARIABLE_modelVariableName___Entity.date = date
+            }
+            if let image {
+                ___VARIABLE_modelVariableName___Entity.imageData = image
+            }
+            if let noteText {
+                ___VARIABLE_modelVariableName___Entity.note = noteText
+            }
+            if let isFavorite {
+                ___VARIABLE_modelVariableName___Entity.isFavorite = isFavorite
+            }
             if let categoryId {
-                let categoryDescriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
-                    predicate: #Predicate { $0.id == categoryId }
-                )
-                ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___ = try modelContext.fetch(categoryDescriptor).first
+                ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___ = try categoryId.map { try fetch___VARIABLE_categoryName___(by: $0) }
             }
             try modelContext.save()
             return ___VARIABLE_modelName___(from: ___VARIABLE_modelVariableName___Entity)
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Update failed:", error: error)
-            throw PersistenceError.saveFailed
+            modelContext.rollback()
+            Log.error("Update failed:", error: error)
+            throw PersistenceError.updateFailed
         }
     }
 
     public func update___VARIABLE_categoryName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, categoryId: UUID?) throws -> ___VARIABLE_modelName___ {
-        try update(___VARIABLE_modelVariableName___, categoryId: categoryId)
+        try update(___VARIABLE_modelVariableName___, categoryId: .some(categoryId))
     }
 
     public func toggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) throws -> ___VARIABLE_modelName___ {
@@ -225,8 +246,12 @@ public actor ___VARIABLE_modelName___StorageService {
                 modelContext.delete(___VARIABLE_modelVariableName___Entity)
             }
             try modelContext.save()
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Delete failed:", error: error)
+            modelContext.rollback()
+            Log.error("Delete failed:", error: error)
             throw PersistenceError.deleteFailed
         }
     }
@@ -241,5 +266,23 @@ public actor ___VARIABLE_modelName___StorageService {
             throw PersistenceError.itemNotFound
         }
         return ___VARIABLE_modelVariableName___
+    }
+
+    private func fetch___VARIABLE_categoryName___(by id: UUID) throws -> ___VARIABLE_categoryName___Entity {
+        let descriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>(
+            predicate: #Predicate { $0.id == id }
+        )
+        guard let ___VARIABLE_categoryVariableName___ = try modelContext.fetch(descriptor).first else {
+            throw PersistenceError.itemNotFound
+        }
+        return ___VARIABLE_categoryVariableName___
+    }
+
+    private func validatedName(_ name: String) throws -> String {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else {
+            throw PersistenceError.validationFailed(reason: "___VARIABLE_modelName___ name cannot be empty")
+        }
+        return trimmedName
     }
 }

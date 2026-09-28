@@ -13,6 +13,8 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
     @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
     @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
 
+    private var saveTask: Task<Void, Never>?
+
     func onAppear() async {
         await fetch___VARIABLE_categoryPluralVariableName___()
 
@@ -50,15 +52,15 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
     }
 
     func on___VARIABLE_categoryName___Selected(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?) async {
-        await state.update { $0.selected___VARIABLE_categoryName___ = ___VARIABLE_categoryVariableName___ }
+        await state.update { $0.selected___VARIABLE_categoryName___Id = ___VARIABLE_categoryVariableName___?.id }
         await updateFormValidation()
-        logDebug("___VARIABLE_categoryName___ selected: \(___VARIABLE_categoryVariableName___?.name ?? "None")")
+        Log.debug("___VARIABLE_categoryName___ selected: \(___VARIABLE_categoryVariableName___?.name ?? "None")")
     }
 
     func on___VARIABLE_categoryName___Created(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async {
-        logDebug("___VARIABLE_categoryName___ created: \(___VARIABLE_categoryVariableName___.name)")
+        Log.debug("___VARIABLE_categoryName___ created: \(___VARIABLE_categoryVariableName___.name)")
         await fetch___VARIABLE_categoryPluralVariableName___()
-        await state.update { $0.selected___VARIABLE_categoryName___ = ___VARIABLE_categoryVariableName___ }
+        await state.update { $0.selected___VARIABLE_categoryName___Id = ___VARIABLE_categoryVariableName___.id }
     }
 
     func onTapCreate___VARIABLE_categoryName___() async {
@@ -74,42 +76,40 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
 
     func updateFormValidation() async {
         await state.update { viewState in
-            viewState.isEmptyForm = viewState.name.isEmpty && viewState.note.isEmpty
-            viewState.isValidForm = !viewState.name.isEmpty
+            viewState.isEmptyForm = viewState.trimmedName.isEmpty && viewState.note.isEmpty
+            viewState.isValidForm = !viewState.trimmedName.isEmpty
         }
-        await logDebug("Form validation changed - valid: \(state.isValidForm)")
+        await Log.debug("Form validation changed - valid: \(state.isValidForm)")
     }
 
     func onTapSave() async {
-        guard await !state.isEmptyForm else {
-            logError("Cannot save ___VARIABLE_modelVariableName___, form is empty")
-            return
+        if let saveTask {
+            return await saveTask.value
         }
-        await state.update { $0.isSaving = true }
+        let task = Task {
+            defer { saveTask = nil }
+            guard await !state.isEmptyForm, await state.isValidForm else { return }
+            await state.update { $0.isSaving = true }
+            defer { await state.update { $0.isSaving = false } }
 
-        if await state.source == nil {
             do {
-                let product = try await create___VARIABLE_modelName___()
+                let ___VARIABLE_modelVariableName___ = if await state.source == nil {
+                    try await create___VARIABLE_modelName___()
+                } else {
+                    try await update___VARIABLE_modelName___()
+                }
                 await state.update { viewState in
                     viewState.hud = .success
-                    viewState.isSaving = false
                     viewState.isDismissed = true
                 }
-                output?.onSave?(product)
+                output?.onSave?(___VARIABLE_modelVariableName___)
             } catch {
-                await state.update { $0.isSaving = false }
-            }
-
-        } else {
-            await state.update {
-                $0.hud = .success
-                $0.isSaving = false
-                $0.isDismissed = true
-            }
-            if let product = await update___VARIABLE_modelName___() {
-                output?.onSave?(product)
+                Log.error("Failed to save ___VARIABLE_modelName___:", error: error)
+                await state.update { $0.alert = .error(error) }
             }
         }
+        saveTask = task
+        await task.value
     }
 }
 
@@ -121,11 +121,15 @@ public extension ___VARIABLE_modelName___EditViewModel {
             let ___VARIABLE_categoryPluralVariableName___ = try await ___VARIABLE_categoryVariableName___StorageService.fetch()
             await state.update { viewState in
                 viewState.___VARIABLE_categoryPluralVariableName___State = .result(___VARIABLE_categoryPluralVariableName___)
-                viewState.set___VARIABLE_categoryPluralVariableName___(___VARIABLE_categoryPluralVariableName___)
+                if let categoryId = viewState.selected___VARIABLE_categoryName___Id,
+                   !___VARIABLE_categoryPluralVariableName___.contains(where: { $0.id == categoryId })
+                {
+                    viewState.selected___VARIABLE_categoryName___Id = nil
+                }
             }
         } catch {
             await state.update { $0.___VARIABLE_categoryPluralVariableName___State = .error(error) }
-            logError("Failed to fetch ___VARIABLE_categoryPluralVariableName___:", error: error)
+            Log.error("Failed to fetch ___VARIABLE_categoryPluralVariableName___:", error: error)
         }
     }
 
@@ -134,7 +138,17 @@ public extension ___VARIABLE_modelName___EditViewModel {
             let ___VARIABLE_modelVariableName___ = try await ___VARIABLE_modelVariableName___StorageService.fetch(by: state.___VARIABLE_modelVariableName___Id)
             await state.update { viewState in
                 viewState.___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
-                viewState.setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+                viewState.name = ___VARIABLE_modelVariableName___.name
+                viewState.note = ___VARIABLE_modelVariableName___.note ?? ""
+                viewState.color = ___VARIABLE_modelVariableName___.color
+                viewState.date = ___VARIABLE_modelVariableName___.date
+                #if os(macOS)
+                    viewState.image = ___VARIABLE_modelVariableName___.imageData.flatMap { NSImage(data: $0) }
+                #else
+                    viewState.image = ___VARIABLE_modelVariableName___.imageData.flatMap { UIImage(data: $0) }
+                #endif
+                viewState.originalImage = viewState.image
+                viewState.selected___VARIABLE_categoryName___Id = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id
             }
             await updateFormValidation()
         } catch {
@@ -144,39 +158,31 @@ public extension ___VARIABLE_modelName___EditViewModel {
 
     func create___VARIABLE_modelName___() async throws -> ___VARIABLE_modelName___ {
         try await ___VARIABLE_modelVariableName___StorageService.save(
-            name: state.name,
+            name: state.trimmedName,
             color: state.color,
             date: state.date ?? Date(),
             imageData: state.image?.jpegData(compressionQuality: 0.5),
             note: state.note.isEmpty ? nil : state.note,
-            ___VARIABLE_categoryVariableName___Id: state.selected___VARIABLE_categoryName___?.id
+            ___VARIABLE_categoryVariableName___Id: state.selected___VARIABLE_categoryName___Id
         )
     }
 
-    func update___VARIABLE_modelName___() async -> ___VARIABLE_modelName___? {
+    func update___VARIABLE_modelName___() async throws -> ___VARIABLE_modelName___ {
         guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
-            logError("Cannot update ___VARIABLE_modelName___ - no product loaded")
-            await state.update { $0.hud = .destructive("Failed to load product data") }
-            return nil
+            Log.error("Cannot update ___VARIABLE_modelName___ - no ___VARIABLE_modelVariableName___ loaded")
+            throw PersistenceError.itemNotFound
         }
-        do {
-            let updatedProduct = try await ___VARIABLE_modelVariableName___StorageService.update(
-                ___VARIABLE_modelVariableName___,
-                name: state.name,
-                color: state.color,
-                date: state.date ?? Date(),
-                image: state.image?.jpegData(compressionQuality: 0.5),
-                note: state.note.isEmpty ? nil : state.note
-            )
-
-            return try await ___VARIABLE_modelVariableName___StorageService.update___VARIABLE_categoryName___(
-                updatedProduct,
-                categoryId: state.selected___VARIABLE_categoryName___?.id
-            )
-        } catch {
-            logError("Failed to update ___VARIABLE_modelName___:", error: error)
-            await state.update { $0.hud = .destructive("Failed to update product") }
-            return nil
-        }
+        let image: Data?? = await state.isImageChanged
+            ? .some(state.image?.jpegData(compressionQuality: 0.5))
+            : .none
+        return try await ___VARIABLE_modelVariableName___StorageService.update(
+            ___VARIABLE_modelVariableName___,
+            name: state.trimmedName,
+            color: state.color,
+            date: state.date ?? Date(),
+            image: image,
+            note: .some(state.note.isEmpty ? nil : state.note),
+            categoryId: .some(state.selected___VARIABLE_categoryName___Id)
+        )
     }
 }

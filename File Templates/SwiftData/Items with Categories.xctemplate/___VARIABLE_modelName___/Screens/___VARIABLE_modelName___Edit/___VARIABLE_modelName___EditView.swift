@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import OversizeArchitecture
 import OversizeComponents
 import OversizeCore
@@ -16,24 +16,25 @@ public struct ___VARIABLE_modelName___EditView: ViewProtocol {
     @FocusState private var focusedField: ___VARIABLE_modelName___EditViewState.FocusField?
 
     public var body: some View {
-        NavigationLayoutView(
+        NavigationLayout(
             viewState.title,
-            content: content,
+            content: content
         )
+        .contentMargins()
         .backConfirmationDialog(viewState.isEmptyForm ? nil : .discard)
         .toolbarTitleDisplayMode(.inline)
         .toolbar(content: { toolbarContent })
         .onChangeValue(of: viewState.focusedField) { focusedField = $0 }
         .task { reducer.callAsFunction(.onAppear) }
         .onAppear { focusedField = .name }
-        .navigate(to: $viewState.destination, method: .managedSheet)
+        .navigationOpen($viewState.destination)
         .navigationDismiss(trigger: $viewState.isDismissed)
         .presentationHUD($viewState.hud)
     }
 
     @ViewBuilder
     private func content() -> some View {
-        LazyVStack(spacing: .small) {
+        VStack(spacing: .small) {
             titleField
 
             noteField
@@ -54,7 +55,6 @@ public struct ___VARIABLE_modelName___EditView: ViewProtocol {
         }
         .fieldLabelPosition(.overInput)
         .controlRadius(.large)
-        .paddingContent()
     }
 }
 

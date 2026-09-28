@@ -27,6 +27,7 @@ struct ___VARIABLE_categoryName___Row: View {
         ListRow(
             ___VARIABLE_categoryVariableName___.name,
             subtitle: viewOption == .compact ? nil : ___VARIABLE_categoryVariableName___.date.formatted(date: .abbreviated, time: .shortened),
+            action: action,
             leading: {
                 Text(___VARIABLE_categoryVariableName___.emoji ?? "🏕️")
                     .frame(
@@ -40,8 +41,7 @@ struct ___VARIABLE_categoryName___Row: View {
                 if ___VARIABLE_categoryVariableName___.isFavorite {
                     Image.Base.Star.fill.icon(Color.warning)
                 }
-            },
-            action: action
+            }
         )
     }
 }

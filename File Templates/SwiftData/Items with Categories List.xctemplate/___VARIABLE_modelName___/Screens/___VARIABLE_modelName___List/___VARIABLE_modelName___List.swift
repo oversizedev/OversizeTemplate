@@ -27,6 +27,21 @@ public struct ___VARIABLE_modelName___ListOutput: Sendable {
     }
 }
 
+public struct ___VARIABLE_modelName___ListQuery: Equatable, Sendable {
+    public let searchTerm: String
+    public let filterType: ___VARIABLE_modelName___FilterType
+    public let sortType: ___VARIABLE_modelName___SortType
+    public let sortOrder: ___VARIABLE_modelName___SortOrder
+
+    @MainActor
+    init(_ viewState: ___VARIABLE_modelName___ListViewState) {
+        searchTerm = viewState.searchTerm
+        filterType = viewState.filterType
+        sortType = viewState.storage.sortType
+        sortOrder = viewState.storage.sortOrder
+    }
+}
+
 public enum ___VARIABLE_modelName___ViewOption: String, CaseIterable, Identifiable, Sendable {
     case standard, compact
 

@@ -11,7 +11,7 @@ import SwiftUI
 @View(module: ___VARIABLE_modelName___Detail.self)
 public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
     public var body: some View {
-        NavigationListCoverLayoutView {
+        NavigationListCoverLayout {
             stateView(viewState.state)
         } cover: {
             cover
@@ -22,7 +22,7 @@ public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
         .toolbar { toolbarContent }
         .presentationAlert($viewState.alert)
         .presentationHUD($viewState.hud)
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
         .navigationBack($viewState.isDismissed)
         .task { reducer.callAsFunction(.onAppear) }
     }
@@ -75,7 +75,7 @@ public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
     }
 
     private func content(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
-        ListSection {
+        Section {
             ListRow(___VARIABLE_modelVariableName___.date.formatted())
             if let note = ___VARIABLE_modelVariableName___.note {
                 ListRow(note)

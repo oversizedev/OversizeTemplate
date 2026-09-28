@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import Observation
 import OversizeArchitecture
@@ -93,7 +93,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     }
 
     private func onTapEdit___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        logUI("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+        Log.ui("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,

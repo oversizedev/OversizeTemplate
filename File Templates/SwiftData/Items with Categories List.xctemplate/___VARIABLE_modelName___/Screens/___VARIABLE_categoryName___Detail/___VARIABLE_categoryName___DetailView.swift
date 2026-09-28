@@ -14,7 +14,7 @@ import SwiftUI
 @View(module: ___VARIABLE_categoryName___Detail.self)
 public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
     public var body: some View {
-        NavigationListCoverLayoutView(coverHeight: 200) {
+        NavigationListCoverLayout(coverHeight: 200) {
             stateView(viewState.state)
         } cover: {
             cover
@@ -23,10 +23,11 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
         }
         .listLayoutStyle(.smallInsetGrouped)
         .toolbar { toolbarContent }
+        .contentMargins()
         .errorState(viewState.state)
         .presentationAlert($viewState.alert)
         .presentationHUD($viewState.hud)
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
         .navigationBack($viewState.isDismissed)
         .task { reducer.callAsFunction(.onAppear) }
     }
@@ -79,7 +80,7 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
 
     @ViewBuilder
     private func content(_ model: ___VARIABLE_categoryName___DetailViewState.StateModel) -> some View {
-        ListSection("Information") {
+        Section("Information") {
             ListRow(
                 "Name",
                 subtitle: model.___VARIABLE_categoryVariableName___.name
@@ -93,7 +94,7 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
         }
 
         if model.isEmpty {
-            ListSection {
+            Section {
                 TextBox(
                     title: "Nothing Here Yet",
                     subtitle: "Items you add will appear here"

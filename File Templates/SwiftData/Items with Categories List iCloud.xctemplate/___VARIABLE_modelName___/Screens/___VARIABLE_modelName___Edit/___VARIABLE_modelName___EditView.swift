@@ -1,12 +1,12 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import OversizeArchitecture
 import OversizeComponents
 import OversizeCore
 import OversizeLocalizable
-import OversizeNavigation
 import OversizeMediaKit
+import OversizeNavigation
 import OversizeResources
 import OversizeUI
 import SwiftUI
@@ -16,24 +16,25 @@ public struct ___VARIABLE_modelName___EditView: ViewProtocol {
     @FocusState private var focusedField: ___VARIABLE_modelName___EditViewState.FocusField?
 
     public var body: some View {
-        NavigationLayoutView(
+        NavigationLayout(
             viewState.title,
-            content: content,
+            content: content
         )
         .backConfirmationDialog(viewState.isEmptyForm ? nil : .discard)
+        .contentMargins()
         .toolbarTitleDisplayMode(.inline)
         .toolbar(content: { toolbarContent })
         .onChangeValue(of: viewState.focusedField) { focusedField = $0 }
         .task { reducer.callAsFunction(.onAppear) }
         .onAppear { focusedField = .name }
-        .navigate(to: $viewState.destination, method: .managedSheet)
+        .navigationOpen($viewState.destination)
         .navigationDismiss(trigger: $viewState.isDismissed)
         .presentationHUD($viewState.hud)
+        .presentationAlert($viewState.alert)
     }
 
-    @ViewBuilder
     private func content() -> some View {
-        LazyVStack(spacing: .small) {
+        VStack(spacing: .small) {
             titleField
 
             noteField
@@ -41,20 +42,19 @@ public struct ___VARIABLE_modelName___EditView: ViewProtocol {
             ___VARIABLE_categoryVariableName___Field
 
             #if !os(tvOS)
-            urlField
+                urlField
 
-            colorField
+                colorField
             #endif
 
             #if os(iOS)
-            dateField
+                dateField
 
-            imageField
+                imageField
             #endif
         }
         .fieldLabelPosition(.overInput)
         .controlRadius(.large)
-        .paddingContent()
     }
 }
 
@@ -84,7 +84,10 @@ private extension ___VARIABLE_modelName___EditView {
         Select(
             "Select category",
             viewState.___VARIABLE_categoryPluralVariableName___State.result ?? [],
-            selection: $viewState.selected___VARIABLE_categoryName___,
+            selection: Binding<___VARIABLE_categoryName___?>(
+                get: { viewState.selected___VARIABLE_categoryName___ },
+                set: { reducer.callAsFunction(.on___VARIABLE_categoryName___Selected($0)) }
+            ),
             activeModal: $viewState.isShow___VARIABLE_categoryName___Picker
         ) { ___VARIABLE_categoryVariableName___, _ in
             Row(___VARIABLE_categoryVariableName___?.name ?? "Select ___VARIABLE_categoryVariableName___")
@@ -125,8 +128,8 @@ private extension ___VARIABLE_modelName___EditView {
                 "URL",
                 text: Binding(
                     get: { viewState.url?.absoluteString ?? "" },
-                    set: { _ in },
-                ),
+                    set: { _ in }
+                )
             ))
             .focused($focusedField, equals: .url)
             .submitLabel(.done)
@@ -135,9 +138,9 @@ private extension ___VARIABLE_modelName___EditView {
     }
 
     #if os(iOS)
-    private var dateField: some View {
-        DateField(selection: $viewState.date)
-    }
+        private var dateField: some View {
+            DateField(selection: $viewState.date)
+        }
     #endif
 
     private var colorField: some View {
@@ -150,9 +153,9 @@ private extension ___VARIABLE_modelName___EditView {
     }
 
     #if os(iOS)
-    private var imageField: some View {
-        PhotoField($viewState.image)
-    }
+        private var imageField: some View {
+            PhotoField($viewState.image)
+        }
     #endif
 }
 
@@ -162,12 +165,19 @@ private extension ___VARIABLE_modelName___EditView {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.Button.save, systemImage: "checkmark") {
+            Button {
                 reducer.callAsFunction(.onTapSave)
+            } label: {
+                if viewState.isSaving {
+                    ProgressView()
+                } else {
+                    Label(L10n.Button.save, systemImage: "checkmark")
+                }
             }
             .labelStyle(.toolbar)
             .buttonStyle(.toolbarPrimary)
-            .disabled(!viewState.isValidForm)
+            .accessibilityLabel(L10n.Button.save)
+            .disabled(!viewState.isValidForm || viewState.isSaving)
             .keyboardShortcut(.defaultAction)
         }
     }

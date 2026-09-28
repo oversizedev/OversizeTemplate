@@ -13,13 +13,13 @@ public final class ___VARIABLE_categoryName___Entity {
 
     // MARK: Basic Properties
 
-    public var name: String
+    public var name: String = ""
     public var emoji: String?
-    public var colorData: ColorData
-    public var date: Date
+    public var colorData: ColorData = ColorData(color: .blue)
+    public var date: Date = Date()
     public var note: String?
-    public var isFavorite: Bool
-    public var index: Int
+    public var isFavorite: Bool = false
+    public var index: Int = 0
 
     @Relationship(deleteRule: .nullify, inverse: \___VARIABLE_modelName___Entity.___VARIABLE_categoryVariableName___)
     public var ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___Entity]? = []

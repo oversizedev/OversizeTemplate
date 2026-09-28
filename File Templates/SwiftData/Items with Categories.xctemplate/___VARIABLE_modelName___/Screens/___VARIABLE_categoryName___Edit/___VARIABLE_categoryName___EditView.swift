@@ -14,12 +14,11 @@ public struct ___VARIABLE_categoryName___EditView: ViewProtocol {
     @FocusState private var focusedField: ___VARIABLE_categoryName___EditViewState.FocusField?
 
     public var body: some View {
-        NavigationLayoutView(
+        NavigationLayout(
             viewState.title,
             content: content
-        ) {
-            Color.backgroundPrimary
-        }
+        )
+        .contentMargins()
         .backConfirmationDialog(viewState.isEmptyForm ? nil : .discard)
         .toolbarTitleDisplayMode(.inline)
         .toolbar(content: { toolbarContent })
@@ -53,7 +52,6 @@ public struct ___VARIABLE_categoryName___EditView: ViewProtocol {
         }
         .fieldLabelPosition(.overInput)
         .controlRadius(.large)
-        .paddingContent()
     }
 }
 

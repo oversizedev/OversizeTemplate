@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
@@ -43,16 +43,16 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
         await state.update { viewState in
             viewState.alert = .delete {
                 Task {
-                    logData("Attempting to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+                    Log.debug("Attempting to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
                     do {
                         try await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
-                        logDeleted("___VARIABLE_modelName___")
+                        Log.info("___VARIABLE_modelName___ deleted")
                         await self.state.update { viewState in
                             viewState.hud = .delete
                             viewState.isDismissed = true
                         }
                     } catch {
-                        logError("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
+                        Log.error("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
                         await self.state.update { $0.alert = .error(error) }
                     }
                 }
@@ -62,7 +62,7 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
 
     func onTapToggleFavorite() async {
         guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
-            logWarning("Cannot toggle favorite - no ___VARIABLE_modelName___ loaded")
+            Log.warning("Cannot toggle favorite - no ___VARIABLE_modelName___ loaded")
             return
         }
         let wasFavorite = ___VARIABLE_modelVariableName___.isFavorite
@@ -81,13 +81,13 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
         do {
             _ = try await ___VARIABLE_modelVariableName___StorageService.incrementViewCount(___VARIABLE_modelVariableName___)
         } catch {
-            logError("Silently failed to increment view count for ___VARIABLE_modelName___", error: error)
+            Log.error("Silently failed to increment view count for ___VARIABLE_modelName___", error: error)
         }
     }
 
     func onTapSelectCategory(_ category: ___VARIABLE_categoryName___?) async {
         guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
-            logWarning("Cannot select category - no ___VARIABLE_modelName___ loaded")
+            Log.warning("Cannot select category - no ___VARIABLE_modelName___ loaded")
             return
         }
 

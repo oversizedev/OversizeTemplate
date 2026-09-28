@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import OversizeArchitecture
 import OversizeComponents
 import OversizeCore
@@ -12,7 +12,7 @@ import SwiftUI
 @View(module: ___VARIABLE_categoryName___Detail.self)
 public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
     public var body: some View {
-        NavigationCoverLayoutView("Detail") {
+        NavigationCoverLayout("Detail") {
             stateView(viewState.___VARIABLE_categoryVariableName___State)
         } cover: {
             cover
@@ -26,7 +26,7 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
         .toolbar { toolbarContent }
         .presentationAlert($viewState.alert)
         .presentationHUD($viewState.hud)
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
         .navigationBack($viewState.isDismissed)
         .task { reducer.callAsFunction(.onAppear) }
     }

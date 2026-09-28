@@ -24,7 +24,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         image: Data? = nil,
         note: String? = nil,
     ) -> Result<___VARIABLE_modelName___, Error> {
-        logData("Attempting to save new ___VARIABLE_modelName___: '\(name)'")
+        Log.debug("Attempting to save new ___VARIABLE_modelName___: '\(name)'")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         let ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___ = .init(
@@ -39,16 +39,16 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             context.insert(___VARIABLE_modelVariableName___)
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logSuccess("Successfully saved ___VARIABLE_modelName___: '\(name)' in \(String(format: "%.3f", duration))s")
+            Log.info("Successfully saved ___VARIABLE_modelName___: '\(name)' in \(String(format: "%.3f", duration))s")
             return .success(___VARIABLE_modelVariableName___)
         } catch {
-            logError("Save ___VARIABLE_modelName___:", error: error)
+            Log.error("Save ___VARIABLE_modelName___:", error: error)
             return .failure(SwiftDataError.saveFailed)
         }
     }
 
     public func save(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) -> Result<Void, Error> {
-        logData("Attempting to save \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s")
+        Log.debug("Attempting to save \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
@@ -57,10 +57,10 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             }
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logSuccess("Successfully saved \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s in \(String(format: "%.3f", duration))s")
+            Log.info("Successfully saved \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s in \(String(format: "%.3f", duration))s")
             return .success(())
         } catch {
-            logError("Save multiple ___VARIABLE_modelName___s:", error: error)
+            Log.error("Save multiple ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.batchOperationFailed)
         }
     }
@@ -85,7 +85,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
     // MARK: - Fetch Operations
 
     public func fetchAll(includeArchived: Bool = false) -> Result<[___VARIABLE_modelName___], Error> {
-        logData("Fetching all ___VARIABLE_modelName___s (includeArchived: \(includeArchived))")
+        Log.debug("Fetching all ___VARIABLE_modelName___s (includeArchived: \(includeArchived))")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
@@ -101,10 +101,10 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             }
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logSuccess("Successfully fetched \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s in \(String(format: "%.3f", duration))s")
+            Log.info("Successfully fetched \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s in \(String(format: "%.3f", duration))s")
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Fetch all ___VARIABLE_modelName___s:", error: error)
+            Log.error("Fetch all ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -114,7 +114,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         sortOrder: ___VARIABLE_modelName___SortOrder,
         includeArchived: Bool = false,
     ) -> Result<[___VARIABLE_modelName___], Error> {
-        logData("Fetching sorted ___VARIABLE_modelName___s (sort: \(sortType)/\(sortOrder), includeArchived: \(includeArchived))")
+        Log.debug("Fetching sorted ___VARIABLE_modelName___s (sort: \(sortType)/\(sortOrder), includeArchived: \(includeArchived))")
 
         do {
             let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
@@ -131,16 +131,16 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             }
 
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
-            logSuccess("Successfully fetched \(___VARIABLE_modelPluralVariableName___.count) sorted ___VARIABLE_modelName___s")
+            Log.info("Successfully fetched \(___VARIABLE_modelPluralVariableName___.count) sorted ___VARIABLE_modelName___s")
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Fetch sorted ___VARIABLE_modelName___s:", error: error)
+            Log.error("Fetch sorted ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
 
     public func fetch(by id: UUID) -> Result<___VARIABLE_modelName___, Error> {
-        logData("Fetching ___VARIABLE_modelName___ by ID: \(id)")
+        Log.debug("Fetching ___VARIABLE_modelName___ by ID: \(id)")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
@@ -148,14 +148,14 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
                 predicate: #Predicate { $0.id == id }
             )
             guard let ___VARIABLE_modelVariableName___ = try context.fetch(descriptor).first else {
-                logError("___VARIABLE_modelName___ not found with id: \(id)")
+                Log.error("___VARIABLE_modelName___ not found with id: \(id)")
                 return .failure(SwiftDataError.itemNotFound)
             }
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logSuccess("Successfully fetched ___VARIABLE_modelName___ '\(___VARIABLE_modelVariableName___.name)' in \(String(format: "%.3f", duration))s")
+            Log.info("Successfully fetched ___VARIABLE_modelName___ '\(___VARIABLE_modelVariableName___.name)' in \(String(format: "%.3f", duration))s")
             return .success(___VARIABLE_modelVariableName___)
         } catch {
-            logError("Fetch ___VARIABLE_modelName___ by id:", error: error)
+            Log.error("Fetch ___VARIABLE_modelName___ by id:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -175,7 +175,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Fetch ___VARIABLE_modelName___s by date range:", error: error)
+            Log.error("Fetch ___VARIABLE_modelName___s by date range:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -185,7 +185,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let calendar = Calendar.current
             let startOfDay = calendar.startOfDay(for: date)
             guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else {
-                logError("Failed to calculate endOfDay for date: \(date)")
+                Log.error("Failed to calculate endOfDay for date: \(date)")
                 return .failure(SwiftDataError.invalidPredicate)
             }
 
@@ -204,7 +204,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             return .success(___VARIABLE_modelPluralVariableName___)
 
         } catch {
-            logError("Fetch ___VARIABLE_modelName___s for date:", error: error)
+            Log.error("Fetch ___VARIABLE_modelName___s for date:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -220,7 +220,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Fetch favorite ___VARIABLE_modelName___s:", error: error)
+            Log.error("Fetch favorite ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -234,7 +234,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Fetch archived ___VARIABLE_modelName___s:", error: error)
+            Log.error("Fetch archived ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -252,7 +252,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Fetch sorted archived ___VARIABLE_modelName___s:", error: error)
+            Log.error("Fetch sorted archived ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -272,7 +272,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Fetch sorted favorite ___VARIABLE_modelName___s:", error: error)
+            Log.error("Fetch sorted favorite ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -303,7 +303,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Search ___VARIABLE_modelName___s:", error: error)
+            Log.error("Search ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -339,7 +339,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let ___VARIABLE_modelPluralVariableName___ = try context.fetch(descriptor)
             return .success(___VARIABLE_modelPluralVariableName___)
         } catch {
-            logError("Search sorted ___VARIABLE_modelName___s:", error: error)
+            Log.error("Search sorted ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -358,7 +358,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let count = try context.fetchCount(descriptor)
             return .success(count)
         } catch {
-            logError("Count ___VARIABLE_modelName___s:", error: error)
+            Log.error("Count ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -371,7 +371,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let count = try context.fetchCount(descriptor)
             return .success(count)
         } catch {
-            logError("Count favorite ___VARIABLE_modelName___s:", error: error)
+            Log.error("Count favorite ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.fetchFailed)
         }
     }
@@ -388,7 +388,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
         isFavorite: Bool? = nil,
         isArchive: Bool? = nil,
     ) {
-        logData("Updating ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)'")
+        Log.debug("Updating ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)'")
 
         if let name {
             ___VARIABLE_modelVariableName___.name = name
@@ -414,49 +414,49 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
     }
 
     public func toggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> Result<Void, Error> {
-        logData("Toggling favorite for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' (current: \(___VARIABLE_modelVariableName___.isFavorite))")
+        Log.debug("Toggling favorite for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' (current: \(___VARIABLE_modelVariableName___.isFavorite))")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
             ___VARIABLE_modelVariableName___.isFavorite.toggle()
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logSuccess("Successfully toggled favorite for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' in \(String(format: "%.3f", duration))s")
+            Log.info("Successfully toggled favorite for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' in \(String(format: "%.3f", duration))s")
             return .success(())
         } catch {
-            logError("Toggle favorite for ___VARIABLE_modelName___:", error: error)
+            Log.error("Toggle favorite for ___VARIABLE_modelName___:", error: error)
             return .failure(SwiftDataError.saveFailed)
         }
     }
 
     public func toggleArchive(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> Result<Void, Error> {
-        logData("Toggling archive for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' (current: \(___VARIABLE_modelVariableName___.isArchive))")
+        Log.debug("Toggling archive for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' (current: \(___VARIABLE_modelVariableName___.isArchive))")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
             ___VARIABLE_modelVariableName___.isArchive.toggle()
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logSuccess("Successfully toggled archive for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' in \(String(format: "%.3f", duration))s")
+            Log.info("Successfully toggled archive for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' in \(String(format: "%.3f", duration))s")
             return .success(())
         } catch {
-            logError("Toggle archive for ___VARIABLE_modelName___:", error: error)
+            Log.error("Toggle archive for ___VARIABLE_modelName___:", error: error)
             return .failure(SwiftDataError.saveFailed)
         }
     }
 
     public func incrementViewCount(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> Result<Void, Error> {
-        logDebug("Incrementing view count for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' (current: \(___VARIABLE_modelVariableName___.viewCount))")
+        Log.debug("Incrementing view count for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' (current: \(___VARIABLE_modelVariableName___.viewCount))")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
             ___VARIABLE_modelVariableName___.viewCount += 1
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logDebug("Successfully incremented view count for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' in \(String(format: "%.3f", duration))s")
+            Log.debug("Successfully incremented view count for ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' in \(String(format: "%.3f", duration))s")
             return .success(())
         } catch {
-            logError("Increment view count for ___VARIABLE_modelName___:", error: error)
+            Log.error("Increment view count for ___VARIABLE_modelName___:", error: error)
             return .failure(SwiftDataError.saveFailed)
         }
     }
@@ -469,7 +469,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             try context.save()
             return .success(())
         } catch {
-            logError("Archive ___VARIABLE_modelName___s:", error: error)
+            Log.error("Archive ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.batchOperationFailed)
         }
     }
@@ -482,7 +482,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             try context.save()
             return .success(())
         } catch {
-            logError("Unarchive ___VARIABLE_modelName___s:", error: error)
+            Log.error("Unarchive ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.batchOperationFailed)
         }
     }
@@ -490,24 +490,24 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
     // MARK: - Delete Operations
 
     public func delete(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> Result<Void, Error> {
-        logData("Attempting to delete ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)'")
+        Log.debug("Attempting to delete ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)'")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
             context.delete(___VARIABLE_modelVariableName___)
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logDeleted("___VARIABLE_modelName___ '\(___VARIABLE_modelVariableName___.name)' deleted successfully")
-            logDebug("Deletion of ___VARIABLE_modelName___ '\(___VARIABLE_modelVariableName___.name)' took \(String(format: "%.3f", duration))s")
+            Log.info("___VARIABLE_modelName___ '\(___VARIABLE_modelVariableName___.name)' deleted successfully")
+            Log.debug("Deletion of ___VARIABLE_modelName___ '\(___VARIABLE_modelVariableName___.name)' took \(String(format: "%.3f", duration))s")
             return .success(())
         } catch {
-            logError("Delete ___VARIABLE_modelName___:", error: error)
+            Log.error("Delete ___VARIABLE_modelName___:", error: error)
             return .failure(SwiftDataError.deleteFailed)
         }
     }
 
     public func delete(_ ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]) -> Result<Void, Error> {
-        logData("Attempting to delete \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s")
+        Log.debug("Attempting to delete \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
@@ -516,16 +516,16 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             }
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logDeleted("\(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s deleted successfully in \(String(format: "%.3f", duration))s")
+            Log.info("\(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s deleted successfully in \(String(format: "%.3f", duration))s")
             return .success(())
         } catch {
-            logError("Delete multiple ___VARIABLE_modelName___s:", error: error)
+            Log.error("Delete multiple ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.batchOperationFailed)
         }
     }
 
     public func deleteAll(includeArchived: Bool = true) -> Result<Void, Error> {
-        logData("Attempting to delete all ___VARIABLE_modelName___s (includeArchived: \(includeArchived))")
+        Log.debug("Attempting to delete all ___VARIABLE_modelName___s (includeArchived: \(includeArchived))")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         do {
@@ -543,10 +543,10 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             }
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logDeleted("All \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s deleted successfully in \(String(format: "%.3f", duration))s")
+            Log.info("All \(___VARIABLE_modelPluralVariableName___.count) ___VARIABLE_modelName___s deleted successfully in \(String(format: "%.3f", duration))s")
             return .success(())
         } catch {
-            logError("Delete all ___VARIABLE_modelName___s:", error: error)
+            Log.error("Delete all ___VARIABLE_modelName___s:", error: error)
             return .failure(SwiftDataError.batchOperationFailed)
         }
     }
@@ -561,7 +561,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             let count = try context.fetchCount(descriptor)
             return count > 0
         } catch {
-            logError("Check if ___VARIABLE_modelName___ exists:", error: error)
+            Log.error("Check if ___VARIABLE_modelName___ exists:", error: error)
             return false
         }
     }
@@ -576,7 +576,7 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
     // MARK: - Duplicate Operations
 
     public func duplicate(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> Result<___VARIABLE_modelName___, Error> {
-        logData("Attempting to duplicate ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)'")
+        Log.debug("Attempting to duplicate ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)'")
         let startTime = CFAbsoluteTimeGetCurrent()
 
         let duplicatedProduct = ___VARIABLE_modelName___(
@@ -594,10 +594,10 @@ public actor ___VARIABLE_modelName___StorageService: ModelActor {
             context.insert(duplicatedProduct)
             try context.save()
             let duration = CFAbsoluteTimeGetCurrent() - startTime
-            logSuccess("Successfully duplicated ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' -> '\(duplicatedProduct.name)' in \(String(format: "%.3f", duration))s")
+            Log.info("Successfully duplicated ___VARIABLE_modelName___: '\(___VARIABLE_modelVariableName___.name)' -> '\(duplicatedProduct.name)' in \(String(format: "%.3f", duration))s")
             return .success(duplicatedProduct)
         } catch {
-            logError("Duplicate ___VARIABLE_modelName___:", error: error)
+            Log.error("Duplicate ___VARIABLE_modelName___:", error: error)
             return .failure(SwiftDataError.saveFailed)
         }
     }

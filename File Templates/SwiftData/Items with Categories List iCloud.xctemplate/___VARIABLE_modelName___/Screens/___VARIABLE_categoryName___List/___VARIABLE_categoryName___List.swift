@@ -19,6 +19,21 @@ public struct ___VARIABLE_categoryName___ListOutput: Sendable {
     public init() {}
 }
 
+public struct ___VARIABLE_categoryName___ListQuery: Equatable, Sendable {
+    public let searchTerm: String
+    public let filterType: ___VARIABLE_categoryName___FilterType
+    public let sortType: ___VARIABLE_categoryName___SortType
+    public let sortOrder: ___VARIABLE_categoryName___SortOrder
+
+    @MainActor
+    init(_ viewState: ___VARIABLE_categoryName___ListViewState) {
+        searchTerm = viewState.searchTerm
+        filterType = viewState.filterType
+        sortType = viewState.storage.sortType
+        sortOrder = viewState.storage.sortOrder
+    }
+}
+
 public enum ___VARIABLE_categoryName___ViewOption: String, CaseIterable, Identifiable, Sendable {
     case standard, compact
 

@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import ObservableDefaults
 import Observation
@@ -47,8 +47,9 @@ public extension ___VARIABLE_modelName___ListViewState {
 // MARK: - App Storage
 
 public extension ___VARIABLE_modelName___ListViewState {
-    @ObservableDefaults
-    final class Storage: @unchecked Sendable {
+    @MainActor
+    @ObservableDefaults(ignoreExternalChanges: true)
+    final class Storage: Sendable {
         @DefaultsKey(userDefaultsKey: "___VARIABLE_modelName___ListView.DisplayType")
         public var displayType: ___VARIABLE_modelName___ListDisplayType = .list
 

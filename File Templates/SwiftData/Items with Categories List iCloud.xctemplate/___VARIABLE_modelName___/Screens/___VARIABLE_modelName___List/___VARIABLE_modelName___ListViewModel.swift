@@ -16,7 +16,8 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
 
     func onAppear() async {
-        await fetchData()
+        let hasLoadedData = await state.state.result != nil
+        await fetchData(showsLoading: !hasLoadedData)
     }
 
     func onRefresh() async {
@@ -24,11 +25,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     }
 
     func onChangeSearchTerm(_ searchTerm: String) async {
-        if searchTerm.isEmpty {
-            await fetch___VARIABLE_modelName___s()
-        } else {
-            await fetchSearched___VARIABLE_modelName___s(searchTerm: searchTerm)
-        }
+        await fetchData()
     }
 
     func onTapCreate___VARIABLE_modelName___() async {
@@ -42,22 +39,41 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     }
 
     func onTapDetail___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        await state.update { $0.destination = .___VARIABLE_modelVariableName___Details___VARIABLE_modelName___(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___) }
+        await state.update {
+            $0.presented___VARIABLE_modelName___Id = ___VARIABLE_modelVariableName___.id
+            $0.destination = .___VARIABLE_modelVariableName___Details___VARIABLE_modelName___(
+                ___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___,
+                onEdit: Callback { _ in
+                    Task { await self.fetchData() }
+                },
+                onDelete: Callback { deleted___VARIABLE_modelName___ in
+                    Task {
+                        await self.state.update { viewState in
+                            if viewState.presented___VARIABLE_modelName___Id == deleted___VARIABLE_modelName___.id {
+                                viewState.hud = .delete()
+                                viewState.dismissDetail = true
+                            }
+                        }
+                        await self.fetchData()
+                    }
+                }
+            )
+        }
     }
 
     func onChangeSortType(_ sortType: ___VARIABLE_modelName___SortType) async {
         await state.update { $0.storage.sortType = sortType }
-        await fetch___VARIABLE_modelName___s()
+        await fetchData()
     }
 
     func onChangeSortOrder(_ sortOrder: ___VARIABLE_modelName___SortOrder) async {
         await state.update { $0.storage.sortOrder = sortOrder }
-        await fetch___VARIABLE_modelName___s()
+        await fetchData()
     }
 
     func onChangeFilterType(_ filterType: ___VARIABLE_modelName___FilterType) async {
         await state.update { $0.filterType = filterType }
-        await fetch___VARIABLE_modelName___s()
+        await fetchData()
     }
 
     func onChangeViewOption(_ viewOption: ___VARIABLE_modelName___ViewOption) async {
@@ -71,7 +87,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
                     do {
                         try await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
                         await self.state.update { $0.hud = .delete() }
-                        await self.fetch___VARIABLE_modelName___s()
+                        await self.fetchData()
                     } catch {
                         await self.state.update { $0.alert = .error(error) }
                     }
@@ -81,7 +97,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     }
 
     private func onTapEdit___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        logUI("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+        Log.ui("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
@@ -97,7 +113,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
         do {
             _ = try await ___VARIABLE_modelVariableName___StorageService.toggleFavorite(___VARIABLE_modelVariableName___)
             await state.update { $0.hud = wasFavorite ? .unfavorite() : .favorite() }
-            await fetch___VARIABLE_modelName___s()
+            await fetchData()
         } catch {
             await state.update { $0.alert = .error(error) }
         }
@@ -107,7 +123,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
         do {
             _ = try await ___VARIABLE_modelVariableName___StorageService.duplicate(___VARIABLE_modelVariableName___)
             await state.update { $0.hud = .success("Duplicated") }
-            await fetch___VARIABLE_modelName___s()
+            await fetchData()
         } catch {
             await state.update { $0.alert = .error(error) }
         }
@@ -117,7 +133,7 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
         do {
             _ = try await ___VARIABLE_modelVariableName___StorageService.update___VARIABLE_categoryName___(___VARIABLE_modelVariableName___, categoryId: ___VARIABLE_categoryVariableName___?.id)
             await state.update { $0.hud = ___VARIABLE_categoryVariableName___ != nil ? .success("___VARIABLE_categoryName___ assigned") : .success("___VARIABLE_categoryName___ removed") }
-            await fetch___VARIABLE_modelName___s()
+            await fetchData()
         } catch {
             await state.update { $0.alert = .error(error) }
         }
@@ -126,10 +142,23 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     private func onTapCreate___VARIABLE_categoryName___For___VARIABLE_modelName___(_: ___VARIABLE_modelName___) async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Create(
-                onSave: Callback { _ in
-                    Task { await self.fetchData() }
+                onSave: Callback { ___VARIABLE_categoryVariableName___ in
+                    Task {
+                        await self.add___VARIABLE_categoryName___ToCurrentState(___VARIABLE_categoryVariableName___)
+                        await self.fetchData()
+                    }
                 }
             )
+        }
+    }
+
+    private func add___VARIABLE_categoryName___ToCurrentState(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async {
+        await state.update { viewState in
+            guard case var .result(model) = viewState.state,
+                  !model.___VARIABLE_categoryPluralVariableName___.contains(where: { $0.id == ___VARIABLE_categoryVariableName___.id })
+            else { return }
+            model.___VARIABLE_categoryPluralVariableName___.append(___VARIABLE_categoryVariableName___)
+            viewState.state = .result(model)
         }
     }
 
@@ -154,75 +183,43 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
 }
 
 public extension ___VARIABLE_modelName___ListViewModel {
-    func fetchData() async {
-        let sortType = await state.storage.sortType
-        let sortOrder = await state.storage.sortOrder
-        let filterType = await state.filterType
+    func fetchData(showsLoading: Bool = false) async {
+        if showsLoading {
+            await state.update { $0.state = .loading }
+        }
+
+        let query = await ___VARIABLE_modelName___ListQuery(state)
 
         do {
-            async let ___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelVariableName___StorageService.fetch(
-                filterType: filterType,
-                sortType: sortType,
-                sortOrder: sortOrder,
-                ___VARIABLE_categoryVariableName___Id: input?.___VARIABLE_categoryVariableName___Id
-            )
             async let ___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_categoryVariableName___StorageService.fetch()
+            let ___VARIABLE_modelPluralVariableName___ = if query.searchTerm.isEmpty {
+                try await ___VARIABLE_modelVariableName___StorageService.fetch(
+                    filterType: query.filterType,
+                    sortType: query.sortType,
+                    sortOrder: query.sortOrder,
+                    ___VARIABLE_categoryVariableName___Id: input?.___VARIABLE_categoryVariableName___Id
+                )
+            } else {
+                try await ___VARIABLE_modelVariableName___StorageService.search(
+                    query: query.searchTerm,
+                    filterType: query.filterType,
+                    sortType: query.sortType,
+                    sortOrder: query.sortOrder
+                )
+            }
             let model = try await ___VARIABLE_modelName___ListViewState.StateModel(
                 ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
                 ___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___
             )
-            await state.update { $0.state = .result(model) }
+            await state.update { viewState in
+                guard query == .init(viewState) else { return }
+                viewState.state = .result(model)
+            }
         } catch {
-            await state.update { $0.state = .error(error) }
-        }
-    }
-
-    func fetchSearched___VARIABLE_modelName___s(searchTerm: String) async {
-        let sortType = await state.storage.sortType
-        let sortOrder = await state.storage.sortOrder
-        let filterType = await state.filterType
-        let existing___VARIABLE_categoryPluralVariableName___ = await state.state.result?.___VARIABLE_categoryPluralVariableName___ ?? []
-
-        do {
-            let ___VARIABLE_modelPluralVariableName___ = try await ___VARIABLE_modelVariableName___StorageService.search(
-                query: searchTerm,
-                filterType: filterType,
-                sortType: sortType,
-                sortOrder: sortOrder
-            )
-
-            let model = ___VARIABLE_modelName___ListViewState.StateModel(
-                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
-                ___VARIABLE_categoryPluralVariableName___: existing___VARIABLE_categoryPluralVariableName___
-            )
-            await state.update { $0.state = .result(model) }
-
-        } catch {
-            await state.update { $0.state = .error(error) }
-        }
-    }
-
-    func fetch___VARIABLE_modelName___s() async {
-        let sortType = await state.storage.sortType
-        let sortOrder = await state.storage.sortOrder
-        let filterType = await state.filterType
-        let existing___VARIABLE_categoryPluralVariableName___ = await state.state.result?.___VARIABLE_categoryPluralVariableName___ ?? []
-
-        do {
-            let ___VARIABLE_modelPluralVariableName___ = try await ___VARIABLE_modelVariableName___StorageService.fetch(
-                filterType: filterType,
-                sortType: sortType,
-                sortOrder: sortOrder,
-                ___VARIABLE_categoryVariableName___Id: input?.___VARIABLE_categoryVariableName___Id
-            )
-
-            let model = ___VARIABLE_modelName___ListViewState.StateModel(
-                ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,
-                ___VARIABLE_categoryPluralVariableName___: existing___VARIABLE_categoryPluralVariableName___
-            )
-            await state.update { $0.state = .result(model) }
-        } catch {
-            await state.update { $0.state = .error(error) }
+            await state.update { viewState in
+                guard query == .init(viewState) else { return }
+                viewState.state = .error(error)
+            }
         }
     }
 }

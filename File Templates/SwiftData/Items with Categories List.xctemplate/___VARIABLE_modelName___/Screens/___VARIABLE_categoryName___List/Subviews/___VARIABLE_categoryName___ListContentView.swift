@@ -31,7 +31,7 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
     }
 
     public var body: some View {
-        ListSection {
+        Section {
             ForEach(___VARIABLE_categoryPluralVariableName___) { ___VARIABLE_categoryVariableName___ in
                 ___VARIABLE_categoryName___Row(___VARIABLE_categoryVariableName___, viewOption: viewOption) {
                     onAction(.onTapItem(___VARIABLE_categoryVariableName___))

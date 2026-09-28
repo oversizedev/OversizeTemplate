@@ -19,8 +19,10 @@ public final class ___VARIABLE_categoryName___ListViewState: ViewStateProtocol {
     public var state: LoadingState<StateModel> = .idle
     public var searchTerm: String = ""
     public var destination: ___VARIABLE_modelName___Destinations?
+    public var presented___VARIABLE_categoryName___Id: UUID?
     public var alert: AppAlert?
     public var hud: OversizeNavigation.HUD?
+    public var dismissDetail: Bool = false
 
     public var filterType: ___VARIABLE_categoryName___FilterType
 
@@ -45,8 +47,9 @@ public extension ___VARIABLE_categoryName___ListViewState {
 // MARK: - App Storage
 
 public extension ___VARIABLE_categoryName___ListViewState {
-    @ObservableDefaults
-    final class Storage: @unchecked Sendable {
+    @MainActor
+    @ObservableDefaults(ignoreExternalChanges: true)
+    final class Storage: Sendable {
         @DefaultsKey(userDefaultsKey: "___VARIABLE_categoryName___ListView.SortType")
         public var sortType: ___VARIABLE_categoryName___SortType = .date
 

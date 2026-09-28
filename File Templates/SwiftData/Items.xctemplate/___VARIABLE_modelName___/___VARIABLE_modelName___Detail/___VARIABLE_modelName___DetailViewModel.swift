@@ -71,7 +71,7 @@ public extension ___VARIABLE_modelName___DetailViewModel {
                 switch action {
                 case .save:
                     Task {
-                        logSuccess("___VARIABLE_modelName___ edit completed")
+                        Log.info("___VARIABLE_modelName___ edit completed")
                         await self.fetchData()
                     }
                 }
@@ -84,14 +84,14 @@ public extension ___VARIABLE_modelName___DetailViewModel {
         await state.update { viewState in
             viewState.alert = .delete {
                 Task {
-                    logData("Attempting to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+                    Log.debug("Attempting to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
                     let result = await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
                     switch result {
                     case .success:
-                        logDeleted("___VARIABLE_modelName___")
+                        Log.info("___VARIABLE_modelName___")
                         await self.onDeleteSuccess()
                     case let .failure(error):
-                        logError("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
+                        Log.error("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
                         await self.onDeleteFailure(error)
                     }
                 }
@@ -112,7 +112,7 @@ public extension ___VARIABLE_modelName___DetailViewModel {
 
     private func toggleFavorite() async {
         guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
-            logWarning("Cannot toggle favorite - no ___VARIABLE_modelName___ loaded")
+            Log.warning("Cannot toggle favorite - no ___VARIABLE_modelName___ loaded")
             return
         }
         let wasFavorite = ___VARIABLE_modelVariableName___.isFavorite
@@ -129,7 +129,7 @@ public extension ___VARIABLE_modelName___DetailViewModel {
 
     private func toggleArchive() async {
         guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
-            logWarning("Cannot toggle archive - no ___VARIABLE_modelName___ loaded")
+            Log.warning("Cannot toggle archive - no ___VARIABLE_modelName___ loaded")
             return
         }
         let wasArchived = ___VARIABLE_modelVariableName___.isArchive

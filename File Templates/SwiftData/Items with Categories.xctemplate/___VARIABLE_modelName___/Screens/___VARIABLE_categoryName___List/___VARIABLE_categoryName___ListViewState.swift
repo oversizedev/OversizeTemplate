@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import ObservableDefaults
 import Observation
@@ -34,7 +34,7 @@ public final class ___VARIABLE_categoryName___ListViewState: ViewStateProtocol {
 // MARK: - User Actions
 
 public extension ___VARIABLE_categoryName___ListViewState {
-    struct StateModel: Emptyable, SearchableState, Sendable {
+    struct StateModel: Emptyable, Sendable {
         public var ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]
 
         public var isEmpty: Bool {
@@ -48,8 +48,9 @@ public extension ___VARIABLE_categoryName___ListViewState {
 // MARK: - App Storage
 
 public extension ___VARIABLE_categoryName___ListViewState {
-    @ObservableDefaults
-    final class Storage: @unchecked Sendable {
+    @MainActor
+    @ObservableDefaults(ignoreExternalChanges: true)
+    final class Storage: Sendable {
         @DefaultsKey(userDefaultsKey: "___VARIABLE_categoryName___ListView.DisplayType")
         public var displayType: ___VARIABLE_categoryName___ListDisplayType = .list
 

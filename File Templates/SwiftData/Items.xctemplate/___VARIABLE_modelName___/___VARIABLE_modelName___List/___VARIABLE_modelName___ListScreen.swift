@@ -24,7 +24,7 @@ public struct ___VARIABLE_modelName___ListScreen: ViewProtocol {
     }
 
     public var body: some View {
-        NavigationLayoutView(viewState.filterType.title) {
+        NavigationLayout(viewState.filterType.title) {
             stateView(viewState.___VARIABLE_modelPluralVariableName___State)
         } background: {
             Color.backgroundPrimary
@@ -44,7 +44,7 @@ public struct ___VARIABLE_modelName___ListScreen: ViewProtocol {
         .refreshable(action: {
             reducer.callAsFunction(.onRefresh)
         })
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
         .onChange(of: viewState.searchTerm) {
             reducer.callAsFunction(.onChangeSearchTerm(oldValue: $0, newValue: $1))
         }
@@ -346,7 +346,7 @@ private extension ___VARIABLE_modelName___ListScreen {
 public extension ___VARIABLE_modelName___ListScreen {
     @MainActor
     static func build() -> some View {
-        logNotice("Building ___VARIABLE_modelName___ListScreen")
+        Log.notice("Building ___VARIABLE_modelName___ListScreen")
         let viewState = ___VARIABLE_modelName___ListViewState()
         let viewModel = ___VARIABLE_modelName___ListViewModel(state: viewState)
         let reducer = Reducer(viewModel: viewModel)
@@ -355,7 +355,7 @@ public extension ___VARIABLE_modelName___ListScreen {
 
     @MainActor
     static func buildArchive() -> some View {
-        logNotice("Building ___VARIABLE_modelName___ListScreen (Archive)")
+        Log.notice("Building ___VARIABLE_modelName___ListScreen (Archive)")
         let viewState = ___VARIABLE_modelName___ListViewState(filterType: .archived)
         let viewModel = ___VARIABLE_modelName___ListViewModel(state: viewState)
         let reducer = Reducer(viewModel: viewModel)
@@ -364,7 +364,7 @@ public extension ___VARIABLE_modelName___ListScreen {
 
     @MainActor
     static func buildFavorites() -> some View {
-        logNotice("Building ___VARIABLE_modelName___ListScreen (Favorites)")
+        Log.notice("Building ___VARIABLE_modelName___ListScreen (Favorites)")
         let viewState = ___VARIABLE_modelName___ListViewState(filterType: .favorites)
         let viewModel = ___VARIABLE_modelName___ListViewModel(state: viewState)
         let reducer = Reducer(viewModel: viewModel)

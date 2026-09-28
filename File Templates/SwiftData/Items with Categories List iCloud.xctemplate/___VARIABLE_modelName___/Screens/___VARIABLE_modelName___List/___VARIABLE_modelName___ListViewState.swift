@@ -19,14 +19,16 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
     public var state: LoadingState<StateModel> = .idle
     public var searchTerm: String = ""
     public var destination: ___VARIABLE_modelName___Destinations?
+    public var presented___VARIABLE_modelName___Id: UUID?
     public var alert: AppAlert?
     public var hud: OversizeNavigation.HUD?
+    public var dismissDetail: Bool = false
 
     public var filterType: ___VARIABLE_modelName___FilterType
 
     /// Initialization
-    public init(input _: ___VARIABLE_modelName___List.Input?) {
-        filterType = .standard
+    public init(input: ___VARIABLE_modelName___List.Input?) {
+        filterType = input?.filterType ?? .standard
     }
 }
 
@@ -46,8 +48,9 @@ public extension ___VARIABLE_modelName___ListViewState {
 // MARK: - App Storage
 
 public extension ___VARIABLE_modelName___ListViewState {
-    @ObservableDefaults
-    final class Storage: @unchecked Sendable {
+    @MainActor
+    @ObservableDefaults(ignoreExternalChanges: true)
+    final class Storage: Sendable {
         @DefaultsKey(userDefaultsKey: "___VARIABLE_modelName___ListView.SortType")
         public var sortType: ___VARIABLE_modelName___SortType = .date
 

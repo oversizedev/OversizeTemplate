@@ -27,12 +27,12 @@ struct ___VARIABLE_modelName___Row: View {
         ListRow(
             ___VARIABLE_modelVariableName___.name,
             subtitle: viewOption == .compact ? nil : ___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened),
+            action: action,
             trailing: {
                 if ___VARIABLE_modelVariableName___.isFavorite {
                     Image.Base.Star.fill.icon(Color.warning)
                 }
-            },
-            action: action
+            }
         )
     }
 }

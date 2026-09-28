@@ -1,8 +1,6 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
-import FactoryKit
-import ObservableDefaults
 import Observation
 import OversizeArchitecture
 import OversizeCore
@@ -31,13 +29,22 @@ public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
     public var isDismissed: Bool = .init()
     public var isEmptyForm: Bool = true
     public var isValidForm: Bool = false
+    public var isDuplicateName: Bool = false
     public var hud: OversizeNavigation.HUD?
+    public var alert: AppAlert?
 
     public let emojis = "🍏🍎🍐🍊🍋🍋‍🟩🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑"
 
     /// Constants
     public let source: ___VARIABLE_categoryName___EditInput.Source?
     public let ___VARIABLE_categoryVariableName___Id: UUID
+
+    // Original Values
+    #if os(macOS)
+        public var originalImage: NSImage?
+    #else
+        public var originalImage: UIImage?
+    #endif
 
     /// View
     var title: String {
@@ -48,6 +55,14 @@ public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
         }
     }
 
+    var trimmedName: String {
+        name.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var isImageChanged: Bool {
+        image !== originalImage
+    }
+
     /// Initialization
     public init(input: ___VARIABLE_categoryName___Edit.Input?) {
         source = input?.source
@@ -56,30 +71,21 @@ public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
         case let .___VARIABLE_categoryVariableName___(___VARIABLE_categoryVariableName___):
             ___VARIABLE_categoryVariableName___Id = ___VARIABLE_categoryVariableName___.id
             ___VARIABLE_categoryVariableName___State = .result(___VARIABLE_categoryVariableName___)
-            setFields(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___)
+            name = ___VARIABLE_categoryVariableName___.name
+            emoji = ___VARIABLE_categoryVariableName___.emoji ?? "🥕"
+            note = ___VARIABLE_categoryVariableName___.note ?? ""
+            color = ___VARIABLE_categoryVariableName___.color
+            date = ___VARIABLE_categoryVariableName___.date
+            #if os(macOS)
+                image = ___VARIABLE_categoryVariableName___.imageData.flatMap { NSImage(data: $0) }
+            #else
+                image = ___VARIABLE_categoryVariableName___.imageData.flatMap { UIImage(data: $0) }
+            #endif
+            originalImage = image
         case let .id(id):
             ___VARIABLE_categoryVariableName___Id = id
         case .none:
             ___VARIABLE_categoryVariableName___Id = UUID()
-        }
-    }
-}
-
-// MARK: - User Actions
-
-public extension ___VARIABLE_categoryName___EditViewState {
-    func setFields(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) {
-        name = ___VARIABLE_categoryVariableName___.name
-        emoji = ___VARIABLE_categoryVariableName___.emoji ?? "🥕"
-        note = ___VARIABLE_categoryVariableName___.note ?? ""
-        color = ___VARIABLE_categoryVariableName___.color
-        date = ___VARIABLE_categoryVariableName___.date
-        if let data = ___VARIABLE_categoryVariableName___.imageData {
-            #if os(macOS)
-                image = NSImage(data: data)
-            #else
-                image = UIImage(data: data)
-            #endif
         }
     }
 }

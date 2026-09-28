@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
@@ -45,7 +45,7 @@ public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
 
     func onTapSave() async {
         guard await !state.isEmptyForm else {
-            logError("Cannot save ___VARIABLE_categoryVariableName___, form is empty")
+            Log.error("Cannot save ___VARIABLE_categoryVariableName___, form is empty")
             return
         }
         await state.update { $0.isSaving = true }
@@ -112,25 +112,28 @@ private extension ___VARIABLE_categoryName___EditViewModel {
 
     func update___VARIABLE_categoryName___() async throws -> ___VARIABLE_categoryName___ {
         guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else {
-            logError("Cannot update ___VARIABLE_categoryName___ - no product loaded")
+            Log.error("Cannot update ___VARIABLE_categoryName___ - no product loaded")
             await state.update { $0.hud = .default("No category loaded") }
-            throw SwiftDataError.itemNotFound
+            throw PersistenceError.itemNotFound
         }
 
         do {
+            let image: Data?? = await state.isImageChanged
+                ? .some(state.image?.jpegData(compressionQuality: 0.5))
+                : .none
             let updatedCategory = try await ___VARIABLE_modelVariableName___CategoryStorageService.update(
                 ___VARIABLE_categoryVariableName___,
                 name: state.name,
-                emoji: state.emoji,
+                emoji: .some(state.emoji),
                 color: state.color,
                 date: state.date ?? Date(),
-                image: state.image?.jpegData(compressionQuality: 0.5),
-                note: state.note.isEmpty ? nil : state.note,
+                image: image,
+                note: .some(state.note.isEmpty ? nil : state.note)
             )
 
             return updatedCategory
         } catch {
-            logError("Failed to update ___VARIABLE_categoryName___:", error: error)
+            Log.error("Failed to update ___VARIABLE_categoryName___:", error: error)
             await state.update { $0.hud = .error(error) }
             throw error
         }

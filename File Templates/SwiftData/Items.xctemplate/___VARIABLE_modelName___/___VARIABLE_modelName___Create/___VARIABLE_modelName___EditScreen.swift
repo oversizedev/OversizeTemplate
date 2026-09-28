@@ -25,7 +25,7 @@ public struct ___VARIABLE_modelName___EditScreen: ViewProtocol {
     }
 
     public var body: some View {
-        NavigationLayoutView(
+        NavigationLayout(
             viewState.title,
             content: content,
         )

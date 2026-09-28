@@ -13,11 +13,11 @@ public final class ___VARIABLE_modelName___Entity {
 
     // MARK: Basic Properties
 
-    public var name: String
-    public var colorData: ColorData
-    public var date: Date
+    public var name: String = ""
+    public var colorData: ColorData = ColorData(color: .blue)
+    public var date: Date = Date()
     public var note: String?
-    public var isFavorite: Bool
+    public var isFavorite: Bool = false
 
     public var ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity?
 

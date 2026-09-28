@@ -14,7 +14,7 @@ import SwiftUI
 @View(module: ___VARIABLE_modelName___List.self)
 public struct ___VARIABLE_modelName___ListView: ViewProtocol {
     public var body: some View {
-        NavigationListLayoutView(viewState.filterType.title) {
+        NavigationListLayout(viewState.filterType.title) {
             stateView(viewState.state)
         }
         .listLayoutStyle(.smallInsetGrouped)
@@ -43,7 +43,8 @@ public struct ___VARIABLE_modelName___ListView: ViewProtocol {
         .toolbarTitleDisplayMode(.inline)
         .presentationHUD($viewState.hud)
         .presentationAlert($viewState.alert)
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
+        .navigationBack($viewState.dismissDetail)
         .onChangeValue(of: viewState.searchTerm) {
             reducer.callAsFunction(.onChangeSearchTerm($0))
         }

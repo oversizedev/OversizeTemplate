@@ -34,7 +34,7 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
     }
 
     public var body: some View {
-        ListSection {
+        Section {
             ForEach(___VARIABLE_categoryPluralVariableName___) { ___VARIABLE_categoryVariableName___ in
                 ___VARIABLE_categoryName___Row(___VARIABLE_categoryVariableName___, viewOption: viewOption) {
                     onAction(.onTapItem(___VARIABLE_categoryVariableName___))
@@ -67,23 +67,23 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
                 }
                 .contextMenu { contextMenu(for: ___VARIABLE_categoryVariableName___) }
             }
+        }
 
-            if hasUncategorized {
-                ListSection {
-                    ListRow("No Category") {
-                        onAction(.onTapUncategorized)
-                    } leading: {
-                        Text("🗂️")
-                            .frame(
-                                width: 24,
-                                height: 24,
-                                alignment: .center
-                            )
-                            .iconOnSurface()
-                    }
-                    .navigatable()
-                    .listRowSeparator(.hidden)
+        if hasUncategorized {
+            Section {
+                ListRow("No Category") {
+                    onAction(.onTapUncategorized)
+                } leading: {
+                    Text("🗂️")
+                        .frame(
+                            width: 24,
+                            height: 24,
+                            alignment: .center
+                        )
+                        .iconOnSurface()
                 }
+                .navigatable()
+                .listRowSeparator(.hidden)
             }
         }
     }

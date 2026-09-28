@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
@@ -39,11 +39,11 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
 
     func onCategorySelected(_ category: ___VARIABLE_categoryName___?) async {
         await state.update { $0.selectedCategory = category }
-        logDebug("Category selected: \(category?.name ?? "None")")
+        Log.debug("Category selected: \(category?.name ?? "None")")
     }
 
     func onCategoryCreated(_ category: ___VARIABLE_categoryName___) async {
-        logDebug("Category created: \(category.name)")
+        Log.debug("Category created: \(category.name)")
         await fetchCategories()
         await state.update { $0.selectedCategory = category }
     }
@@ -64,12 +64,12 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
             viewState.isEmptyForm = viewState.name.isEmpty && viewState.note.isEmpty
             viewState.isValidForm = !viewState.name.isEmpty
         }
-        await logDebug("Form validation changed - valid: \(state.isValidForm)")
+        await Log.debug("Form validation changed - valid: \(state.isValidForm)")
     }
 
     func onTapSave() async {
         guard await !state.isEmptyForm else {
-            logError("Cannot save ___VARIABLE_modelVariableName___, form is empty")
+            Log.error("Cannot save ___VARIABLE_modelVariableName___, form is empty")
             return
         }
         await state.update { $0.isSaving = true }
@@ -112,7 +112,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
             }
         } catch {
             await state.update { $0.categoriesState = .error(error) }
-            logError("Failed to fetch categories:", error: error)
+            Log.error("Failed to fetch categories:", error: error)
         }
     }
 
@@ -145,18 +145,21 @@ public extension ___VARIABLE_modelName___EditViewModel {
 
     func update___VARIABLE_modelName___() async -> ___VARIABLE_modelName___? {
         guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
-            logError("Cannot update ___VARIABLE_modelName___ - no product loaded")
+            Log.error("Cannot update ___VARIABLE_modelName___ - no product loaded")
             await state.update { $0.hud = .destructive("Failed to load product data") }
             return nil
         }
         do {
+            let image: Data?? = await state.isImageChanged
+                ? .some(state.image?.jpegData(compressionQuality: 0.5))
+                : .none
             let updatedProduct = try await ___VARIABLE_modelVariableName___StorageService.update(
                 ___VARIABLE_modelVariableName___,
                 name: state.name,
                 color: state.color,
                 date: state.date ?? Date(),
-                image: state.image?.jpegData(compressionQuality: 0.5),
-                note: state.note.isEmpty ? nil : state.note
+                image: image,
+                note: .some(state.note.isEmpty ? nil : state.note)
             )
 
             let finalProduct = try await ___VARIABLE_modelVariableName___StorageService.updateCategory(
@@ -165,7 +168,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
             )
             return finalProduct
         } catch {
-            logError("Failed to update ___VARIABLE_modelName___:", error: error)
+            Log.error("Failed to update ___VARIABLE_modelName___:", error: error)
             await state.update { $0.hud = .destructive("Failed to update product") }
             return nil
         }

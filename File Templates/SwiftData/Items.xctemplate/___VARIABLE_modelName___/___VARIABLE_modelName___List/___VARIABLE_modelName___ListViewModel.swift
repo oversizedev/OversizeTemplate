@@ -113,7 +113,7 @@ public extension ___VARIABLE_modelName___ListViewModel {
                 switch action {
                 case .save:
                     Task {
-                        logSuccess("New ___VARIABLE_modelName___ created")
+                        Log.info("New ___VARIABLE_modelName___ created")
                         await self.fetchData()
                     }
                 }
@@ -182,13 +182,13 @@ public extension ___VARIABLE_modelName___ListViewModel {
     }
 
     private func onTapEdit___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        logUI("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+        Log.ui("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Edit(___VARIABLE_modelVariableName___, callback: .init(handler: { action in
                 switch action {
                 case .save:
                     Task {
-                        logSuccess("___VARIABLE_modelName___ edit completed: \(___VARIABLE_modelVariableName___.name)")
+                        Log.info("___VARIABLE_modelName___ edit completed: \(___VARIABLE_modelVariableName___.name)")
                         await self.fetchData()
                     }
                 }

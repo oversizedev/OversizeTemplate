@@ -12,6 +12,8 @@ public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
     /// Services
     @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
 
+    private var saveTask: Task<Void, Never>?
+
     // User Actions
 
     func onAppear() async {
@@ -53,44 +55,68 @@ public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
     }
 
     func updateFormValidation() async {
+        let trimmedName = await state.trimmedName
+
+        guard !trimmedName.isEmpty else {
+            await state.update { viewState in
+                guard viewState.trimmedName == trimmedName else { return }
+                viewState.isEmptyForm = viewState.note.isEmpty
+                viewState.isDuplicateName = false
+                viewState.isValidForm = false
+            }
+            return
+        }
+
+        let excludingId: UUID? = await state.source == nil ? nil : state.___VARIABLE_categoryVariableName___Id
+
+        var isDuplicate = false
+        do {
+            isDuplicate = try await ___VARIABLE_categoryVariableName___StorageService.isNameTaken(trimmedName, excludingId: excludingId)
+        } catch {
+            Log.error("Failed to check ___VARIABLE_categoryVariableName___ name uniqueness:", error: error)
+        }
+
         await state.update { viewState in
-            viewState.isEmptyForm = viewState.name.isEmpty && viewState.note.isEmpty
-            viewState.isValidForm = !viewState.name.isEmpty
+            guard viewState.trimmedName == trimmedName else { return }
+            viewState.isEmptyForm = false
+            viewState.isDuplicateName = isDuplicate
+            viewState.isValidForm = !isDuplicate
         }
     }
 
     func onTapSave() async {
-        guard await !state.isEmptyForm else {
-            logError("Cannot save ___VARIABLE_categoryVariableName___, form is empty")
-            return
+        if let saveTask {
+            return await saveTask.value
         }
-        await state.update { $0.isSaving = true }
+        let task = Task {
+            defer { saveTask = nil }
+            guard await !state.isEmptyForm, await state.isValidForm else { return }
+            await state.update { $0.isSaving = true }
+            defer { await state.update { $0.isSaving = false } }
 
-        if await state.source == nil {
             do {
-                let createdCategory = try await create___VARIABLE_categoryName___()
+                let ___VARIABLE_categoryVariableName___ = if await state.source == nil {
+                    try await create___VARIABLE_categoryName___()
+                } else {
+                    try await update___VARIABLE_categoryName___()
+                }
                 await state.update { viewState in
                     viewState.hud = .success
-                    viewState.isSaving = false
                     viewState.isDismissed = true
                 }
-                output?.onSave?(createdCategory)
-            } catch {
-                await state.update { $0.isSaving = false }
-            }
-        } else {
-            do {
-                let updatedCategory = try await update___VARIABLE_categoryName___()
+                output?.onSave?(___VARIABLE_categoryVariableName___)
+            } catch PersistenceError.duplicateItem {
                 await state.update { viewState in
-                    viewState.hud = .success
-                    viewState.isSaving = false
-                    viewState.isDismissed = true
+                    viewState.isDuplicateName = true
+                    viewState.isValidForm = false
                 }
-                output?.onSave?(updatedCategory)
             } catch {
-                await state.update { $0.isSaving = false }
+                Log.error("Failed to save ___VARIABLE_categoryName___:", error: error)
+                await state.update { $0.alert = .error(error) }
             }
         }
+        saveTask = task
+        await task.value
     }
 }
 
@@ -102,7 +128,17 @@ private extension ___VARIABLE_categoryName___EditViewModel {
             let ___VARIABLE_categoryVariableName___ = try await ___VARIABLE_categoryVariableName___StorageService.fetch(by: state.___VARIABLE_categoryVariableName___Id)
             await state.update { viewState in
                 viewState.___VARIABLE_categoryVariableName___State = .result(___VARIABLE_categoryVariableName___)
-                viewState.setFields(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___)
+                viewState.name = ___VARIABLE_categoryVariableName___.name
+                viewState.emoji = ___VARIABLE_categoryVariableName___.emoji ?? "🥕"
+                viewState.note = ___VARIABLE_categoryVariableName___.note ?? ""
+                viewState.color = ___VARIABLE_categoryVariableName___.color
+                viewState.date = ___VARIABLE_categoryVariableName___.date
+                #if os(macOS)
+                    viewState.image = ___VARIABLE_categoryVariableName___.imageData.flatMap { NSImage(data: $0) }
+                #else
+                    viewState.image = ___VARIABLE_categoryVariableName___.imageData.flatMap { UIImage(data: $0) }
+                #endif
+                viewState.originalImage = viewState.image
             }
             await updateFormValidation()
         } catch {
@@ -113,7 +149,7 @@ private extension ___VARIABLE_categoryName___EditViewModel {
     func create___VARIABLE_categoryName___() async throws -> ___VARIABLE_categoryName___ {
         let count = try await ___VARIABLE_categoryVariableName___StorageService.count()
         return try await ___VARIABLE_categoryVariableName___StorageService.save(
-            name: state.name,
+            name: state.trimmedName,
             emoji: state.emoji,
             color: state.color,
             date: state.date ?? Date(),
@@ -125,25 +161,20 @@ private extension ___VARIABLE_categoryName___EditViewModel {
 
     func update___VARIABLE_categoryName___() async throws -> ___VARIABLE_categoryName___ {
         guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else {
-            logError("Cannot update ___VARIABLE_categoryName___ - no category loaded")
-            await state.update { $0.hud = .default("No category loaded") }
+            Log.error("Cannot update ___VARIABLE_categoryName___ - no category loaded")
             throw PersistenceError.itemNotFound
         }
-
-        do {
-            return try await ___VARIABLE_categoryVariableName___StorageService.update(
-                ___VARIABLE_categoryVariableName___,
-                name: state.name,
-                emoji: state.emoji,
-                color: state.color,
-                date: state.date ?? Date(),
-                image: state.image?.jpegData(compressionQuality: 0.5),
-                note: state.note.isEmpty ? nil : state.note
-            )
-        } catch {
-            logError("Failed to update ___VARIABLE_categoryName___:", error: error)
-            await state.update { $0.hud = .error(error) }
-            throw error
-        }
+        let image: Data?? = await state.isImageChanged
+            ? .some(state.image?.jpegData(compressionQuality: 0.5))
+            : .none
+        return try await ___VARIABLE_categoryVariableName___StorageService.update(
+            ___VARIABLE_categoryVariableName___,
+            name: state.trimmedName,
+            emoji: .some(state.emoji),
+            color: state.color,
+            date: state.date ?? Date(),
+            image: image,
+            note: .some(state.note.isEmpty ? nil : state.note)
+        )
     }
 }

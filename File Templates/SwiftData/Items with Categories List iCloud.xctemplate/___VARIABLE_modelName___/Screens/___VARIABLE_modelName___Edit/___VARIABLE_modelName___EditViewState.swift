@@ -1,8 +1,6 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
-import FactoryKit
-import ObservableDefaults
 import Observation
 import OversizeArchitecture
 import OversizeCore
@@ -22,7 +20,7 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
     #else
         public var image: UIImage?
     #endif
-    public var selected___VARIABLE_categoryName___: ___VARIABLE_categoryName___?
+    public var selected___VARIABLE_categoryName___Id: UUID?
 
     /// User Interface
     public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
@@ -33,6 +31,7 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
     public var isEmptyForm: Bool = true
     public var isValidForm: Bool = false
     public var hud: OversizeNavigation.HUD?
+    public var alert: AppAlert?
     public var destination: ___VARIABLE_modelName___Destinations?
     public var isShow___VARIABLE_categoryName___Picker: Bool? = false
 
@@ -40,12 +39,33 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
     public let source: ___VARIABLE_modelName___EditInput.Source?
     public let ___VARIABLE_modelVariableName___Id: UUID
 
+    // Original Values
+    #if os(macOS)
+        public var originalImage: NSImage?
+    #else
+        public var originalImage: UIImage?
+    #endif
+
     /// View
     var title: String {
         if source == nil {
             "Create"
         } else {
             "Edit"
+        }
+    }
+
+    var trimmedName: String {
+        name.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var isImageChanged: Bool {
+        image !== originalImage
+    }
+
+    var selected___VARIABLE_categoryName___: ___VARIABLE_categoryName___? {
+        selected___VARIABLE_categoryName___Id.flatMap { categoryId in
+            ___VARIABLE_categoryPluralVariableName___State.result?.first { $0.id == categoryId }
         }
     }
 
@@ -57,40 +77,22 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
         case let .___VARIABLE_modelVariableName___(___VARIABLE_modelVariableName___):
             ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id
             ___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
-            setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+            name = ___VARIABLE_modelVariableName___.name
+            note = ___VARIABLE_modelVariableName___.note ?? ""
+            color = ___VARIABLE_modelVariableName___.color
+            date = ___VARIABLE_modelVariableName___.date
+            #if os(macOS)
+                image = ___VARIABLE_modelVariableName___.imageData.flatMap { NSImage(data: $0) }
+            #else
+                image = ___VARIABLE_modelVariableName___.imageData.flatMap { UIImage(data: $0) }
+            #endif
+            originalImage = image
+            selected___VARIABLE_categoryName___Id = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id
         case let .id(id):
             ___VARIABLE_modelVariableName___Id = id
         case .none:
             ___VARIABLE_modelVariableName___Id = UUID()
-        }
-    }
-}
-
-// MARK: - User Actions
-
-public extension ___VARIABLE_modelName___EditViewState {
-    func setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        name = ___VARIABLE_modelVariableName___.name
-        note = ___VARIABLE_modelVariableName___.note ?? ""
-        color = ___VARIABLE_modelVariableName___.color
-        date = ___VARIABLE_modelVariableName___.date
-        if let data = ___VARIABLE_modelVariableName___.imageData {
-            #if os(macOS)
-                image = NSImage(data: data)
-            #else
-                image = UIImage(data: data)
-            #endif
-        }
-        if let categoryId = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id {
-            selected___VARIABLE_categoryName___ = ___VARIABLE_categoryPluralVariableName___State.result?.first { $0.id == categoryId }
-        } else {
-            selected___VARIABLE_categoryName___ = nil
-        }
-    }
-
-    func set___VARIABLE_categoryPluralVariableName___(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) {
-        if let currentCategoryId = selected___VARIABLE_categoryName___?.id {
-            selected___VARIABLE_categoryName___ = ___VARIABLE_categoryPluralVariableName___.first { $0.id == currentCategoryId }
+            selected___VARIABLE_categoryName___Id = input?.___VARIABLE_categoryVariableName___Id
         }
     }
 }

@@ -15,7 +15,7 @@ import SwiftUI
 @View(module: ___VARIABLE_categoryName___Detail.self)
 public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
     public var body: some View {
-        NavigationListCoverLayoutView(coverHeight: 200) {
+        NavigationListCoverLayout(coverHeight: 200) {
             stateView(viewState.state)
                 .listSectionSpacing(.xSmall)
                 .headerProminence(.increased)
@@ -25,11 +25,12 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
             coverBackground
         }
         .listLayoutStyle(.smallInsetGrouped)
+        .contentMargins()
         .toolbar { toolbarContent }
         .errorState(viewState.state)
         .presentationAlert($viewState.alert)
         .presentationHUD($viewState.hud)
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
         .navigationBack($viewState.isDismissed)
         .task { reducer.callAsFunction(.onAppear) }
     }
@@ -82,7 +83,7 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
 
     @ViewBuilder
     private func content(_ model: ___VARIABLE_categoryName___DetailViewState.StateModel) -> some View {
-        ListSection("Information") {
+        Section("Information") {
             ListRow(
                 "Name",
                 subtitle: model.___VARIABLE_categoryVariableName___.name
@@ -94,10 +95,9 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
                 )
             }
         }
-        .listSectionTitlePosition(.inside)
 
         if model.isEmpty {
-            ListSection {
+            Section {
                 EmptyStateView(
                     image: Illustration.Objects.box,
                     title: "Nothing Here Yet",
@@ -118,7 +118,7 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
                     reducer.callAsFunction(.on___VARIABLE_modelName___Action(action))
                 }
             )
-            ListSection {
+            Section {
                 ListButton("Add item") {
                     reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___)
                 }

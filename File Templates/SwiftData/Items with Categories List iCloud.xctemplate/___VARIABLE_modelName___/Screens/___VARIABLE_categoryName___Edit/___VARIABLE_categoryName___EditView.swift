@@ -4,8 +4,8 @@ import OversizeArchitecture
 import OversizeComponents
 import OversizeCore
 import OversizeLocalizable
-import OversizeNavigation
 import OversizeMediaKit
+import OversizeNavigation
 import OversizeUI
 import SwiftUI
 
@@ -14,23 +14,22 @@ public struct ___VARIABLE_categoryName___EditView: ViewProtocol {
     @FocusState private var focusedField: ___VARIABLE_categoryName___EditViewState.FocusField?
 
     public var body: some View {
-        NavigationLayoutView(
+        NavigationLayout(
             viewState.title,
             content: content
-        ) {
-            Color.backgroundPrimary
-        }
+        )
         .backConfirmationDialog(viewState.isEmptyForm ? nil : .discard)
+        .contentMargins()
         .toolbarTitleDisplayMode(.inline)
         .toolbar(content: { toolbarContent })
         .navigationDismiss(trigger: $viewState.isDismissed)
         .presentationHUD($viewState.hud)
+        .presentationAlert($viewState.alert)
         .onChangeValue(of: viewState.focusedField) { focusedField = $0 }
         .task { reducer.callAsFunction(.onAppear) }
         .onAppear { focusedField = .name }
     }
 
-    @ViewBuilder
     private func content() -> some View {
         VStack(spacing: .small) {
             emojiField
@@ -40,20 +39,19 @@ public struct ___VARIABLE_categoryName___EditView: ViewProtocol {
             noteField
 
             #if !os(tvOS)
-            urlField
+                urlField
 
-            colorField
+                colorField
             #endif
 
             #if os(iOS)
-            dateField
+                dateField
 
-            imageField
+                imageField
             #endif
         }
         .fieldLabelPosition(.overInput)
         .controlRadius(.large)
-        .paddingContent()
     }
 }
 
@@ -61,12 +59,20 @@ public struct ___VARIABLE_categoryName___EditView: ViewProtocol {
 
 private extension ___VARIABLE_categoryName___EditView {
     private var titleField: some View {
-        TextField("Name", text: $viewState.name)
-            .textFieldStyle(.placeholder("Name", text: $viewState.name))
-            .submitLabel(.continue)
-            .onSubmit { focusedField = .note }
-            .focused($focusedField, equals: .name)
-            .onChangeValue(of: viewState.name) { reducer.callAsFunction(.onNameChanged($0)) }
+        VStack(alignment: .leading, spacing: .xxxSmall) {
+            TextField("Name", text: $viewState.name)
+                .textFieldStyle(.placeholder("Name", text: $viewState.name))
+                .submitLabel(.continue)
+                .onSubmit { focusedField = .note }
+                .focused($focusedField, equals: .name)
+                .onChangeValue(of: viewState.name) { reducer.callAsFunction(.onNameChanged($0)) }
+
+            if viewState.isDuplicateName {
+                Text("A category with this name already exists")
+                    .font(.caption)
+                    .foregroundStyle(Color.error)
+            }
+        }
     }
 
     private var noteField: some View {
@@ -85,8 +91,8 @@ private extension ___VARIABLE_categoryName___EditView {
                 "URL",
                 text: Binding(
                     get: { viewState.url?.absoluteString ?? "" },
-                    set: { _ in },
-                ),
+                    set: { _ in }
+                )
             ))
             .focused($focusedField, equals: .url)
             .submitLabel(.done)
@@ -95,9 +101,9 @@ private extension ___VARIABLE_categoryName___EditView {
     }
 
     #if os(iOS)
-    private var dateField: some View {
-        DateField(selection: $viewState.date)
-    }
+        private var dateField: some View {
+            DateField(selection: $viewState.date)
+        }
     #endif
 
     private var colorField: some View {
@@ -110,14 +116,18 @@ private extension ___VARIABLE_categoryName___EditView {
     }
 
     #if os(iOS)
-    private var imageField: some View {
-        PhotoField($viewState.image)
-    }
+        private var imageField: some View {
+            PhotoField($viewState.image)
+        }
     #endif
 
     private var emojiField: some View {
-        EmojiField("Icon", emojis: viewState.emojis, selection: $viewState.emoji)
-            .iconPickerStyle(.circle)
+        EmojiField(
+            "Icon",
+            emojis: viewState.emojis,
+            selection: $viewState.emoji
+        )
+        .iconPickerStyle(.circle)
     }
 }
 
@@ -127,12 +137,19 @@ private extension ___VARIABLE_categoryName___EditView {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.Button.save, systemImage: "checkmark") {
+            Button {
                 reducer.callAsFunction(.onTapSave)
+            } label: {
+                if viewState.isSaving {
+                    ProgressView()
+                } else {
+                    Label(L10n.Button.save, systemImage: "checkmark")
+                }
             }
             .labelStyle(.toolbar)
             .buttonStyle(.toolbarPrimary)
-            .disabled(!viewState.isValidForm)
+            .accessibilityLabel(L10n.Button.save)
+            .disabled(!viewState.isValidForm || viewState.isSaving)
             .keyboardShortcut(.defaultAction)
         }
     }
