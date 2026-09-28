@@ -10,20 +10,24 @@ import SwiftUI
 
 @Observable
 public final class ___VARIABLE_categoryName___ListViewState: ViewStateProtocol {
-    /// App Storage
+    // MARK: - App Storage
+
     public var storage = Storage()
 
-    /// User Interface
+    // MARK: - User Interface
+
     public var state: LoadingState<StateModel> = .idle
     public var searchTerm: String = ""
     public var filterType: ___VARIABLE_categoryName___FilterType = .standard
 
-    /// Routing
+    // MARK: - Routing
+
     public var destination: ___VARIABLE_modelName___Destinations?
     public var alert: AppAlert?
     public var hud: OversizeNavigation.HUD?
 
-    /// Initialization
+    // MARK: - Initialization
+
     public init(input _: ___VARIABLE_categoryName___List.Input?) {}
 }
 

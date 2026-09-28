@@ -151,6 +151,29 @@ public final class FeatureViewState: ViewStateProtocol {
 }
 ```
 
+- ViewState holds only stored properties, computed properties and `init`; no methods
+- Double taps on writes are coalesced with a stored task in the ViewModel actor (same style as `HUDState`):
+  `if let saveTask { return await saveTask.value }`, then `saveTask = Task { defer { saveTask = nil } ... }`
+  and `await task.value`. Lists and details route every write through one `performWrite { ... }` helper that
+  owns this task and the shared `fetchData` / error alert. No other process flags in the ViewModel
+- Lists drop stale fetch results without flags: parameters are captured as `XListQuery` (Equatable struct in the
+  module file, `@MainActor init(_ viewState:)`), and the result or error is written only if
+  `query == .init(viewState)` inside the same `state.update`
+- The ViewState keeps only what the UI shows and is written only through `state.update`
+  (reset UI flags with `defer { await state.update { ... } }`). Form fields and the search term are the only
+  values bound directly from the view; discrete choices (filter, sort, view option, picker selection) go
+  through actions with a `Binding(get:set:)` that calls the reducer
+- Edit screens keep the whole form in one Equatable `Form` struct (`viewState.form`) plus `originalForm` as the
+  baseline: the ViewModel derives `isValidForm` and `hasChanges` in `onFormChanged` (one
+  `.onChangeValue(of: viewState.form)` in the view), `hasChanges` drives `backConfirmationDialog`, and `onTapSave`
+  works on a single snapshot of `form`. `Domain → Form` mapping is a `nonisolated static func form(from:)` in the
+  ViewModel, used by the ViewState `init` (model input) and by the fetch (id input); a fetch merges into a draft
+  the user already typed into (`merge(draft:loaded:)` keeps touched fields, fills the rest)
+- A screen dismisses itself after a destructive action (`isDismissed = true`, `.navigationBack`) and then
+  notifies the parent through `output`; the parent only refreshes and shows a HUD, it never pops the child
+- Reusable list content views expose an `Action` enum (`open`, `edit`, `toggleFavorite`, `duplicate`, `delete`, …)
+  that the screen ViewModel dispatches in one `onXAction(_:)` method
+
 ### Navigation Pattern
 Destination enum in `Env`, free of any navigation framework:
 
@@ -196,7 +219,8 @@ intents (deep links, tab switching).
   `___PACKAGENAME___/Navigation`. The only exception is `RootTabs` in `Env/Tabs`. A tab's first screen is named after the
   tab (`Main`, `AppSettings`)
 - Screens with parameters (`___VARIABLE_modelName___Detail`) are built with `build(input:)`; `buildCached()` only
-  for tab roots whose state should survive re-creation
+  for tab roots whose state should survive re-creation. Routed destinations always use `build()`: a cached
+  ViewState is keyed by the module type, so a pushed copy would share `destination`, search and alerts with the root
 
 ## Key Files
 
@@ -224,6 +248,7 @@ Versions are defined in `Configs/Packages.yml` and in each `Packages/*/Package.s
   (`@Module`), OversizeNavigation, OversizeServices, OversizeCore, OversizeLocalizable, OversizeResources
 - **Third-party**: Factory (DI, `FactoryTesting` in tests), Navigator (`NavigatorUI`, app target only),
   ObservableDefaults
+- OversizeComponents is deprecated and must not be used
 
 ## Project Setup
 

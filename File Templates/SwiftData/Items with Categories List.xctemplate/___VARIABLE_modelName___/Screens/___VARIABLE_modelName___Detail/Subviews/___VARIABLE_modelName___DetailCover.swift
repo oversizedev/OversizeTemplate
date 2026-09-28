@@ -26,13 +26,11 @@ struct ___VARIABLE_modelName___DetailCoverBackground: View {
 
     var body: some View {
         if let image {
-            GeometryReader { geometry in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .clipped()
-            }
+            image
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
         } else {
             LinearGradient(
                 colors: [Color.backgroundPrimary, Color.backgroundTertiary],

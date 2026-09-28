@@ -6,6 +6,7 @@ import SwiftUI
 struct ___VARIABLE_categoryName___DetailCover: View {
     let emoji: String
     let name: String
+    let color: Color
     let isFavorite: Bool
 
     var body: some View {
@@ -15,7 +16,7 @@ struct ___VARIABLE_categoryName___DetailCover: View {
                 .padding(.large)
                 .background {
                     Circle()
-                        .fill(Color.surfacePrimary)
+                        .fill(color.opacity(0.2))
                 }
 
             HStack(spacing: .xxxSmall) {
@@ -33,19 +34,29 @@ struct ___VARIABLE_categoryName___DetailCover: View {
 }
 
 struct ___VARIABLE_categoryName___DetailCoverBackground: View {
+    let image: Image?
+
     var body: some View {
-        LinearGradient(
-            colors: [Color.backgroundPrimary, Color.backgroundSecondary],
-            startPoint: .top,
-            endPoint: .bottom
-        )
+        if let image {
+            image
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+        } else {
+            LinearGradient(
+                colors: [Color.backgroundPrimary, Color.backgroundSecondary],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
     }
 }
 
 #Preview {
-    ___VARIABLE_categoryName___DetailCover(emoji: "🎬", name: "Video", isFavorite: true)
+    ___VARIABLE_categoryName___DetailCover(emoji: "🎬", name: "Video", color: .red, isFavorite: true)
         .frame(height: 200)
         .background {
-            ___VARIABLE_categoryName___DetailCoverBackground()
+            ___VARIABLE_categoryName___DetailCoverBackground(image: nil)
         }
 }

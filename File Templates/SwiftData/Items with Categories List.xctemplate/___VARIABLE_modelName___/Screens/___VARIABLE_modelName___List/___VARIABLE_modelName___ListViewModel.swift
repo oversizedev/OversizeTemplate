@@ -9,8 +9,8 @@ import SwiftUI
 
 @ViewModel(module: ___VARIABLE_modelName___List.self)
 public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
-    @Injected(\.___VARIABLE_modelVariableName___StorageService) private var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
-    @Injected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @LazyInjected(\.___VARIABLE_modelVariableName___StorageService) private var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
+    @LazyInjected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
 
     private var saveTask: Task<Void, Never>?
 

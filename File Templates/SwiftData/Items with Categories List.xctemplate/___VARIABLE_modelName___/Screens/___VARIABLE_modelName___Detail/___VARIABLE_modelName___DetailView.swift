@@ -89,7 +89,7 @@ private extension ___VARIABLE_modelName___DetailView {
                     }
                     .tint(.error)
                 }
-                
+
             } label: {
                 Label {
                     Text("Options")

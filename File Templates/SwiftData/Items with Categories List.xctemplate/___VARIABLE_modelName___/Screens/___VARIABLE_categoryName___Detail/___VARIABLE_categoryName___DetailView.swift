@@ -17,10 +17,11 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
             ___VARIABLE_categoryName___DetailCover(
                 emoji: viewState.state.result?.___VARIABLE_categoryVariableName___.displayEmoji ?? ___VARIABLE_categoryName___.defaultEmoji,
                 name: viewState.state.result?.___VARIABLE_categoryVariableName___.name ?? "",
+                color: viewState.state.result?.___VARIABLE_categoryVariableName___.color ?? .clear,
                 isFavorite: viewState.state.result?.___VARIABLE_categoryVariableName___.isFavorite ?? false
             )
         } coverBackground: {
-            ___VARIABLE_categoryName___DetailCoverBackground()
+            ___VARIABLE_categoryName___DetailCoverBackground(image: viewState.state.result?.___VARIABLE_categoryVariableName___.image)
         }
         .listLayoutStyle(.smallInsetGrouped)
         .contentMargins()

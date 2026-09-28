@@ -24,6 +24,11 @@ struct ___VARIABLE_modelName___Row: View {
             ___VARIABLE_modelVariableName___.name,
             subtitle: viewOption == .compact ? nil : ___VARIABLE_modelVariableName___.date.formatted(date: .abbreviated, time: .shortened),
             action: action,
+            leading: {
+                Circle()
+                    .fill(___VARIABLE_modelVariableName___.color)
+                    .frame(width: 24, height: 24)
+            },
             trailing: {
                 if ___VARIABLE_modelVariableName___.isFavorite {
                     Image.Base.Star.fill.icon(Color.warning)

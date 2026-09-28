@@ -27,7 +27,7 @@ struct ___VARIABLE_categoryName___Row: View {
             leading: {
                 Text(___VARIABLE_categoryVariableName___.displayEmoji)
                     .frame(width: 24, height: 24, alignment: .center)
-                    .iconOnSurface()
+                    .iconOnSurface(surfaceSolor: ___VARIABLE_categoryVariableName___.color.opacity(0.2))
             },
             trailing: {
                 if ___VARIABLE_categoryVariableName___.isFavorite {

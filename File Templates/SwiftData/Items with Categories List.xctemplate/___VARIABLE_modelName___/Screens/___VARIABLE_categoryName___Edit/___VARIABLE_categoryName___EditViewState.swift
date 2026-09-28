@@ -9,33 +9,39 @@ import SwiftUI
 
 @Observable
 public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
-    /// Form
+    // MARK: - Form
+
     public var form: Form
     public var originalForm: Form?
 
-    /// User Interface
+    // MARK: - User Interface
+
     public var ___VARIABLE_categoryVariableName___State: LoadingState<___VARIABLE_categoryName___> = .idle
     public var isSaving: Bool = false
     public var isValidForm: Bool = false
     public var isDuplicateName: Bool = false
     public var hasChanges: Bool = false
 
-    /// Routing
+    // MARK: - Routing
+
     public var alert: AppAlert?
     public var hud: OversizeNavigation.HUD?
     public var isDismissed: Bool = false
 
-    /// Constants
+    // MARK: - Constants
+
     public let source: ___VARIABLE_categoryName___EditInput.Source?
     public let ___VARIABLE_categoryVariableName___Id: UUID
     public let emojis = "🍏🍎🍐🍊🍋🍋‍🟩🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑"
 
-    /// View
+    // MARK: - View
+
     var title: String {
         source == nil ? "Create" : "Edit"
     }
 
-    /// Initialization
+    // MARK: - Initialization
+
     public init(input: ___VARIABLE_categoryName___Edit.Input?) {
         source = input?.source
 

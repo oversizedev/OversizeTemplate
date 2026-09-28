@@ -9,19 +9,23 @@ import SwiftUI
 
 @Observable
 public final class ___VARIABLE_categoryName___DetailViewState: ViewStateProtocol {
-    /// User Interface
+    // MARK: - User Interface
+
     public var state: LoadingState<StateModel> = .idle
 
-    /// Routing
+    // MARK: - Routing
+
     public var destination: ___VARIABLE_modelName___Destinations?
     public var alert: AppAlert?
     public var hud: OversizeNavigation.HUD?
     public var isDismissed: Bool = false
 
-    /// Constants
+    // MARK: - Constants
+
     public let ___VARIABLE_categoryVariableName___Id: UUID
 
-    /// Initialization
+    // MARK: - Initialization
+
     public init(input: ___VARIABLE_categoryName___Detail.Input?) {
         ___VARIABLE_categoryVariableName___Id = input?.___VARIABLE_categoryVariableName___Id ?? UUID()
     }
