@@ -34,16 +34,16 @@ check "NavigatorUI is allowed only in the app target" \
     '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+NavigatorUI\b' \
     "$PACKAGES"
 
-check "App packages must not access persistence (Database, SwiftData, @Query, .modelContainer)" \
-    '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+(Database|SwiftData)\b|@Query\b|\.modelContainer\(' \
+check "App packages must not use SwiftData directly (@Query, .modelContainer)" \
+    '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+SwiftData\b|@Query\b|\.modelContainer\(' \
     "$PACKAGES/App/Sources"
 
 check "Services must work with Domain models only (no SwiftData)" \
     '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+SwiftData\b' \
     "$PACKAGES/Services/Sources"
 
-check "Env must stay a leaf module" \
-    '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+(Models|Database|Services|Main|Onboarding|Settings)\b' \
+check "Env must not depend on app layers (only Models is allowed)" \
+    '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+(Database|Services|Main|Onboarding|Settings|SwiftData)\b' \
     "$PACKAGES/Env/Sources"
 
 check "Models must not depend on other app layers" \

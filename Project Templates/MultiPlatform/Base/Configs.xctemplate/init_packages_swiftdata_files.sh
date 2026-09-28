@@ -116,10 +116,10 @@ extension ModelContainer {
 PACKAGE_FILE_EOF
 
 mkdir -p "Packages/Database/Sources/Database/Mapping"
-cat <<'PACKAGE_FILE_EOF' >"Packages/Database/Sources/Database/Mapping/___VARIABLE_modelName___+Entity.swift"
+cat <<'PACKAGE_FILE_EOF' >"Packages/Database/Sources/Database/Mapping/___VARIABLE_modelName___Mapping.swift"
 //
 // Copyright © __INIT_YEAR__ ___FULLUSERNAME___
-// ___VARIABLE_modelName___+Entity.swift, created on __INIT_DATE__
+// ___VARIABLE_modelName___Mapping.swift, created on __INIT_DATE__
 //
 
 import Foundation

@@ -33,6 +33,7 @@ targets:
       - package: OversizeCore
       - package: Database
       - package: Env
+      - package: Models
       - package: App
       - sdk: StoreKit.framework
     entitlements:

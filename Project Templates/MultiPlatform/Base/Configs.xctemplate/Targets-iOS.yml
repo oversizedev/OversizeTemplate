@@ -81,6 +81,7 @@ targets:
       - package: OversizeKit
       - package: OversizeNavigation
       - package: Env
+      - package: Models
       - package: App
         products:
           - Main

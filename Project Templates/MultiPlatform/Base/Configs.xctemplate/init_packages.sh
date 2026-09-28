@@ -29,6 +29,7 @@ import PackageDescription
 
 let commonDependencies: [PackageDescription.Package.Dependency] = [
     .package(name: "Models", path: "../Models"),
+    .package(name: "Database", path: "../Database"),
     .package(name: "Env", path: "../Env"),
     .package(name: "Services", path: "../Services"),
     .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "3.0.2")),
@@ -84,6 +85,7 @@ let package = Package(
             name: "Main",
             dependencies: [
                 .product(name: "Models", package: "Models"),
+                .product(name: "Database", package: "Database"),
                 .product(name: "Env", package: "Env"),
                 .product(name: "Services", package: "Services"),
                 .product(name: "OversizeResources", package: "OversizeResources"),
@@ -128,6 +130,8 @@ let package = Package(
             name: "MainTests",
             dependencies: [
                 "Main",
+                .product(name: "Models", package: "Models"),
+                .product(name: "Database", package: "Database"),
                 .product(name: "Services", package: "Services"),
                 .product(name: "FactoryKit", package: "Factory"),
                 .product(name: "FactoryTesting", package: "Factory"),
@@ -233,15 +237,19 @@ import Foundation
 import PackageDescription
 
 let remoteDependencies: [PackageDescription.Package.Dependency] = [
+    .package(name: "Models", path: "../Models"),
     .package(url: "https://github.com/oversizedev/OversizeResources.git", .upToNextMajor(from: "2.0.0")),
     .package(url: "https://github.com/oversizedev/OversizeUI.git", .upToNextMajor(from: "3.20.4")),
+    .package(url: "https://github.com/oversizedev/OversizeArchitecture.git", .upToNextMajor(from: "0.2.0")),
 ]
 
 let sharedPackagesPath = "\(NSHomeDirectory())/Developer/Packages"
 
 let localDependencies: [PackageDescription.Package.Dependency] = [
+    .package(name: "Models", path: "../Models"),
     .package(name: "OversizeResources", path: "\(sharedPackagesPath)/OversizeResources"),
     .package(name: "OversizeUI", path: "\(sharedPackagesPath)/OversizeUI"),
+    .package(name: "OversizeArchitecture", path: "\(sharedPackagesPath)/OversizeArchitecture"),
 ]
 
 let isLocalDev = ProcessInfo.processInfo.environment["FORCE_REMOTE_PACKAGES"] != "1"
@@ -269,8 +277,10 @@ let package = Package(
         .target(
             name: "Env",
             dependencies: [
+                .product(name: "Models", package: "Models"),
                 .product(name: "OversizeResources", package: "OversizeResources"),
                 .product(name: "OversizeUI", package: "OversizeUI"),
+                .product(name: "OversizeArchitecture", package: "OversizeArchitecture"),
             ]
         ),
     ]
