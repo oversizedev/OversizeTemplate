@@ -2,6 +2,7 @@
 
 import ___VARIABLE_modelPackage___
 import FactoryKit
+import Models
 import OversizeArchitecture
 import OversizeCore
 import OversizeNavigation

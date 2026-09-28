@@ -2,6 +2,7 @@
 
 import ___VARIABLE_modelPackage___
 import Foundation
+import Models
 import OversizeArchitecture
 import OversizeResources
 import SwiftUI

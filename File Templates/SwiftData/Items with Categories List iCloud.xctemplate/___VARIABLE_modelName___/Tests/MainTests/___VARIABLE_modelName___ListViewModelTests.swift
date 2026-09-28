@@ -4,6 +4,7 @@ import ___VARIABLE_modelPackage___
 import FactoryKit
 import FactoryTesting
 @testable import Main
+import Models
 import SwiftUI
 import Testing
 
@@ -18,9 +19,9 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `appear loads ___VARIABLE_modelPluralVariableName___ and categories`() async throws {
-        let category = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", categoryId: category.id)
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Spotify")
+        let category = try await TestData.makeCategory("Video")
+        try await TestData.make___VARIABLE_modelName___("Netflix", categoryId: category.id)
+        try await TestData.make___VARIABLE_modelName___("Spotify")
         let (state, viewModel) = makeViewModel()
 
         await viewModel.handleAction(.onAppear)
@@ -30,8 +31,8 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `search matches name and note`() async throws {
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", note: "Streaming")
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Spotify", note: "Music")
+        try await TestData.make___VARIABLE_modelName___("Netflix", note: "Streaming")
+        try await TestData.make___VARIABLE_modelName___("Spotify", note: "Music")
         let (state, viewModel) = makeViewModel()
 
         state.searchTerm = "music"
@@ -41,8 +42,8 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `favorites filter shows only favorites`() async throws {
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", isFavorite: true)
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Spotify")
+        try await TestData.make___VARIABLE_modelName___("Netflix", isFavorite: true)
+        try await TestData.make___VARIABLE_modelName___("Spotify")
         let (state, viewModel) = makeViewModel()
 
         await viewModel.handleAction(.onChangeFilterType(.favorites))
@@ -52,8 +53,8 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `sort by name ascending orders alphabetically`() async throws {
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Spotify")
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        try await TestData.make___VARIABLE_modelName___("Spotify")
+        try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel()
 
         await viewModel.handleAction(.onChangeSortType(.name))
@@ -64,8 +65,8 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `stale search result is dropped`() async throws {
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Spotify")
+        try await TestData.make___VARIABLE_modelName___("Netflix")
+        try await TestData.make___VARIABLE_modelName___("Spotify")
         let (state, viewModel) = makeViewModel()
 
         state.searchTerm = "Net"
@@ -78,7 +79,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `confirmed delete removes ___VARIABLE_modelVariableName___ and shows hud`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel()
         await viewModel.handleAction(.onAppear)
 
@@ -91,7 +92,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `duplicate double tap creates one copy`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel()
 
         async let firstTap: Void = viewModel.handleAction(.on___VARIABLE_modelName___Action(.duplicate(netflix)))
@@ -102,7 +103,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `toggle favorite uses persisted value`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel()
 
         await viewModel.handleAction(.on___VARIABLE_modelName___Action(.toggleFavorite(netflix)))
@@ -112,7 +113,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `created category is assigned to requested ___VARIABLE_modelVariableName___`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel()
 
         await viewModel.handleAction(.on___VARIABLE_modelName___Action(.createCategory(for: netflix)))
@@ -120,7 +121,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
             Issue.record("Expected create category destination")
             return
         }
-        let category = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let category = try await TestData.makeCategory("Video")
         onSave?(category)
         await waitUntil { state.state.result?.___VARIABLE_modelPluralVariableName___.first?.___VARIABLE_categoryVariableName___Id == category.id }
 
@@ -128,7 +129,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
     }
 
     @Test func `opening detail sets destination and delete callback refreshes`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel()
         await viewModel.handleAction(.onAppear)
 

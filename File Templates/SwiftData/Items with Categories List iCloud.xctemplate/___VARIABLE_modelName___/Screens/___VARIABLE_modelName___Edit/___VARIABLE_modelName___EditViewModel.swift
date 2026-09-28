@@ -1,7 +1,9 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Env
 import FactoryKit
+import Models
 import OversizeArchitecture
 import OversizeCore
 import OversizeNavigation
@@ -36,8 +38,8 @@ public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
         await state.update { viewState in
             viewState.isShow___VARIABLE_categoryName___Picker = false
             viewState.destination = .___VARIABLE_categoryVariableName___Create(
-                onSave: Callback { [weak self] ___VARIABLE_categoryVariableName___ in
-                    Task { await self?.selectCreatedCategory(___VARIABLE_categoryVariableName___) }
+                onSave: Callback { ___VARIABLE_categoryVariableName___ in
+                    Task { await self.selectCreatedCategory(___VARIABLE_categoryVariableName___) }
                 }
             )
         }

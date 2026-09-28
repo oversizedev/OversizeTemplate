@@ -1,7 +1,9 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Env
 import FactoryKit
+import Models
 import OversizeArchitecture
 import OversizeCore
 import OversizeNavigation
@@ -26,8 +28,7 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
-                onSave: Callback { [weak self] updated___VARIABLE_modelName___ in
-                    guard let self else { return }
+                onSave: Callback { updated___VARIABLE_modelName___ in
                     Task {
                         await self.fetchData()
                         self.output?.onEdit?(updated___VARIABLE_modelName___)
@@ -40,8 +41,8 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     func onTapDelete() async {
         guard let ___VARIABLE_modelVariableName___ = await state.state.result?.___VARIABLE_modelVariableName___ else { return }
         await state.update { viewState in
-            viewState.alert = .delete { [weak self] in
-                Task { await self?.delete(___VARIABLE_modelVariableName___) }
+            viewState.alert = .delete {
+                Task { await self.delete(___VARIABLE_modelVariableName___) }
             }
         }
     }
@@ -63,8 +64,8 @@ public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
     func onTapCreateCategory() async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Create(
-                onSave: Callback { [weak self] ___VARIABLE_categoryVariableName___ in
-                    Task { await self?.assignCategory(___VARIABLE_categoryVariableName___, showsHUD: false) }
+                onSave: Callback { ___VARIABLE_categoryVariableName___ in
+                    Task { await self.assignCategory(___VARIABLE_categoryVariableName___, showsHUD: false) }
                 }
             )
         }

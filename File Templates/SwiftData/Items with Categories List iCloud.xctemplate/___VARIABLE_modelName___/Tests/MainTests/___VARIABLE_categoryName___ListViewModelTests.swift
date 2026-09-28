@@ -4,6 +4,7 @@ import ___VARIABLE_modelPackage___
 import FactoryKit
 import FactoryTesting
 @testable import Main
+import Models
 import SwiftUI
 import Testing
 
@@ -18,8 +19,8 @@ struct ___VARIABLE_categoryName___ListViewModelTests {
     }
 
     @Test func `appear loads categories`() async throws {
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Music")
+        try await TestData.makeCategory("Video")
+        try await TestData.makeCategory("Music")
         let (state, viewModel) = makeViewModel()
 
         await viewModel.handleAction(.onAppear)
@@ -28,9 +29,9 @@ struct ___VARIABLE_categoryName___ListViewModelTests {
     }
 
     @Test func `search and favorites compose`() async throws {
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video", isFavorite: true)
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video Games")
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Music", isFavorite: true)
+        try await TestData.makeCategory("Video", isFavorite: true)
+        try await TestData.makeCategory("Video Games")
+        try await TestData.makeCategory("Music", isFavorite: true)
         let (state, viewModel) = makeViewModel()
 
         await viewModel.handleAction(.onChangeFilterType(.favorites))
@@ -41,8 +42,8 @@ struct ___VARIABLE_categoryName___ListViewModelTests {
     }
 
     @Test func `sort by name ascending orders alphabetically`() async throws {
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Music")
+        try await TestData.makeCategory("Video")
+        try await TestData.makeCategory("Music")
         let (state, viewModel) = makeViewModel()
 
         await viewModel.handleAction(.onChangeSortType(.name))
@@ -52,7 +53,7 @@ struct ___VARIABLE_categoryName___ListViewModelTests {
     }
 
     @Test func `confirmed delete removes category`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let video = try await TestData.makeCategory("Video")
         let (state, viewModel) = makeViewModel()
         await viewModel.handleAction(.onAppear)
 
@@ -64,7 +65,7 @@ struct ___VARIABLE_categoryName___ListViewModelTests {
     }
 
     @Test func `duplicate double tap creates one copy`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let video = try await TestData.makeCategory("Video")
         let (state, viewModel) = makeViewModel()
 
         async let firstTap: Void = viewModel.handleAction(.onCategoryAction(.duplicate(video)))
@@ -83,7 +84,7 @@ struct ___VARIABLE_categoryName___ListViewModelTests {
             Issue.record("Expected create destination")
             return
         }
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let video = try await TestData.makeCategory("Video")
         onSave?(video)
         await waitUntil { state.state.result?.___VARIABLE_categoryPluralVariableName___.count == 1 }
 

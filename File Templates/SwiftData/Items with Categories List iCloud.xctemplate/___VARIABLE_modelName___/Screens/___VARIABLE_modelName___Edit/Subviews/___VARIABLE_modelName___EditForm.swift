@@ -1,6 +1,7 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Models
 import OversizeMediaKit
 import OversizeUI
 import SwiftUI
@@ -55,7 +56,7 @@ struct ___VARIABLE_modelName___EditForm: View {
             viewState.___VARIABLE_categoryVariableName___Options,
             selection: Binding(
                 get: { viewState.selected___VARIABLE_categoryName___ },
-                set: { onSelectCategory($0) }
+                set: onSelectCategory
             ),
             activeModal: $viewState.isShow___VARIABLE_categoryName___Picker
         ) { ___VARIABLE_categoryVariableName___, _ in

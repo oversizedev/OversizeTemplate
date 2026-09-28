@@ -42,19 +42,6 @@ public final class ___VARIABLE_modelName___Entity {
         self.___VARIABLE_categoryVariableName___ = ___VARIABLE_categoryVariableName___
         imageData = image
     }
-
-    public convenience init(from domain: ___VARIABLE_modelName___, ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___Entity? = nil) {
-        self.init(
-            id: domain.id,
-            name: domain.name,
-            color: domain.color,
-            date: domain.date,
-            image: domain.imageData,
-            note: domain.note,
-            isFavorite: domain.isFavorite,
-            ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___
-        )
-    }
 }
 
 // MARK: - Computed Properties

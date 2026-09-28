@@ -1,6 +1,7 @@
 // ___FILEHEADER___
 
 import Foundation
+import OversizeCore
 import SwiftUI
 
 public struct ___VARIABLE_categoryName___: Identifiable, Hashable, Equatable, Sendable {
@@ -42,24 +43,6 @@ public struct ___VARIABLE_categoryName___: Identifiable, Hashable, Equatable, Se
 public extension ___VARIABLE_categoryName___ {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
-    }
-}
-
-// MARK: - SwiftData Conversion
-
-public extension ___VARIABLE_categoryName___ {
-    init(from entity: ___VARIABLE_categoryName___Entity) {
-        self.init(
-            id: entity.id,
-            imageData: entity.imageData,
-            name: entity.name,
-            emoji: entity.emoji,
-            color: entity.color,
-            date: entity.date,
-            note: entity.note,
-            isFavorite: entity.isFavorite,
-            index: entity.index
-        )
     }
 }
 

@@ -1,5 +1,6 @@
 // ___FILEHEADER___
 
+import Models
 import OversizeCore
 import SwiftData
 import SwiftUI
@@ -97,7 +98,6 @@ public actor ___VARIABLE_modelName___StorageService {
     ) throws -> [___VARIABLE_modelName___] {
         do {
             let isFavoritesOnly = filterType == .favorites
-            let isUncategorizedOnly = filterType == .uncategorized
             var predicate: Predicate<___VARIABLE_modelName___Entity>?
             if let ___VARIABLE_categoryVariableName___Id {
                 predicate = #Predicate { ___VARIABLE_modelVariableName___ in
@@ -107,10 +107,6 @@ public actor ___VARIABLE_modelName___StorageService {
             } else if isFavoritesOnly {
                 predicate = #Predicate { ___VARIABLE_modelVariableName___ in
                     ___VARIABLE_modelVariableName___.isFavorite
-                }
-            } else if isUncategorizedOnly {
-                predicate = #Predicate { ___VARIABLE_modelVariableName___ in
-                    ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ == nil
                 }
             }
 
@@ -154,15 +150,6 @@ public actor ___VARIABLE_modelName___StorageService {
                 FetchDescriptor<___VARIABLE_modelName___Entity>(
                     predicate: #Predicate { ___VARIABLE_modelVariableName___ in
                         ___VARIABLE_modelVariableName___.isFavorite &&
-                            (___VARIABLE_modelVariableName___.name.localizedStandardContains(query) ||
-                                (___VARIABLE_modelVariableName___.note?.localizedStandardContains(query) == true))
-                    },
-                    sortBy: [sortDescriptor]
-                )
-            } else if filterType == .uncategorized {
-                FetchDescriptor<___VARIABLE_modelName___Entity>(
-                    predicate: #Predicate { ___VARIABLE_modelVariableName___ in
-                        ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ == nil &&
                             (___VARIABLE_modelVariableName___.name.localizedStandardContains(query) ||
                                 (___VARIABLE_modelVariableName___.note?.localizedStandardContains(query) == true))
                     },

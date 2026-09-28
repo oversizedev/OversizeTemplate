@@ -1,7 +1,9 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Env
 import FactoryKit
+import Models
 import OversizeArchitecture
 import OversizeCore
 import OversizeNavigation
@@ -47,8 +49,8 @@ public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
     func onTapCreate___VARIABLE_modelName___() async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Create(
-                onSave: Callback { [weak self] _ in
-                    Task { await self?.fetchData() }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -85,11 +87,10 @@ private extension ___VARIABLE_modelName___ListViewModel {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Detail(
                 ___VARIABLE_modelVariableName___,
-                onEdit: Callback { [weak self] _ in
-                    Task { await self?.fetchData() }
+                onEdit: Callback { _ in
+                    Task { await self.fetchData() }
                 },
-                onDelete: Callback { [weak self] _ in
-                    guard let self else { return }
+                onDelete: Callback { _ in
                     Task {
                         await self.state.update { $0.hud = .delete }
                         await self.fetchData()
@@ -103,8 +104,8 @@ private extension ___VARIABLE_modelName___ListViewModel {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
-                onSave: Callback { [weak self] _ in
-                    Task { await self?.fetchData() }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -113,8 +114,8 @@ private extension ___VARIABLE_modelName___ListViewModel {
     func createCategory(for ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Create(
-                onSave: Callback { [weak self] ___VARIABLE_categoryVariableName___ in
-                    Task { await self?.assignCategory(___VARIABLE_categoryVariableName___, to: ___VARIABLE_modelVariableName___, showsHUD: false) }
+                onSave: Callback { ___VARIABLE_categoryVariableName___ in
+                    Task { await self.assignCategory(___VARIABLE_categoryVariableName___, to: ___VARIABLE_modelVariableName___, showsHUD: false) }
                 }
             )
         }
@@ -149,8 +150,8 @@ private extension ___VARIABLE_modelName___ListViewModel {
 
     func confirmDelete(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update { viewState in
-            viewState.alert = .delete { [weak self] in
-                Task { await self?.delete(___VARIABLE_modelVariableName___) }
+            viewState.alert = .delete {
+                Task { await self.delete(___VARIABLE_modelVariableName___) }
             }
         }
     }

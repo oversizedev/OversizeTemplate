@@ -1,7 +1,9 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Env
 import FactoryKit
+import Models
 import OversizeArchitecture
 import OversizeCore
 import OversizeNavigation
@@ -26,8 +28,7 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Edit(
                 ___VARIABLE_categoryVariableName___,
-                onSave: Callback { [weak self] updatedCategory in
-                    guard let self else { return }
+                onSave: Callback { updatedCategory in
                     Task {
                         await self.fetchData()
                         self.output?.onEdit?(updatedCategory)
@@ -40,8 +41,8 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
     func onTapDelete() async {
         guard let ___VARIABLE_categoryVariableName___ = await state.state.result?.___VARIABLE_categoryVariableName___ else { return }
         await state.update { viewState in
-            viewState.alert = .delete { [weak self] in
-                Task { await self?.delete(___VARIABLE_categoryVariableName___) }
+            viewState.alert = .delete {
+                Task { await self.delete(___VARIABLE_categoryVariableName___) }
             }
         }
     }
@@ -53,18 +54,6 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
             await self.state.update { $0.hud = updatedCategory.isFavorite ? .favorite : .unfavorite }
             await self.fetchData()
             self.output?.onEdit?(updatedCategory)
-        }
-    }
-
-    func onTapCreate___VARIABLE_modelName___() async {
-        let ___VARIABLE_categoryVariableName___Id = await state.___VARIABLE_categoryVariableName___Id
-        await state.update { viewState in
-            viewState.destination = .___VARIABLE_modelVariableName___Create(
-                ___VARIABLE_categoryVariableName___Id: ___VARIABLE_categoryVariableName___Id,
-                onSave: Callback { [weak self] _ in
-                    Task { await self?.fetchData() }
-                }
-            )
         }
     }
 
@@ -95,11 +84,10 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Detail(
                 ___VARIABLE_modelVariableName___,
-                onEdit: Callback { [weak self] _ in
-                    Task { await self?.fetchData() }
+                onEdit: Callback { _ in
+                    Task { await self.fetchData() }
                 },
-                onDelete: Callback { [weak self] _ in
-                    guard let self else { return }
+                onDelete: Callback { _ in
                     Task {
                         await self.state.update { $0.hud = .delete }
                         await self.fetchData()
@@ -113,8 +101,8 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
-                onSave: Callback { [weak self] _ in
-                    Task { await self?.fetchData() }
+                onSave: Callback { _ in
+                    Task { await self.fetchData() }
                 }
             )
         }
@@ -123,8 +111,8 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
     func createCategory(for ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Create(
-                onSave: Callback { [weak self] ___VARIABLE_categoryVariableName___ in
-                    Task { await self?.assignCategory(___VARIABLE_categoryVariableName___, to: ___VARIABLE_modelVariableName___, showsHUD: false) }
+                onSave: Callback { ___VARIABLE_categoryVariableName___ in
+                    Task { await self.assignCategory(___VARIABLE_categoryVariableName___, to: ___VARIABLE_modelVariableName___, showsHUD: false) }
                 }
             )
         }
@@ -160,8 +148,8 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
 
     func confirmDelete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await state.update { viewState in
-            viewState.alert = .delete { [weak self] in
-                Task { await self?.delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___) }
+            viewState.alert = .delete {
+                Task { await self.delete___VARIABLE_modelName___(___VARIABLE_modelVariableName___) }
             }
         }
     }

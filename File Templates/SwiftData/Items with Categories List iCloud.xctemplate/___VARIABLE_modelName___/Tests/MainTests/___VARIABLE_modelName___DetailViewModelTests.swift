@@ -4,6 +4,7 @@ import ___VARIABLE_modelPackage___
 import FactoryKit
 import FactoryTesting
 @testable import Main
+import Models
 import SwiftUI
 import Testing
 
@@ -20,8 +21,8 @@ struct ___VARIABLE_modelName___DetailViewModelTests {
     }
 
     @Test func `appear loads ___VARIABLE_modelVariableName___ with categories`() async throws {
-        let category = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", categoryId: category.id)
+        let category = try await TestData.makeCategory("Video")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix", categoryId: category.id)
         let (state, viewModel) = makeViewModel(id: netflix.id)
 
         await viewModel.handleAction(.onAppear)
@@ -39,7 +40,7 @@ struct ___VARIABLE_modelName___DetailViewModelTests {
     }
 
     @Test func `toggle favorite updates state and emits edit callback`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let recorder = CallbackRecorder<___VARIABLE_modelName___>()
         let (state, viewModel) = makeViewModel(id: netflix.id, output: .init(onEdit: recorder.callback))
         await viewModel.handleAction(.onAppear)
@@ -52,8 +53,8 @@ struct ___VARIABLE_modelName___DetailViewModelTests {
     }
 
     @Test func `select category updates ___VARIABLE_modelVariableName___`() async throws {
-        let category = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let category = try await TestData.makeCategory("Video")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel(id: netflix.id)
         await viewModel.handleAction(.onAppear)
 
@@ -65,7 +66,7 @@ struct ___VARIABLE_modelName___DetailViewModelTests {
     }
 
     @Test func `confirmed delete dismisses once and emits delete callback`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let recorder = CallbackRecorder<___VARIABLE_modelName___>()
         let (state, viewModel) = makeViewModel(id: netflix.id, output: .init(onDelete: recorder.callback))
         await viewModel.handleAction(.onAppear)
@@ -79,7 +80,7 @@ struct ___VARIABLE_modelName___DetailViewModelTests {
     }
 
     @Test func `delete failure shows alert and keeps screen`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel(id: netflix.id)
         await viewModel.handleAction(.onAppear)
         try await Container.shared.___VARIABLE_modelVariableName___StorageService().delete(netflix)
@@ -97,7 +98,7 @@ struct ___VARIABLE_modelName___DetailViewModelTests {
     }
 
     @Test func `edit destination callback refreshes and emits`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let recorder = CallbackRecorder<___VARIABLE_modelName___>()
         let (state, viewModel) = makeViewModel(id: netflix.id, output: .init(onEdit: recorder.callback))
         await viewModel.handleAction(.onAppear)

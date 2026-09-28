@@ -1,6 +1,8 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Env
+import Models
 import Observation
 import OversizeArchitecture
 import OversizeCore
@@ -69,7 +71,6 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
             ___VARIABLE_modelVariableName___Id = UUID()
             form = Form()
             form.date = Date()
-            form.___VARIABLE_categoryVariableName___Id = input?.___VARIABLE_categoryVariableName___Id
             originalForm = form
         }
     }

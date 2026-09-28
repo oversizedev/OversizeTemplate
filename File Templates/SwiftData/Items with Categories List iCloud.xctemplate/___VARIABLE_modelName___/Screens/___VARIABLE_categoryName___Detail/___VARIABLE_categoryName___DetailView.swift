@@ -1,6 +1,7 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Models
 import OversizeArchitecture
 import OversizeCore
 import OversizeLocalizable
@@ -44,7 +45,6 @@ public struct ___VARIABLE_categoryName___DetailView: ViewProtocol {
                 ___VARIABLE_categoryVariableName___: model.___VARIABLE_categoryVariableName___,
                 ___VARIABLE_modelPluralVariableName___: model.___VARIABLE_modelPluralVariableName___,
                 ___VARIABLE_categoryPluralVariableName___: model.___VARIABLE_categoryPluralVariableName___,
-                onTapCreate___VARIABLE_modelName___: { reducer.callAsFunction(.onTapCreate___VARIABLE_modelName___) },
                 on___VARIABLE_modelName___Action: { reducer.callAsFunction(.on___VARIABLE_modelName___Action($0)) }
             )
         case .error:

@@ -1,6 +1,8 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Env
+import Models
 import ObservableDefaults
 import Observation
 import OversizeArchitecture
@@ -28,9 +30,7 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
 
     // MARK: - Initialization
 
-    public init(input: ___VARIABLE_modelName___List.Input?) {
-        filterType = input?.filterType ?? .standard
-    }
+    public init(input _: ___VARIABLE_modelName___List.Input?) {}
 }
 
 // MARK: - State Model

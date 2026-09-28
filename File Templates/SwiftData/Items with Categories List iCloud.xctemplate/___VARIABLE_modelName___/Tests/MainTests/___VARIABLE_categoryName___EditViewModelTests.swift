@@ -4,6 +4,7 @@ import ___VARIABLE_modelPackage___
 import FactoryKit
 import FactoryTesting
 @testable import Main
+import Models
 import SwiftUI
 import Testing
 
@@ -19,7 +20,7 @@ struct ___VARIABLE_categoryName___EditViewModelTests {
     }
 
     @Test func `duplicate name marks form invalid`() async throws {
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        try await TestData.makeCategory("Video")
         let (state, viewModel) = makeViewModel()
         state.form.name = "video"
 
@@ -53,7 +54,7 @@ struct ___VARIABLE_categoryName___EditViewModelTests {
         state.form.name = "Video"
         await viewModel.handleAction(.onFormChanged)
         #expect(state.isValidForm)
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        try await TestData.makeCategory("Video")
 
         await viewModel.handleAction(.onTapSave)
 
@@ -63,7 +64,7 @@ struct ___VARIABLE_categoryName___EditViewModelTests {
     }
 
     @Test func `edit with model prefills form and keeps own name valid`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let video = try await TestData.makeCategory("Video")
         let (state, viewModel) = makeViewModel(.init(___VARIABLE_categoryVariableName___: video))
 
         await viewModel.handleAction(.onAppear)
@@ -75,7 +76,7 @@ struct ___VARIABLE_categoryName___EditViewModelTests {
     }
 
     @Test func `emoji change marks form dirty and saves`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let video = try await TestData.makeCategory("Video")
         let (state, viewModel) = makeViewModel(.init(___VARIABLE_categoryVariableName___: video))
         await viewModel.handleAction(.onAppear)
 
@@ -90,7 +91,7 @@ struct ___VARIABLE_categoryName___EditViewModelTests {
     }
 
     @Test func `edit by id loads form and missing id publishes error`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let video = try await TestData.makeCategory("Video")
         let (loadedState, loadedViewModel) = makeViewModel(.init(id: video.id))
         let (missingState, missingViewModel) = makeViewModel(.init(id: UUID()))
 

@@ -4,6 +4,7 @@ import ___VARIABLE_modelPackage___
 import FactoryKit
 import FactoryTesting
 @testable import Main
+import Models
 import SwiftUI
 import Testing
 
@@ -20,11 +21,11 @@ struct ___VARIABLE_categoryName___DetailViewModelTests {
     }
 
     @Test func `appear loads only ___VARIABLE_modelPluralVariableName___ of the category`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        let music = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Music")
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", categoryId: video.id)
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Spotify", categoryId: music.id)
-        try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Dropbox")
+        let video = try await TestData.makeCategory("Video")
+        let music = try await TestData.makeCategory("Music")
+        try await TestData.make___VARIABLE_modelName___("Netflix", categoryId: video.id)
+        try await TestData.make___VARIABLE_modelName___("Spotify", categoryId: music.id)
+        try await TestData.make___VARIABLE_modelName___("Dropbox")
         let (state, viewModel) = makeViewModel(id: video.id)
 
         await viewModel.handleAction(.onAppear)
@@ -35,7 +36,7 @@ struct ___VARIABLE_categoryName___DetailViewModelTests {
     }
 
     @Test func `toggle favorite emits updated category`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let video = try await TestData.makeCategory("Video")
         let recorder = CallbackRecorder<___VARIABLE_categoryName___>()
         let (state, viewModel) = makeViewModel(id: video.id, output: .init(onEdit: recorder.callback))
         await viewModel.handleAction(.onAppear)
@@ -47,8 +48,8 @@ struct ___VARIABLE_categoryName___DetailViewModelTests {
     }
 
     @Test func `confirmed delete dismisses and keeps ___VARIABLE_modelPluralVariableName___`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", categoryId: video.id)
+        let video = try await TestData.makeCategory("Video")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix", categoryId: video.id)
         let recorder = CallbackRecorder<___VARIABLE_categoryName___>()
         let (state, viewModel) = makeViewModel(id: video.id, output: .init(onDelete: recorder.callback))
         await viewModel.handleAction(.onAppear)
@@ -62,7 +63,7 @@ struct ___VARIABLE_categoryName___DetailViewModelTests {
     }
 
     @Test func `delete without output still dismisses`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let video = try await TestData.makeCategory("Video")
         let (state, viewModel) = makeViewModel(id: video.id)
         await viewModel.handleAction(.onAppear)
 
@@ -74,8 +75,8 @@ struct ___VARIABLE_categoryName___DetailViewModelTests {
     }
 
     @Test func `child ___VARIABLE_modelVariableName___ delete refreshes without closing category`() async throws {
-        let video = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", categoryId: video.id)
+        let video = try await TestData.makeCategory("Video")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix", categoryId: video.id)
         let (state, viewModel) = makeViewModel(id: video.id)
         await viewModel.handleAction(.onAppear)
 

@@ -49,21 +49,6 @@ public final class ___VARIABLE_categoryName___Entity {
         self.___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelPluralVariableName___
         imageData = image
     }
-
-    public convenience init(from domain: ___VARIABLE_categoryName___, ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___Entity] = []) {
-        self.init(
-            id: domain.id,
-            name: domain.name,
-            emoji: domain.emoji,
-            color: domain.color,
-            date: domain.date,
-            image: domain.imageData,
-            note: domain.note,
-            isFavorite: domain.isFavorite,
-            index: domain.index,
-            ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___
-        )
-    }
 }
 
 // MARK: - Computed Properties

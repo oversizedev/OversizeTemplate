@@ -1,6 +1,7 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Models
 import OversizeUI
 import SwiftUI
 
@@ -8,7 +9,6 @@ struct ___VARIABLE_categoryName___DetailContent: View {
     let ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___
     let ___VARIABLE_modelPluralVariableName___: [___VARIABLE_modelName___]
     let ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]
-    let onTapCreate___VARIABLE_modelName___: () -> Void
     let on___VARIABLE_modelName___Action: (___VARIABLE_modelName___ListContentView.Action) -> Void
 
     var body: some View {
@@ -39,11 +39,6 @@ struct ___VARIABLE_categoryName___DetailContent: View {
                 onAction: on___VARIABLE_modelName___Action
             )
         }
-
-        Section {
-            ListButton("Add ___VARIABLE_modelVariableName___", action: onTapCreate___VARIABLE_modelName___)
-        }
-        .listSectionSpacing(.xxxSmall)
     }
 }
 
@@ -53,7 +48,6 @@ struct ___VARIABLE_categoryName___DetailContent: View {
             ___VARIABLE_categoryVariableName___: .init(name: "Video", emoji: "🎬", color: .red, date: .now, note: "Streaming"),
             ___VARIABLE_modelPluralVariableName___: [.init(name: "Netflix", color: .red, date: .now)],
             ___VARIABLE_categoryPluralVariableName___: [],
-            onTapCreate___VARIABLE_modelName___: {},
             on___VARIABLE_modelName___Action: { _ in }
         )
     }

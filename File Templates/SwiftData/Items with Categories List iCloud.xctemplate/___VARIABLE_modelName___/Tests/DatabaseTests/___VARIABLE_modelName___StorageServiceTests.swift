@@ -2,6 +2,7 @@
 
 @testable import ___VARIABLE_modelPackage___
 import Foundation
+import Models
 import OversizeCore
 import SwiftData
 import SwiftUI

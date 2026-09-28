@@ -1,6 +1,7 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
+import Models
 import OversizeArchitecture
 import OversizeCore
 import OversizeLocalizable
@@ -54,7 +55,6 @@ public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
         case let .result(model):
             ___VARIABLE_categoryName___ListContentView(
                 ___VARIABLE_categoryPluralVariableName___: model.___VARIABLE_categoryPluralVariableName___,
-                hasUncategorized: model.hasUncategorized,
                 viewOption: viewState.storage.viewOption,
                 onAction: { reducer.callAsFunction(.onCategoryAction($0)) }
             )

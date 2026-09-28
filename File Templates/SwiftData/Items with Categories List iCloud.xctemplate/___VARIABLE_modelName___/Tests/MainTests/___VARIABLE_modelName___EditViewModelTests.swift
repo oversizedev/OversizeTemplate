@@ -4,6 +4,7 @@ import ___VARIABLE_modelPackage___
 import FactoryKit
 import FactoryTesting
 @testable import Main
+import Models
 import SwiftUI
 import Testing
 
@@ -61,8 +62,8 @@ struct ___VARIABLE_modelName___EditViewModelTests {
     }
 
     @Test func `edit with model prefills form without changes`() async throws {
-        let category = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", note: "Family", categoryId: category.id)
+        let category = try await TestData.makeCategory("Video")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix", note: "Family", categoryId: category.id)
         let (state, viewModel) = makeViewModel(.init(___VARIABLE_modelVariableName___: netflix))
 
         #expect(state.form.name == "Netflix")
@@ -77,8 +78,8 @@ struct ___VARIABLE_modelName___EditViewModelTests {
     }
 
     @Test func `edit removes category and clears note`() async throws {
-        let category = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", note: "Family", categoryId: category.id)
+        let category = try await TestData.makeCategory("Video")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix", note: "Family", categoryId: category.id)
         let (state, viewModel) = makeViewModel(.init(___VARIABLE_modelVariableName___: netflix))
         await viewModel.handleAction(.onAppear)
 
@@ -95,7 +96,7 @@ struct ___VARIABLE_modelName___EditViewModelTests {
     }
 
     @Test func `edit by id loads form`() async throws {
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel(.init(id: netflix.id))
 
         await viewModel.handleAction(.onAppear)
@@ -106,8 +107,8 @@ struct ___VARIABLE_modelName___EditViewModelTests {
     }
 
     @Test func `late load keeps typed draft and fills untouched fields`() async throws {
-        let category = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
-        let netflix = try await ___VARIABLE_modelName___TestData.make___VARIABLE_modelName___("Netflix", note: "Family", categoryId: category.id)
+        let category = try await TestData.makeCategory("Video")
+        let netflix = try await TestData.make___VARIABLE_modelName___("Netflix", note: "Family", categoryId: category.id)
         let (state, viewModel) = makeViewModel(.init(id: netflix.id))
         state.form.name = "Draft"
 
@@ -145,7 +146,7 @@ struct ___VARIABLE_modelName___EditViewModelTests {
             Issue.record("Expected create category destination")
             return
         }
-        let category = try await ___VARIABLE_modelName___TestData.make___VARIABLE_categoryName___("Video")
+        let category = try await TestData.makeCategory("Video")
         onSave?(category)
         await waitUntil { state.form.___VARIABLE_categoryVariableName___Id == category.id }
 
