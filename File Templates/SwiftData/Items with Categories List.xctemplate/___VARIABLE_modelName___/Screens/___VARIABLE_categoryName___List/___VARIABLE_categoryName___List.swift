@@ -51,13 +51,23 @@ public enum ___VARIABLE_categoryName___ViewOption: String, CaseIterable, Identif
     }
 }
 
+// MARK: - Display Extensions
+
+public extension ___VARIABLE_categoryName___ {
+    static let defaultEmoji = "🍏"
+
+    var displayEmoji: String {
+        emoji ?? Self.defaultEmoji
+    }
+}
+
 // MARK: - Filter Type Extensions
 
 public extension ___VARIABLE_categoryName___FilterType {
     var title: String {
         switch self {
         case .standard:
-            "All items"
+            "All categories"
         case .favorites:
             "Favorites"
         }
@@ -84,18 +94,18 @@ public extension ___VARIABLE_categoryName___FilterType {
     var emptyStateTitle: String {
         switch self {
         case .standard:
-            "Your list is empty"
+            "No categories yet"
         case .favorites:
-            "No favorite items yet"
+            "No favorite categories yet"
         }
     }
 
     var emptyStateSubtitle: String? {
         switch self {
         case .standard:
-            "Add your first item to get started"
+            "Add your first category to get started"
         case .favorites:
-            "Mark items as favorites to see them here"
+            "Mark categories as favorites to see them here"
         }
     }
 }

@@ -49,6 +49,7 @@ public actor ___VARIABLE_modelName___StorageService {
                     date: ___VARIABLE_modelVariableName___.date,
                     image: ___VARIABLE_modelVariableName___.imageData,
                     note: ___VARIABLE_modelVariableName___.note,
+                    isFavorite: ___VARIABLE_modelVariableName___.isFavorite,
                     ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___
                 )
 
@@ -95,14 +96,22 @@ public actor ___VARIABLE_modelName___StorageService {
         ___VARIABLE_categoryVariableName___Id: UUID? = nil
     ) throws -> [___VARIABLE_modelName___] {
         do {
+            let isFavoritesOnly = filterType == .favorites
+            let isUncategorizedOnly = filterType == .uncategorized
             var predicate: Predicate<___VARIABLE_modelName___Entity>?
-
             if let ___VARIABLE_categoryVariableName___Id {
                 predicate = #Predicate { ___VARIABLE_modelVariableName___ in
                     ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___?.id == ___VARIABLE_categoryVariableName___Id
+                        && (!isFavoritesOnly || ___VARIABLE_modelVariableName___.isFavorite)
                 }
-            } else if let filterPredicate = filterType?.filterPredicate {
-                predicate = filterPredicate
+            } else if isFavoritesOnly {
+                predicate = #Predicate { ___VARIABLE_modelVariableName___ in
+                    ___VARIABLE_modelVariableName___.isFavorite
+                }
+            } else if isUncategorizedOnly {
+                predicate = #Predicate { ___VARIABLE_modelVariableName___ in
+                    ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ == nil
+                }
             }
 
             let sortDescriptor = sortType.sortDescriptor(order: sortOrder)
@@ -145,6 +154,15 @@ public actor ___VARIABLE_modelName___StorageService {
                 FetchDescriptor<___VARIABLE_modelName___Entity>(
                     predicate: #Predicate { ___VARIABLE_modelVariableName___ in
                         ___VARIABLE_modelVariableName___.isFavorite &&
+                            (___VARIABLE_modelVariableName___.name.localizedStandardContains(query) ||
+                                (___VARIABLE_modelVariableName___.note?.localizedStandardContains(query) == true))
+                    },
+                    sortBy: [sortDescriptor]
+                )
+            } else if filterType == .uncategorized {
+                FetchDescriptor<___VARIABLE_modelName___Entity>(
+                    predicate: #Predicate { ___VARIABLE_modelVariableName___ in
+                        ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___ == nil &&
                             (___VARIABLE_modelVariableName___.name.localizedStandardContains(query) ||
                                 (___VARIABLE_modelVariableName___.note?.localizedStandardContains(query) == true))
                     },
@@ -221,7 +239,8 @@ public actor ___VARIABLE_modelName___StorageService {
     }
 
     public func toggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) throws -> ___VARIABLE_modelName___ {
-        try update(___VARIABLE_modelVariableName___, isFavorite: !___VARIABLE_modelVariableName___.isFavorite)
+        let entity = try fetch___VARIABLE_modelName___(by: ___VARIABLE_modelVariableName___.id)
+        return try update(___VARIABLE_modelVariableName___, isFavorite: !entity.isFavorite)
     }
 
     // MARK: - Delete Operations

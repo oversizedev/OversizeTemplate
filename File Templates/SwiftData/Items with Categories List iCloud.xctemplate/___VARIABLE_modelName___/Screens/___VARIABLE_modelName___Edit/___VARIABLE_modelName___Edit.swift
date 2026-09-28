@@ -30,17 +30,6 @@ public struct ___VARIABLE_modelName___EditInput: Sendable {
         source = nil
         self.___VARIABLE_categoryVariableName___Id = ___VARIABLE_categoryVariableName___Id
     }
-
-    public var ___VARIABLE_modelVariableName___Id: UUID? {
-        switch source {
-        case let .id(id):
-            id
-        case let .___VARIABLE_modelVariableName___(___VARIABLE_modelVariableName___):
-            ___VARIABLE_modelVariableName___.id
-        case .none:
-            nil
-        }
-    }
 }
 
 public struct ___VARIABLE_modelName___EditOutput: Sendable {

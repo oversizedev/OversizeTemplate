@@ -1,13 +1,11 @@
 // ___FILEHEADER___
 
 import ___VARIABLE_modelPackage___
-import FactoryKit
 import ObservableDefaults
 import Observation
 import OversizeArchitecture
 import OversizeCore
 import OversizeNavigation
-import SwiftData
 import SwiftUI
 
 @Observable
@@ -18,13 +16,12 @@ public final class ___VARIABLE_modelName___ListViewState: ViewStateProtocol {
     /// User Interface
     public var state: LoadingState<StateModel> = .idle
     public var searchTerm: String = ""
+    public var filterType: ___VARIABLE_modelName___FilterType = .standard
+
+    /// Routing
     public var destination: ___VARIABLE_modelName___Destinations?
-    public var presented___VARIABLE_modelName___Id: UUID?
     public var alert: AppAlert?
     public var hud: OversizeNavigation.HUD?
-    public var dismissDetail: Bool = false
-
-    public var filterType: ___VARIABLE_modelName___FilterType
 
     /// Initialization
     public init(input: ___VARIABLE_modelName___List.Input?) {

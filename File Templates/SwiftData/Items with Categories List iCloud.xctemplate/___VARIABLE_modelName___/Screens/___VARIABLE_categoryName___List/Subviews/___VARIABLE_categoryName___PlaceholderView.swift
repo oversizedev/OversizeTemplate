@@ -17,8 +17,13 @@ struct ___VARIABLE_categoryName___PlaceholderView: View {
                         .iconOnSurface()
                 }
             )
-            .listRowSeparator(.hidden)
         }
         .redacted(reason: .placeholder)
+    }
+}
+
+#Preview {
+    List {
+        ___VARIABLE_categoryName___PlaceholderView()
     }
 }

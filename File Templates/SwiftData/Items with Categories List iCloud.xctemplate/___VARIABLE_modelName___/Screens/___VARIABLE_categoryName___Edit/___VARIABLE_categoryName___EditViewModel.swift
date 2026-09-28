@@ -4,84 +4,26 @@ import ___VARIABLE_modelPackage___
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
-import OversizeUI
+import OversizeNavigation
 import SwiftUI
 
 @ViewModel(module: ___VARIABLE_categoryName___Edit.self)
 public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
-    /// Services
-    @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @LazyInjected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
 
     private var saveTask: Task<Void, Never>?
 
-    // User Actions
+    // MARK: - User Actions
 
     func onAppear() async {
-        if await state.source != nil {
-            await fetchData()
+        if case let .id(id) = await state.source, await state.originalForm == nil {
+            await fetch___VARIABLE_categoryName___(id)
         }
-    }
-
-    func onFocusField(_ field: ___VARIABLE_categoryName___EditViewState.FocusField?) async {
-        await state.update { $0.focusedField = field }
-    }
-
-    func onNameChanged(_: String) async {
         await updateFormValidation()
     }
 
-    func onNoteChanged(_: String) async {
+    func onFormChanged() async {
         await updateFormValidation()
-    }
-
-    func onUrlChanged(_: URL?) async {
-        await updateFormValidation()
-    }
-
-    func onColorChanged(_: Color) async {
-        await updateFormValidation()
-    }
-
-    func onDateChanged(_: Date?) async {
-        await updateFormValidation()
-    }
-
-    func onImageChanged(_: UIImage?) async {
-        await updateFormValidation()
-    }
-
-    func onEmojiChanged(_: String) async {
-        await updateFormValidation()
-    }
-
-    func updateFormValidation() async {
-        let trimmedName = await state.trimmedName
-
-        guard !trimmedName.isEmpty else {
-            await state.update { viewState in
-                guard viewState.trimmedName == trimmedName else { return }
-                viewState.isEmptyForm = viewState.note.isEmpty
-                viewState.isDuplicateName = false
-                viewState.isValidForm = false
-            }
-            return
-        }
-
-        let excludingId: UUID? = await state.source == nil ? nil : state.___VARIABLE_categoryVariableName___Id
-
-        var isDuplicate = false
-        do {
-            isDuplicate = try await ___VARIABLE_categoryVariableName___StorageService.isNameTaken(trimmedName, excludingId: excludingId)
-        } catch {
-            Log.error("Failed to check ___VARIABLE_categoryVariableName___ name uniqueness:", error: error)
-        }
-
-        await state.update { viewState in
-            guard viewState.trimmedName == trimmedName else { return }
-            viewState.isEmptyForm = false
-            viewState.isDuplicateName = isDuplicate
-            viewState.isValidForm = !isDuplicate
-        }
     }
 
     func onTapSave() async {
@@ -90,15 +32,18 @@ public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
         }
         let task = Task {
             defer { saveTask = nil }
-            guard await !state.isEmptyForm, await state.isValidForm else { return }
+            let form = await state.form
+            guard !form.trimmedName.isEmpty else { return }
             await state.update { $0.isSaving = true }
             defer { await state.update { $0.isSaving = false } }
 
             do {
-                let ___VARIABLE_categoryVariableName___ = if await state.source == nil {
-                    try await create___VARIABLE_categoryName___()
+                let ___VARIABLE_categoryVariableName___ = if let loadedCategory = await state.___VARIABLE_categoryVariableName___State.result {
+                    try await update(loadedCategory, with: form)
+                } else if await state.source == nil {
+                    try await create(form)
                 } else {
-                    try await update___VARIABLE_categoryName___()
+                    throw PersistenceError.itemNotFound
                 }
                 await state.update { viewState in
                     viewState.hud = .success
@@ -107,6 +52,7 @@ public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
                 output?.onSave?(___VARIABLE_categoryVariableName___)
             } catch PersistenceError.duplicateItem {
                 await state.update { viewState in
+                    guard viewState.form.trimmedName == form.trimmedName else { return }
                     viewState.isDuplicateName = true
                     viewState.isValidForm = false
                 }
@@ -120,61 +66,138 @@ public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
     }
 }
 
+// MARK: - Mapping
+
+extension ___VARIABLE_categoryName___EditViewModel {
+    nonisolated static func form(from ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) -> ___VARIABLE_categoryName___EditViewState.Form {
+        var form = ___VARIABLE_categoryName___EditViewState.Form()
+        form.name = ___VARIABLE_categoryVariableName___.name
+        form.note = ___VARIABLE_categoryVariableName___.note ?? ""
+        form.emoji = ___VARIABLE_categoryVariableName___.displayEmoji
+        form.color = ___VARIABLE_categoryVariableName___.color
+        form.date = ___VARIABLE_categoryVariableName___.date
+        form.image = ___VARIABLE_categoryVariableName___.imageData.flatMap { PlatformImage(data: $0) }
+        return form
+    }
+
+    nonisolated static func merge(
+        draft: ___VARIABLE_categoryName___EditViewState.Form,
+        loaded: ___VARIABLE_categoryName___EditViewState.Form
+    ) -> ___VARIABLE_categoryName___EditViewState.Form {
+        let untouched = ___VARIABLE_categoryName___EditViewState.Form()
+        var form = loaded
+        if draft.name != untouched.name {
+            form.name = draft.name
+        }
+        if draft.note != untouched.note {
+            form.note = draft.note
+        }
+        if draft.emoji != untouched.emoji {
+            form.emoji = draft.emoji
+        }
+        if draft.color != untouched.color {
+            form.color = draft.color
+        }
+        if draft.date != untouched.date {
+            form.date = draft.date
+        }
+        if draft.image != untouched.image {
+            form.image = draft.image
+        }
+        return form
+    }
+
+    nonisolated static func imageData(from image: PlatformImage?) throws -> Data? {
+        guard let image else { return nil }
+        guard let data = image.jpegData(compressionQuality: 0.5) else {
+            throw PersistenceError.validationFailed(reason: "Image could not be encoded")
+        }
+        return data
+    }
+}
+
+// MARK: - Validation
+
+private extension ___VARIABLE_categoryName___EditViewModel {
+    func updateFormValidation() async {
+        let form = await state.form
+        let trimmedName = form.trimmedName
+
+        await state.update { viewState in
+            viewState.hasChanges = viewState.originalForm.map { $0 != viewState.form } ?? false
+        }
+
+        guard !trimmedName.isEmpty else {
+            await state.update { viewState in
+                guard viewState.form.trimmedName == trimmedName else { return }
+                viewState.isDuplicateName = false
+                viewState.isValidForm = false
+            }
+            return
+        }
+
+        let excludingId: UUID? = await state.source == nil ? nil : state.___VARIABLE_categoryVariableName___Id
+        var isDuplicate = false
+        do {
+            isDuplicate = try await ___VARIABLE_categoryVariableName___StorageService.isNameTaken(trimmedName, excludingId: excludingId)
+        } catch {
+            Log.error("Failed to check ___VARIABLE_categoryName___ name uniqueness:", error: error)
+        }
+
+        await state.update { viewState in
+            guard viewState.form.trimmedName == trimmedName else { return }
+            viewState.isDuplicateName = isDuplicate
+            viewState.isValidForm = !isDuplicate
+        }
+    }
+}
+
 // MARK: - Data Fetching
 
 private extension ___VARIABLE_categoryName___EditViewModel {
-    func fetchData() async {
+    func fetch___VARIABLE_categoryName___(_ id: UUID) async {
         do {
-            let ___VARIABLE_categoryVariableName___ = try await ___VARIABLE_categoryVariableName___StorageService.fetch(by: state.___VARIABLE_categoryVariableName___Id)
+            let ___VARIABLE_categoryVariableName___ = try await ___VARIABLE_categoryVariableName___StorageService.fetch(by: id)
+            let form = Self.form(from: ___VARIABLE_categoryVariableName___)
             await state.update { viewState in
                 viewState.___VARIABLE_categoryVariableName___State = .result(___VARIABLE_categoryVariableName___)
-                viewState.name = ___VARIABLE_categoryVariableName___.name
-                viewState.emoji = ___VARIABLE_categoryVariableName___.emoji ?? "🥕"
-                viewState.note = ___VARIABLE_categoryVariableName___.note ?? ""
-                viewState.color = ___VARIABLE_categoryVariableName___.color
-                viewState.date = ___VARIABLE_categoryVariableName___.date
-                #if os(macOS)
-                    viewState.image = ___VARIABLE_categoryVariableName___.imageData.flatMap { NSImage(data: $0) }
-                #else
-                    viewState.image = ___VARIABLE_categoryVariableName___.imageData.flatMap { UIImage(data: $0) }
-                #endif
-                viewState.originalImage = viewState.image
+                viewState.form = Self.merge(draft: viewState.form, loaded: form)
+                viewState.originalForm = form
             }
-            await updateFormValidation()
         } catch {
+            Log.error("Failed to fetch ___VARIABLE_categoryName___:", error: error)
             await state.update { $0.___VARIABLE_categoryVariableName___State = .error(error) }
         }
     }
+}
 
-    func create___VARIABLE_categoryName___() async throws -> ___VARIABLE_categoryName___ {
+// MARK: - Write Operations
+
+private extension ___VARIABLE_categoryName___EditViewModel {
+    func create(_ form: ___VARIABLE_categoryName___EditViewState.Form) async throws -> ___VARIABLE_categoryName___ {
         let count = try await ___VARIABLE_categoryVariableName___StorageService.count()
         return try await ___VARIABLE_categoryVariableName___StorageService.save(
-            name: state.trimmedName,
-            emoji: state.emoji,
-            color: state.color,
-            date: state.date ?? Date(),
-            image: state.image?.jpegData(compressionQuality: 0.5),
-            note: state.note.isEmpty ? nil : state.note,
+            name: form.trimmedName,
+            emoji: form.emoji,
+            color: form.color,
+            date: form.date ?? Date(),
+            image: Self.imageData(from: form.image),
+            note: form.note.isEmpty ? nil : form.note,
             index: count
         )
     }
 
-    func update___VARIABLE_categoryName___() async throws -> ___VARIABLE_categoryName___ {
-        guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else {
-            Log.error("Cannot update ___VARIABLE_categoryName___ - no category loaded")
-            throw PersistenceError.itemNotFound
-        }
-        let image: Data?? = await state.isImageChanged
-            ? .some(state.image?.jpegData(compressionQuality: 0.5))
-            : .none
+    func update(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___, with form: ___VARIABLE_categoryName___EditViewState.Form) async throws -> ___VARIABLE_categoryName___ {
+        let originalImage = await state.originalForm?.image
+        let image: Data?? = try form.image === originalImage ? nil : .some(Self.imageData(from: form.image))
         return try await ___VARIABLE_categoryVariableName___StorageService.update(
             ___VARIABLE_categoryVariableName___,
-            name: state.trimmedName,
-            emoji: .some(state.emoji),
-            color: state.color,
-            date: state.date ?? Date(),
+            name: form.trimmedName,
+            emoji: .some(form.emoji),
+            color: form.color,
+            date: form.date ?? Date(),
             image: image,
-            note: .some(state.note.isEmpty ? nil : state.note)
+            note: .some(form.note.isEmpty ? nil : form.note)
         )
     }
 }

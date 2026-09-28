@@ -237,7 +237,8 @@ public actor ___VARIABLE_categoryName___StorageService {
     }
 
     public func toggleFavorite(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
-        try update(___VARIABLE_categoryVariableName___, isFavorite: !___VARIABLE_categoryVariableName___.isFavorite)
+        let entity = try fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
+        return try update(___VARIABLE_categoryVariableName___, isFavorite: !entity.isFavorite)
     }
 
     public func incrementViewCount(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
@@ -319,7 +320,9 @@ public actor ___VARIABLE_categoryName___StorageService {
                 let ___VARIABLE_modelVariableName___Descriptor = FetchDescriptor<___VARIABLE_modelName___Entity>(
                     predicate: #Predicate { $0.id == ___VARIABLE_modelVariableName___Id }
                 )
-                if let ___VARIABLE_modelVariableName___Entity = try modelContext.fetch(___VARIABLE_modelVariableName___Descriptor).first {
+                if let ___VARIABLE_modelVariableName___Entity = try modelContext.fetch(___VARIABLE_modelVariableName___Descriptor).first,
+                   ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___?.id == ___VARIABLE_categoryVariableName___Entity.id
+                {
                     ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___ = nil
                 }
             }

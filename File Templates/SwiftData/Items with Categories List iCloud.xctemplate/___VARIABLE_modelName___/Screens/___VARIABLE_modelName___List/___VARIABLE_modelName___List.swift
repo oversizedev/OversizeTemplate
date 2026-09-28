@@ -22,11 +22,7 @@ public struct ___VARIABLE_modelName___ListInput: Sendable {
 }
 
 public struct ___VARIABLE_modelName___ListOutput: Sendable {
-    public let onProductSelected: (@Sendable (___VARIABLE_modelName___) -> Void)?
-
-    public init(onProductSelected: (@Sendable (___VARIABLE_modelName___) -> Void)? = nil) {
-        self.onProductSelected = onProductSelected
-    }
+    public init() {}
 }
 
 public struct ___VARIABLE_modelName___ListQuery: Equatable, Sendable {

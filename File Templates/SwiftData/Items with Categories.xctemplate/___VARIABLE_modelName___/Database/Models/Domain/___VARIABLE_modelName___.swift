@@ -6,7 +6,6 @@ import SwiftUI
 public struct ___VARIABLE_modelName___: Identifiable, Hashable, Equatable, Sendable {
     public let id: UUID
     public let imageData: Data?
-    public let image: Image?
     public let name: String
     public let color: Color
     public let date: Date
@@ -35,11 +34,6 @@ public struct ___VARIABLE_modelName___: Identifiable, Hashable, Equatable, Senda
         self.isFavorite = isFavorite
         self.viewCount = viewCount
         self.___VARIABLE_categoryVariableName___Id = ___VARIABLE_categoryVariableName___Id
-        if let imageData {
-            image = .init(data: imageData)
-        } else {
-            image = nil
-        }
     }
 }
 
@@ -72,6 +66,11 @@ public extension ___VARIABLE_modelName___ {
 // MARK: - Computed Properties
 
 public extension ___VARIABLE_modelName___ {
+    var image: Image? {
+        guard let imageData else { return nil }
+        return .init(data: imageData)
+    }
+
     /// Helper function to get category name from categoryId - should be used with lazy loading
     func ___VARIABLE_categoryVariableName___Name(from ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) -> String? {
         guard let ___VARIABLE_categoryVariableName___Id else { return nil }

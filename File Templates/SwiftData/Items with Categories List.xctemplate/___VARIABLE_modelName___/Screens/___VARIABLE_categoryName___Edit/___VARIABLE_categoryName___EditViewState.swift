@@ -9,58 +9,30 @@ import SwiftUI
 
 @Observable
 public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
-    /// Forms
-    public var name: String = .init()
-    public var note: String = .init()
-    public var emoji: String = .init("🍏")
-    public var color: Color = .blue
-    public var url: URL?
-    public var date: Date?
-    #if os(macOS)
-        public var image: NSImage?
-    #else
-        public var image: UIImage?
-    #endif
+    /// Form
+    public var form: Form
+    public var originalForm: Form?
 
     /// User Interface
     public var ___VARIABLE_categoryVariableName___State: LoadingState<___VARIABLE_categoryName___> = .idle
-    public var focusedField: FocusField?
-    public var isSaving: Bool = .init()
-    public var isDismissed: Bool = .init()
-    public var isEmptyForm: Bool = true
+    public var isSaving: Bool = false
     public var isValidForm: Bool = false
     public var isDuplicateName: Bool = false
-    public var hud: OversizeNavigation.HUD?
-    public var alert: AppAlert?
+    public var hasChanges: Bool = false
 
-    public let emojis = "🍏🍎🍐🍊🍋🍋‍🟩🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑"
+    /// Routing
+    public var alert: AppAlert?
+    public var hud: OversizeNavigation.HUD?
+    public var isDismissed: Bool = false
 
     /// Constants
     public let source: ___VARIABLE_categoryName___EditInput.Source?
     public let ___VARIABLE_categoryVariableName___Id: UUID
-
-    // Original Values
-    #if os(macOS)
-        public var originalImage: NSImage?
-    #else
-        public var originalImage: UIImage?
-    #endif
+    public let emojis = "🍏🍎🍐🍊🍋🍋‍🟩🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑"
 
     /// View
     var title: String {
-        if source == nil {
-            "Create"
-        } else {
-            "Edit"
-        }
-    }
-
-    var trimmedName: String {
-        name.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    var isImageChanged: Bool {
-        image !== originalImage
+        source == nil ? "Create" : "Edit"
     }
 
     /// Initialization
@@ -71,21 +43,16 @@ public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
         case let .___VARIABLE_categoryVariableName___(___VARIABLE_categoryVariableName___):
             ___VARIABLE_categoryVariableName___Id = ___VARIABLE_categoryVariableName___.id
             ___VARIABLE_categoryVariableName___State = .result(___VARIABLE_categoryVariableName___)
-            name = ___VARIABLE_categoryVariableName___.name
-            emoji = ___VARIABLE_categoryVariableName___.emoji ?? "🥕"
-            note = ___VARIABLE_categoryVariableName___.note ?? ""
-            color = ___VARIABLE_categoryVariableName___.color
-            date = ___VARIABLE_categoryVariableName___.date
-            #if os(macOS)
-                image = ___VARIABLE_categoryVariableName___.imageData.flatMap { NSImage(data: $0) }
-            #else
-                image = ___VARIABLE_categoryVariableName___.imageData.flatMap { UIImage(data: $0) }
-            #endif
-            originalImage = image
+            form = ___VARIABLE_categoryName___EditViewModel.form(from: ___VARIABLE_categoryVariableName___)
+            originalForm = form
         case let .id(id):
             ___VARIABLE_categoryVariableName___Id = id
+            form = Form()
         case .none:
             ___VARIABLE_categoryVariableName___Id = UUID()
+            form = Form()
+            form.date = Date()
+            originalForm = form
         }
     }
 }
@@ -93,8 +60,22 @@ public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
 // MARK: - Supporting types
 
 public extension ___VARIABLE_categoryName___EditViewState {
-    /// FocusFields
-    enum FocusField: String, Hashable, Sendable {
-        case name, note, url
+    struct Form: Equatable, Sendable {
+        public var name: String = ""
+        public var note: String = ""
+        public var emoji: String = ___VARIABLE_categoryName___.defaultEmoji
+        public var color: Color = .blue
+        public var date: Date?
+        public var image: PlatformImage?
+
+        public init() {}
+
+        public var trimmedName: String {
+            name.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
+
+    enum FocusField: Hashable, Sendable {
+        case name, note
     }
 }
