@@ -82,12 +82,12 @@ public extension ___VARIABLE_modelName___EditViewModel {
             viewState.isEmptyForm = viewState.name.isEmpty && viewState.note.isEmpty
             viewState.isValidForm = !viewState.name.isEmpty
         }
-        await logDebug("Form validation changed - valid: \(state.isValidForm)")
+        await Log.debug("Form validation changed - valid: \(state.isValidForm)")
     }
 
     func onSave() async {
         guard await !state.isEmptyForm else {
-            logError("Cannot save ___VARIABLE_modelVariableName___, form is empty")
+            Log.error("Cannot save ___VARIABLE_modelVariableName___, form is empty")
             return
         }
         await state.update { $0.isSaving = true }
@@ -153,7 +153,7 @@ public extension ___VARIABLE_modelName___EditViewModel {
 
     func update___VARIABLE_modelName___() async {
         guard let ___VARIABLE_modelVariableName___ = await state.___VARIABLE_modelVariableName___State.result else {
-            logError("Cannot update ___VARIABLE_modelName___ - no product loaded")
+            Log.error("Cannot update ___VARIABLE_modelName___ - no product loaded")
             return
         }
         await ___VARIABLE_modelVariableName___StorageService.update(

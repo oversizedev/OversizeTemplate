@@ -40,13 +40,4 @@ public enum ___VARIABLE_modelName___FilterType: String, CaseIterable, Identifiab
     public var id: String {
         rawValue
     }
-
-    public var filterPredicate: Predicate<___VARIABLE_modelName___Entity>? {
-        switch self {
-        case .standard:
-            return nil
-        case .favorites:
-            return #Predicate { $0.isFavorite }
-        }
-    }
 }

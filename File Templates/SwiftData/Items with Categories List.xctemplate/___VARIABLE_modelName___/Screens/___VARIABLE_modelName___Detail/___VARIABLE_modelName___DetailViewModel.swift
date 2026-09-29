@@ -4,102 +4,132 @@ import ___VARIABLE_modelPackage___
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
-import OversizeUI
+import OversizeNavigation
 import SwiftUI
 
 @ViewModel(module: ___VARIABLE_modelName___Detail.self)
 public actor ___VARIABLE_modelName___DetailViewModel: ViewModelProtocol {
-    /// Services
-    @Injected(\.___VARIABLE_modelVariableName___StorageService) var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
-    @Injected(\.___VARIABLE_categoryVariableName___StorageService) var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @LazyInjected(\.___VARIABLE_modelVariableName___StorageService) private var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
+    @LazyInjected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+
+    private var saveTask: Task<Void, Never>?
+
+    // MARK: - User Actions
 
     func onAppear() async {
-        await fetchData()
+        let hasLoadedData = await state.state.result != nil
+        await fetchData(showsLoading: !hasLoadedData)
     }
 
-    func onTapEdit___VARIABLE_modelName___() async {
+    func onTapEdit() async {
         guard let ___VARIABLE_modelVariableName___ = await state.state.result?.___VARIABLE_modelVariableName___ else { return }
         await state.update { viewState in
             viewState.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
-                onSave: Callback { _ in
-                    Task { await self.fetchData() }
+                onSave: Callback { [weak self] updated___VARIABLE_modelName___ in
+                    guard let self else { return }
+                    Task {
+                        await self.fetchData()
+                        self.output?.onEdit?(updated___VARIABLE_modelName___)
+                    }
                 }
             )
         }
     }
 
-    func onTapDelete___VARIABLE_modelName___() async {
+    func onTapDelete() async {
         guard let ___VARIABLE_modelVariableName___ = await state.state.result?.___VARIABLE_modelVariableName___ else { return }
         await state.update { viewState in
-            viewState.alert = .delete {
-                Task {
-                    logData("Attempting to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
-                    do {
-                        try await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
-                        logDeleted("___VARIABLE_modelName___")
-                        await self.state.update { viewState in
-                            viewState.hud = .delete
-                            viewState.isDismissed = true
-                        }
-                    } catch {
-                        logError("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
-                        await self.state.update { $0.alert = .error(error) }
-                    }
-                }
+            viewState.alert = .delete { [weak self] in
+                Task { await self?.delete(___VARIABLE_modelVariableName___) }
             }
         }
     }
 
     func onTapToggleFavorite() async {
-        guard let ___VARIABLE_modelVariableName___ = await state.state.result?.___VARIABLE_modelVariableName___ else {
-            logWarning("Cannot toggle favorite - no ___VARIABLE_modelName___ loaded")
-            return
-        }
-        let wasFavorite = ___VARIABLE_modelVariableName___.isFavorite
-
-        do {
-            _ = try await ___VARIABLE_modelVariableName___StorageService.toggleFavorite(___VARIABLE_modelVariableName___)
-            await state.update { $0.hud = wasFavorite ? .unfavorite() : .favorite() }
-            await fetchData()
-        } catch {
-            await state.update { $0.alert = .error(error) }
+        guard let ___VARIABLE_modelVariableName___ = await state.state.result?.___VARIABLE_modelVariableName___ else { return }
+        await performWrite {
+            let updated___VARIABLE_modelName___ = try await self.___VARIABLE_modelVariableName___StorageService.toggleFavorite(___VARIABLE_modelVariableName___)
+            await self.state.update { $0.hud = updated___VARIABLE_modelName___.isFavorite ? .favorite : .unfavorite }
+            await self.fetchData()
+            self.output?.onEdit?(updated___VARIABLE_modelName___)
         }
     }
 
-    func onTapSelect___VARIABLE_categoryName___(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?) async {
-        guard let ___VARIABLE_modelVariableName___ = await state.state.result?.___VARIABLE_modelVariableName___ else {
-            logWarning("Cannot select ___VARIABLE_categoryName___ - no ___VARIABLE_modelName___ loaded")
-            return
-        }
-
-        do {
-            _ = try await ___VARIABLE_modelVariableName___StorageService.update___VARIABLE_categoryName___(___VARIABLE_modelVariableName___, categoryId: ___VARIABLE_categoryVariableName___?.id)
-            await state.update { $0.hud = ___VARIABLE_categoryVariableName___ != nil ? .success("___VARIABLE_categoryName___ assigned") : .success("___VARIABLE_categoryName___ removed") }
-            await fetchData()
-        } catch {
-            await state.update { $0.alert = .error(error) }
-        }
+    func onTapSelectCategory(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?) async {
+        await assignCategory(___VARIABLE_categoryVariableName___, showsHUD: true)
     }
 
-    func onTapCreate___VARIABLE_categoryName___() async {
+    func onTapCreateCategory() async {
         await state.update { viewState in
             viewState.destination = .___VARIABLE_categoryVariableName___Create(
-                onSave: Callback { _ in
-                    Task { await self.fetchData() }
+                onSave: Callback { [weak self] ___VARIABLE_categoryVariableName___ in
+                    Task { await self?.assignCategory(___VARIABLE_categoryVariableName___, showsHUD: false) }
                 }
             )
         }
     }
 }
 
-public extension ___VARIABLE_modelName___DetailViewModel {
-    private func fetchData() async {
-        await state.update { $0.state = .loading }
+// MARK: - Write Operations
+
+private extension ___VARIABLE_modelName___DetailViewModel {
+    func assignCategory(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?, showsHUD: Bool) async {
+        guard let ___VARIABLE_modelVariableName___ = await state.state.result?.___VARIABLE_modelVariableName___ else { return }
+        await performWrite {
+            let updated___VARIABLE_modelName___ = try await self.___VARIABLE_modelVariableName___StorageService.update___VARIABLE_categoryName___(
+                ___VARIABLE_modelVariableName___,
+                categoryId: ___VARIABLE_categoryVariableName___?.id
+            )
+            if showsHUD {
+                await self.state.update { $0.hud = ___VARIABLE_categoryVariableName___ == nil ? .success("Category removed") : .success("Category assigned") }
+            }
+            await self.fetchData()
+            self.output?.onEdit?(updated___VARIABLE_modelName___)
+        }
+    }
+
+    func delete(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
+        await performWrite {
+            try await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
+            await self.state.update { $0.isDismissed = true }
+            self.output?.onDelete?(___VARIABLE_modelVariableName___)
+        }
+    }
+
+    func performWrite(_ operation: @Sendable @escaping () async throws -> Void) async {
+        if let saveTask {
+            return await saveTask.value
+        }
+        let task = Task {
+            defer { saveTask = nil }
+            do {
+                try await operation()
+            } catch {
+                Log.error("___VARIABLE_modelName___ write failed:", error: error)
+                await state.update { $0.alert = .error(error) }
+            }
+        }
+        saveTask = task
+        await task.value
+    }
+}
+
+// MARK: - Data Fetching
+
+private extension ___VARIABLE_modelName___DetailViewModel {
+    func fetchData(showsLoading: Bool = false) async {
+        if showsLoading {
+            await state.update { $0.state = .loading }
+        }
         do {
-            let ___VARIABLE_modelVariableName___ = try await ___VARIABLE_modelVariableName___StorageService.fetch(by: state.___VARIABLE_modelVariableName___Id)
-            let ___VARIABLE_categoryPluralVariableName___ = try await ___VARIABLE_categoryVariableName___StorageService.fetch()
-            await state.update { $0.state = .result(.init(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___, ___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___)) }
+            async let ___VARIABLE_modelVariableName___ = ___VARIABLE_modelVariableName___StorageService.fetch(by: state.___VARIABLE_modelVariableName___Id)
+            async let ___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_categoryVariableName___StorageService.fetch()
+            let model = try await ___VARIABLE_modelName___DetailViewState.StateModel(
+                ___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___,
+                ___VARIABLE_categoryPluralVariableName___: ___VARIABLE_categoryPluralVariableName___
+            )
+            await state.update { $0.state = .result(model) }
         } catch {
             await state.update { $0.state = .error(error) }
         }

@@ -1,5 +1,6 @@
 // ___FILEHEADER___
 
+import ___VARIABLE_modelPackage___
 import Foundation
 import OversizeArchitecture
 
@@ -14,27 +15,16 @@ public struct ___VARIABLE_categoryName___EditInput: Sendable {
         case ___VARIABLE_categoryVariableName___(___VARIABLE_categoryName___)
     }
 
+    public init() {
+        source = nil
+    }
+
     public init(id: UUID) {
         source = .id(id)
     }
 
     public init(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) {
         source = .___VARIABLE_categoryVariableName___(___VARIABLE_categoryVariableName___)
-    }
-
-    public init() {
-        source = nil
-    }
-
-    public var ___VARIABLE_categoryVariableName___Id: UUID? {
-        switch source {
-        case let .id(id):
-            id
-        case let .___VARIABLE_categoryVariableName___(___VARIABLE_categoryVariableName___):
-            ___VARIABLE_categoryVariableName___.id
-        case .none:
-            nil
-        }
     }
 }
 

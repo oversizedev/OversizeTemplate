@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import OversizeArchitecture
 import OversizeComponents
 import OversizeCore
@@ -14,7 +14,7 @@ import SwiftUI
 @View(module: ___VARIABLE_categoryName___List.self)
 public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
     public var body: some View {
-        NavigationLayoutView(viewState.filterType.title) {
+        NavigationLayout(viewState.filterType.title) {
             stateView(viewState.state)
         } background: {
             Color.backgroundPrimary
@@ -26,7 +26,7 @@ public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
             isPresented: $viewState.isSearch,
             placement: .navigationBarDrawer(displayMode: .automatic)
         )
-        .emptyState(viewState.state) {
+        .contentUnavailable(viewState.state) {
             EmptyStateView(
                 image: viewState.isSearch ? Illustration.Objects.search : viewState.filterType.emptyStateImage,
                 title: viewState.isSearch ? "Nothing found" : viewState.filterType.emptyStateTitle,
@@ -42,7 +42,7 @@ public struct ___VARIABLE_categoryName___ListView: ViewProtocol {
         }
         .presentationHUD($viewState.hud)
         .presentationAlert($viewState.alert)
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
         .onChangeValue(of: viewState.searchTerm) {
             reducer.callAsFunction(.onChangeSearchTerm($0))
         }

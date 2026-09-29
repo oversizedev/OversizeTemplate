@@ -8,7 +8,7 @@ APP_FOLDER=$(find "$PROJECT_ROOT" -maxdepth 3 -name "Assets.xcassets" -path "*/R
 ICONS_DIR="$APP_FOLDER/Resources/Icons"
 ALT_ICONS_DIR="$APP_FOLDER/Resources/AltIcons"
 ASSETS_DIR="$APP_FOLDER/Resources/Assets.xcassets"
-ICTOOL_PATH="/Applications/Xcode.app/Contents/Applications/Icon Composer.app/Contents/Executables/ictool"
+ICTOOL_PATH="$(dirname "$(xcode-select -p)")/Applications/Icon Composer.app/Contents/Executables/ictool"
 
 YELLOW='\033[1;33m'
 GREEN='\033[0;32m'

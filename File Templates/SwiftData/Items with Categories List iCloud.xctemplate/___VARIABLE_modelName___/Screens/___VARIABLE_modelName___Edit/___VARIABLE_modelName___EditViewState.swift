@@ -1,8 +1,7 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
-import FactoryKit
-import ObservableDefaults
+import Env
+import Models
 import Observation
 import OversizeArchitecture
 import OversizeCore
@@ -11,45 +10,50 @@ import SwiftUI
 
 @Observable
 public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
-    /// Forms
-    public var name: String = .init()
-    public var note: String = .init()
-    public var color: Color = .blue
-    public var url: URL?
-    public var date: Date?
-    #if os(macOS)
-        public var image: NSImage?
-    #else
-        public var image: UIImage?
-    #endif
-    public var selected___VARIABLE_categoryName___: ___VARIABLE_categoryName___?
+    // MARK: - Form
 
-    /// User Interface
+    public var form: Form
+    public var originalForm: Form?
+
+    // MARK: - User Interface
+
     public var ___VARIABLE_modelVariableName___State: LoadingState<___VARIABLE_modelName___> = .idle
     public var ___VARIABLE_categoryPluralVariableName___State: LoadingState<[___VARIABLE_categoryName___]> = .idle
-    public var focusedField: FocusField?
-    public var isSaving: Bool = .init()
-    public var isDismissed: Bool = .init()
-    public var isEmptyForm: Bool = true
+    public var isSaving: Bool = false
     public var isValidForm: Bool = false
-    public var hud: OversizeNavigation.HUD?
-    public var destination: ___VARIABLE_modelName___Destinations?
+    public var hasChanges: Bool = false
     public var isShow___VARIABLE_categoryName___Picker: Bool? = false
 
-    /// Constants
+    // MARK: - Routing
+
+    public var destination: ___VARIABLE_modelName___Destinations?
+    public var alert: AppAlert?
+    public var hud: OversizeNavigation.HUD?
+    public var isDismissed: Bool = false
+
+    // MARK: - Constants
+
     public let source: ___VARIABLE_modelName___EditInput.Source?
     public let ___VARIABLE_modelVariableName___Id: UUID
 
-    /// View
+    // MARK: - View
+
     var title: String {
-        if source == nil {
-            "Create"
-        } else {
-            "Edit"
+        source == nil ? "Create" : "Edit"
+    }
+
+    var ___VARIABLE_categoryVariableName___Options: [___VARIABLE_categoryName___?] {
+        [nil] + (___VARIABLE_categoryPluralVariableName___State.result ?? [])
+    }
+
+    var selected___VARIABLE_categoryName___: ___VARIABLE_categoryName___? {
+        form.___VARIABLE_categoryVariableName___Id.flatMap { categoryId in
+            ___VARIABLE_categoryPluralVariableName___State.result?.first { $0.id == categoryId }
         }
     }
 
-    /// Initialization
+    // MARK: - Initialization
+
     public init(input: ___VARIABLE_modelName___Edit.Input?) {
         source = input?.source
 
@@ -57,40 +61,16 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
         case let .___VARIABLE_modelVariableName___(___VARIABLE_modelVariableName___):
             ___VARIABLE_modelVariableName___Id = ___VARIABLE_modelVariableName___.id
             ___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
-            setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
+            form = ___VARIABLE_modelName___EditViewModel.form(from: ___VARIABLE_modelVariableName___)
+            originalForm = form
         case let .id(id):
             ___VARIABLE_modelVariableName___Id = id
+            form = Form()
         case .none:
             ___VARIABLE_modelVariableName___Id = UUID()
-        }
-    }
-}
-
-// MARK: - User Actions
-
-public extension ___VARIABLE_modelName___EditViewState {
-    func setFields(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
-        name = ___VARIABLE_modelVariableName___.name
-        note = ___VARIABLE_modelVariableName___.note ?? ""
-        color = ___VARIABLE_modelVariableName___.color
-        date = ___VARIABLE_modelVariableName___.date
-        if let data = ___VARIABLE_modelVariableName___.imageData {
-            #if os(macOS)
-                image = NSImage(data: data)
-            #else
-                image = UIImage(data: data)
-            #endif
-        }
-        if let categoryId = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id {
-            selected___VARIABLE_categoryName___ = ___VARIABLE_categoryPluralVariableName___State.result?.first { $0.id == categoryId }
-        } else {
-            selected___VARIABLE_categoryName___ = nil
-        }
-    }
-
-    func set___VARIABLE_categoryPluralVariableName___(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) {
-        if let currentCategoryId = selected___VARIABLE_categoryName___?.id {
-            selected___VARIABLE_categoryName___ = ___VARIABLE_categoryPluralVariableName___.first { $0.id == currentCategoryId }
+            form = Form()
+            form.date = Date()
+            originalForm = form
         }
     }
 }
@@ -98,8 +78,22 @@ public extension ___VARIABLE_modelName___EditViewState {
 // MARK: - Supporting types
 
 public extension ___VARIABLE_modelName___EditViewState {
-    /// FocusFields
-    enum FocusField: String, Hashable, Sendable {
-        case name, note, url
+    struct Form: Equatable, Sendable {
+        public var name: String = ""
+        public var note: String = ""
+        public var color: Color = .blue
+        public var date: Date?
+        public var image: PlatformImage?
+        public var ___VARIABLE_categoryVariableName___Id: UUID?
+
+        public init() {}
+
+        public var trimmedName: String {
+            name.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
+
+    enum FocusField: Hashable, Sendable {
+        case name, note
     }
 }

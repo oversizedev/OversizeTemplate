@@ -21,7 +21,7 @@ public struct ___VARIABLE_modelName___DetailScreen: ViewProtocol {
     }
 
     public var body: some View {
-        NavigationCoverLayoutView("Detail") {
+        NavigationCoverLayout("Detail") {
             stateView(viewState.___VARIABLE_modelVariableName___State)
         } cover: {
             cover
@@ -37,7 +37,7 @@ public struct ___VARIABLE_modelName___DetailScreen: ViewProtocol {
         .refreshable(action: {
             reducer.callAsFunction(.onRefresh)
         })
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
         .navigationBack($viewState.isDismissed)
     }
 
@@ -148,7 +148,7 @@ private extension ___VARIABLE_modelName___DetailScreen {
 public extension ___VARIABLE_modelName___DetailScreen {
     @MainActor
     static func build(id: UUID) -> some View {
-        logNotice("Building ___VARIABLE_modelName___DetailScreen for ID: \(id)")
+        Log.notice("Building ___VARIABLE_modelName___DetailScreen for ID: \(id)")
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___Id: id)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
         let reducer = Reducer(viewModel: viewModel)
@@ -157,7 +157,7 @@ public extension ___VARIABLE_modelName___DetailScreen {
 
     @MainActor
     static func build(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
-        logNotice("Building ___VARIABLE_modelName___DetailScreen for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+        Log.notice("Building ___VARIABLE_modelName___DetailScreen for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
         let viewState = ___VARIABLE_modelName___DetailViewState(___VARIABLE_modelVariableName___: ___VARIABLE_modelVariableName___)
         let viewModel = ___VARIABLE_modelName___DetailViewModel(state: viewState)
         let reducer = Reducer(viewModel: viewModel)

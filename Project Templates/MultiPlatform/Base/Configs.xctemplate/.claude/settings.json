@@ -21,7 +21,43 @@
       "Bash(swiftlint:*)",
       "Bash(swift -parse:*)",
       "Bash(git diff:*)",
-      "Bash(codex review:*)"
+      "Bash(codex review:*)",
+      "Bash(make compile:*)",
+      "Bash(make arch-check:*)",
+      "Bash(make init-scripts:*)",
+      "Bash(make verify-init:*)",
+      "Bash(make review:*)",
+      "Bash(make lint:*)",
+      "Bash(make simulator-list:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git branch:*)",
+      "Bash(git switch:*)", "Bash(git checkout:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git merge-base:*)",
+      "Bash(gh issue:*)",
+      "Bash(gh pr:*)",
+      "Bash(gh project:*)",
+      "Bash(gh label:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh api repos/oversizedev/___PACKAGENAME___/:*)",
+      "mcp__xcode"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)",
+      "Bash(git push origin main:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(gh issue delete:*)"
     ],
     "additionalDirectories": [
       "/Users/admin/Developer/Packages/OversizeUI",
@@ -30,10 +66,13 @@
       "/Users/admin/Developer/Packages/OversizeServices",
       "/Users/admin/Developer/Packages/OversizeKit",
       "/Users/admin/Developer/Packages/OversizeNetwork",
-      "/Users/admin/Developer/Packages/OversizeComponents",
       "/Users/admin/Developer/Packages/OversizeNavigation",
       "/Users/admin/Developer/Packages/OversizeLocalizable",
       "/Users/admin/Developer/Packages/OversizeResources"
     ]
-  }
+  },
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "teammateMode": "tmux"
 }

@@ -33,18 +33,9 @@ public enum ___VARIABLE_modelName___SortOrder: String, CaseIterable, Sendable, I
 }
 
 public enum ___VARIABLE_modelName___FilterType: String, CaseIterable, Identifiable, Sendable {
-    case standard, favorites
+    case standard, favorites, uncategorized
 
     public var id: String {
         rawValue
-    }
-
-    public var filterPredicate: Predicate<___VARIABLE_modelName___Entity>? {
-        switch self {
-        case .standard:
-            return nil
-        case .favorites:
-            return #Predicate { $0.isFavorite }
-        }
     }
 }

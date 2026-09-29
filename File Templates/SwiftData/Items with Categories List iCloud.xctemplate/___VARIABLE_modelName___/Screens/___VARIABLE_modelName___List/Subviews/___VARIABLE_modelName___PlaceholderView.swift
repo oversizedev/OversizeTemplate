@@ -13,3 +13,9 @@ struct ___VARIABLE_modelName___PlaceholderView: View {
         .redacted(reason: .placeholder)
     }
 }
+
+#Preview {
+    List {
+        ___VARIABLE_modelName___PlaceholderView()
+    }
+}

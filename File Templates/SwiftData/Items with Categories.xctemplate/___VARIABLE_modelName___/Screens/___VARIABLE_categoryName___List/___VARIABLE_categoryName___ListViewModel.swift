@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import Observation
 import OversizeArchitecture
@@ -112,7 +112,7 @@ private extension ___VARIABLE_categoryName___ListViewModel {
     }
 
     func onTapEdit___VARIABLE_categoryName___(_ category: ___VARIABLE_categoryName___) async {
-        logUI("Edit action triggered for ___VARIABLE_categoryName___: \(category.name)")
+        Log.ui("Edit action triggered for ___VARIABLE_categoryName___: \(category.name)")
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___CategoryEdit(
                 category,

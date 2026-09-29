@@ -2,6 +2,7 @@
 
 import ___VARIABLE_modelPackage___
 import NavigatorUI
+import OversizeKit
 import SwiftUI
 
 public enum ___VARIABLE_modelName___Destinations {
@@ -55,6 +56,6 @@ public struct ___VARIABLE_modelName___RootView: View {
             ___VARIABLE_modelName___ListScreen.build()
                 .navigationDestinationAutoReceive(___VARIABLE_modelName___Destinations.self)
         }
-        .coreServices()
+        .appEnvironment()
     }
 }

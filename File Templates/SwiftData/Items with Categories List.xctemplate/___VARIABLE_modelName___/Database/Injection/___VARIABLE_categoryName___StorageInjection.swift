@@ -6,8 +6,8 @@ import OversizeCore
 public extension Container {
     var ___VARIABLE_categoryVariableName___StorageService: Factory<___VARIABLE_categoryName___StorageService> {
         self {
-            logInfo("Creating ___VARIABLE_categoryName___StorageService instance")
+            Log.info("Creating ___VARIABLE_categoryName___StorageService instance")
             return ___VARIABLE_categoryName___StorageService(modelContainer: self.modelContainerService())
-        }.singleton
+        }.cached
     }
 }

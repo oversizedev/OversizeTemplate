@@ -1,8 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
-import FactoryKit
-import ObservableDefaults
+import Models
 import Observation
 import OversizeArchitecture
 import OversizeCore
@@ -11,44 +9,39 @@ import SwiftUI
 
 @Observable
 public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
-    /// Forms
-    public var name: String = .init()
-    public var note: String = .init()
-    public var emoji: String = .init("🍏")
-    public var color: Color = .blue
-    public var url: URL?
-    public var date: Date?
-    #if os(macOS)
-        public var image: NSImage?
-    #else
-        public var image: UIImage?
-    #endif
+    // MARK: - Form
 
-    /// User Interface
+    public var form: Form
+    public var originalForm: Form?
+
+    // MARK: - User Interface
+
     public var ___VARIABLE_categoryVariableName___State: LoadingState<___VARIABLE_categoryName___> = .idle
-    public var focusedField: FocusField?
-    public var isSaving: Bool = .init()
-    public var isDismissed: Bool = .init()
-    public var isEmptyForm: Bool = true
+    public var isSaving: Bool = false
     public var isValidForm: Bool = false
+    public var isDuplicateName: Bool = false
+    public var hasChanges: Bool = false
+
+    // MARK: - Routing
+
+    public var alert: AppAlert?
     public var hud: OversizeNavigation.HUD?
+    public var isDismissed: Bool = false
 
-    public let emojis = "🍏🍎🍐🍊🍋🍋‍🟩🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑"
+    // MARK: - Constants
 
-    /// Constants
     public let source: ___VARIABLE_categoryName___EditInput.Source?
     public let ___VARIABLE_categoryVariableName___Id: UUID
+    public let emojis = "🍏🍎🍐🍊🍋🍋‍🟩🍌🍉🍇🍓🫐🍈🍒🍑🥭🍍🥥🥝🍅🍆🥑"
 
-    /// View
+    // MARK: - View
+
     var title: String {
-        if source == nil {
-            "Create"
-        } else {
-            "Edit"
-        }
+        source == nil ? "Create" : "Edit"
     }
 
-    /// Initialization
+    // MARK: - Initialization
+
     public init(input: ___VARIABLE_categoryName___Edit.Input?) {
         source = input?.source
 
@@ -56,30 +49,16 @@ public final class ___VARIABLE_categoryName___EditViewState: ViewStateProtocol {
         case let .___VARIABLE_categoryVariableName___(___VARIABLE_categoryVariableName___):
             ___VARIABLE_categoryVariableName___Id = ___VARIABLE_categoryVariableName___.id
             ___VARIABLE_categoryVariableName___State = .result(___VARIABLE_categoryVariableName___)
-            setFields(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___)
+            form = ___VARIABLE_categoryName___EditViewModel.form(from: ___VARIABLE_categoryVariableName___)
+            originalForm = form
         case let .id(id):
             ___VARIABLE_categoryVariableName___Id = id
+            form = Form()
         case .none:
             ___VARIABLE_categoryVariableName___Id = UUID()
-        }
-    }
-}
-
-// MARK: - User Actions
-
-public extension ___VARIABLE_categoryName___EditViewState {
-    func setFields(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) {
-        name = ___VARIABLE_categoryVariableName___.name
-        emoji = ___VARIABLE_categoryVariableName___.emoji ?? "🥕"
-        note = ___VARIABLE_categoryVariableName___.note ?? ""
-        color = ___VARIABLE_categoryVariableName___.color
-        date = ___VARIABLE_categoryVariableName___.date
-        if let data = ___VARIABLE_categoryVariableName___.imageData {
-            #if os(macOS)
-                image = NSImage(data: data)
-            #else
-                image = UIImage(data: data)
-            #endif
+            form = Form()
+            form.date = Date()
+            originalForm = form
         }
     }
 }
@@ -87,8 +66,22 @@ public extension ___VARIABLE_categoryName___EditViewState {
 // MARK: - Supporting types
 
 public extension ___VARIABLE_categoryName___EditViewState {
-    /// FocusFields
-    enum FocusField: String, Hashable, Sendable {
-        case name, note, url
+    struct Form: Equatable, Sendable {
+        public var name: String = ""
+        public var note: String = ""
+        public var emoji: String = ___VARIABLE_categoryName___.defaultEmoji
+        public var color: Color = .blue
+        public var date: Date?
+        public var image: PlatformImage?
+
+        public init() {}
+
+        public var trimmedName: String {
+            name.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+    }
+
+    enum FocusField: Hashable, Sendable {
+        case name, note
     }
 }

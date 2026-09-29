@@ -14,40 +14,6 @@
 	<array>
 		<dict>
 			<key>Identifier</key>
-			<string>storageType</string>
-			<key>Units</key>
-			<dict>
-				<key>SwiftData</key>
-				<array>
-					<dict>
-						<key>Nodes</key>
-						<array>
-							<string>../scripts/init_packages_swiftdata_files.sh</string>
-							<string>../makefile</string>
-						</array>
-						<key>Definitions</key>
-						<dict>
-							<key>../makefile</key>
-							<dict>
-								<key>Path</key>
-								<string>makefile-SwiftData</string>
-							</dict>
-							<key>../scripts/init_packages_swiftdata_files.sh</key>
-							<dict>
-								<key>Path</key>
-								<string>init_packages_swiftdata_files.sh</string>
-								<key>Group</key>
-								<array>
-									<string>scripts</string>
-								</array>
-							</dict>
-						</dict>
-					</dict>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>Identifier</key>
 			<string>app-platform</string>
 			<key>Units</key>
 			<dict>
@@ -100,10 +66,10 @@
 	<array>
 		<string>../makefile</string>
 		<string>../project.yml</string>
+		<string>../project_local.yml</string>
 		<string>../.gitignore</string>
 		<string>../.swiftformat</string>
 		<string>../.swiftlint.yml</string>
-		<string>../project_local.yml</string>
 		<string>../Configs/Base.yml</string>
 		<string>../Configs/Packages.yml</string>
 		<string>../Configs/PackagesLocal.yml</string>
@@ -112,37 +78,66 @@
 		<string>../Configs/Targets.yml</string>
 		<string>../scripts/init_packages.sh</string>
 		<string>../scripts/init_packages_files.sh</string>
+		<string>../scripts/init_packages_swiftdata_files.sh</string>
+		<string>../scripts/init_app_tests.sh</string>
 		<string>../scripts/generate_alt_icons.sh</string>
+		<string>../scripts/generate_init_scripts.py</string>
+		<string>../scripts/verify_init.sh</string>
+		<string>../scripts/check_architecture.sh</string>
+		<string>../scripts/add_permissions.sh</string>
 		<string>../ci_scripts/ci_post_clone.sh</string>
 		<string>../AGENTS.md</string>
 		<string>../CLAUDE.md</string>
+		<string>../.claude/agents/Explore.md</string>
+		<string>../.claude/agents/architecture-reviewer.md</string>
+		<string>../.claude/agents/code-reviewer.md</string>
+		<string>../.claude/agents/feature-developer.md</string>
+		<string>../.claude/agents/manual-qa.md</string>
+		<string>../.claude/agents/solution-architect.md</string>
+		<string>../.claude/agents/storage-developer.md</string>
+		<string>../.claude/agents/team-lead.md</string>
+		<string>../.claude/agents/team-planner.md</string>
 		<string>../.claude/settings.json</string>
 		<string>../.claude/settings.local.json</string>
+		<string>../.claude/skills/team-task/SKILL.md</string>
+		<string>../.claude/team/TEAM_LEAD.md</string>
+		<string>../.claude/team/WORKFLOW.md</string>
+		<string>../.claude/team/orchestrator/README.md</string>
+		<string>../.claude/team/orchestrator/common.sh</string>
+		<string>../.claude/team/orchestrator/config.sh</string>
+		<string>../.claude/team/orchestrator/team-orchestrator.sh</string>
+		<string>../.claude/team/orchestrator/team-run.sh</string>
+		<string>../.claude/team/rules/ARCHITECTURE.md</string>
+		<string>../.claude/team/rules/CODE_STYLE.md</string>
+		<string>../.claude/team/rules/GITHUB.md</string>
+		<string>../.claude/team/rules/PROJECT.md</string>
+		<string>../.claude/team/rules/QA.md</string>
 	</array>
 	<key>Definitions</key>
 	<dict>
-		<key>../scripts/init_packages_files.sh</key>
-		<dict>
-			<key>Path</key>
-			<string>init_packages_files.sh</string>
-			<key>Group</key>
-			<array>
-				<string>scripts</string>
-			</array>
-		</dict>
 		<key>../makefile</key>
 		<dict>
 			<key>Path</key>
 			<string>makefile</string>
 		</dict>
+		<key>../project.yml</key>
+		<dict>
+			<key>Path</key>
+			<string>project.yml</string>
+		</dict>
+		<key>../project_local.yml</key>
+		<dict>
+			<key>Path</key>
+			<string>project_local.yml</string>
+		</dict>
 		<key>../.gitignore</key>
 		<dict>
+			<key>Path</key>
+			<string>.gitignore</string>
 			<key>Group</key>
 			<array>
 				<string>App</string>
 			</array>
-			<key>Path</key>
-			<string>.gitignore</string>
 		</dict>
 		<key>../.swiftformat</key>
 		<dict>
@@ -162,11 +157,6 @@
 				<string>App</string>
 			</array>
 		</dict>
-		<key>../project.yml</key>
-		<dict>
-			<key>Path</key>
-			<string>project.yml</string>
-		</dict>
 		<key>../Configs/Base.yml</key>
 		<dict>
 			<key>Path</key>
@@ -175,20 +165,6 @@
 			<array>
 				<string>Configs</string>
 			</array>
-		</dict>
-		<key>../Configs/Schemes.yml</key>
-		<dict>
-			<key>Path</key>
-			<string>Schemes.yml</string>
-			<key>Group</key>
-			<array>
-				<string>Configs</string>
-			</array>
-		</dict>
-		<key>../project_local.yml</key>
-		<dict>
-			<key>Path</key>
-			<string>project_local.yml</string>
 		</dict>
 		<key>../Configs/Packages.yml</key>
 		<dict>
@@ -217,6 +193,15 @@
 				<string>Configs</string>
 			</array>
 		</dict>
+		<key>../Configs/Schemes.yml</key>
+		<dict>
+			<key>Path</key>
+			<string>Schemes.yml</string>
+			<key>Group</key>
+			<array>
+				<string>Configs</string>
+			</array>
+		</dict>
 		<key>../scripts/init_packages.sh</key>
 		<dict>
 			<key>Path</key>
@@ -226,10 +211,73 @@
 				<string>scripts</string>
 			</array>
 		</dict>
+		<key>../scripts/init_packages_files.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>init_packages_files.sh</string>
+			<key>Group</key>
+			<array>
+				<string>scripts</string>
+			</array>
+		</dict>
+		<key>../scripts/init_packages_swiftdata_files.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>init_packages_swiftdata_files.sh</string>
+			<key>Group</key>
+			<array>
+				<string>scripts</string>
+			</array>
+		</dict>
+		<key>../scripts/init_app_tests.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>init_app_tests.sh</string>
+			<key>Group</key>
+			<array>
+				<string>scripts</string>
+			</array>
+		</dict>
 		<key>../scripts/generate_alt_icons.sh</key>
 		<dict>
 			<key>Path</key>
 			<string>generate_alt_icons.sh</string>
+			<key>Group</key>
+			<array>
+				<string>scripts</string>
+			</array>
+		</dict>
+		<key>../scripts/generate_init_scripts.py</key>
+		<dict>
+			<key>Path</key>
+			<string>generate_init_scripts.py</string>
+			<key>Group</key>
+			<array>
+				<string>scripts</string>
+			</array>
+		</dict>
+		<key>../scripts/verify_init.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>verify_init.sh</string>
+			<key>Group</key>
+			<array>
+				<string>scripts</string>
+			</array>
+		</dict>
+		<key>../scripts/check_architecture.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>check_architecture.sh</string>
+			<key>Group</key>
+			<array>
+				<string>scripts</string>
+			</array>
+		</dict>
+		<key>../scripts/add_permissions.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>add_permissions.sh</string>
 			<key>Group</key>
 			<array>
 				<string>scripts</string>
@@ -254,6 +302,96 @@
 			<key>Path</key>
 			<string>CLAUDE.md</string>
 		</dict>
+		<key>../.claude/agents/Explore.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/Explore.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
+		<key>../.claude/agents/architecture-reviewer.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/architecture-reviewer.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
+		<key>../.claude/agents/code-reviewer.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/code-reviewer.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
+		<key>../.claude/agents/feature-developer.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/feature-developer.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
+		<key>../.claude/agents/manual-qa.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/manual-qa.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
+		<key>../.claude/agents/solution-architect.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/solution-architect.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
+		<key>../.claude/agents/storage-developer.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/storage-developer.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
+		<key>../.claude/agents/team-lead.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/team-lead.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
+		<key>../.claude/agents/team-planner.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/agents/team-planner.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>agents</string>
+			</array>
+		</dict>
 		<key>../.claude/settings.json</key>
 		<dict>
 			<key>Path</key>
@@ -270,6 +408,147 @@
 			<key>Group</key>
 			<array>
 				<string>.claude</string>
+			</array>
+		</dict>
+		<key>../.claude/skills/team-task/SKILL.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/skills/team-task/SKILL.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>skills</string>
+				<string>team-task</string>
+			</array>
+		</dict>
+		<key>../.claude/team/TEAM_LEAD.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/TEAM_LEAD.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+			</array>
+		</dict>
+		<key>../.claude/team/WORKFLOW.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/WORKFLOW.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+			</array>
+		</dict>
+		<key>../.claude/team/orchestrator/README.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/orchestrator/README.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>orchestrator</string>
+			</array>
+		</dict>
+		<key>../.claude/team/orchestrator/common.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/orchestrator/common.sh</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>orchestrator</string>
+			</array>
+		</dict>
+		<key>../.claude/team/orchestrator/config.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/orchestrator/config.sh</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>orchestrator</string>
+			</array>
+		</dict>
+		<key>../.claude/team/orchestrator/team-orchestrator.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/orchestrator/team-orchestrator.sh</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>orchestrator</string>
+			</array>
+		</dict>
+		<key>../.claude/team/orchestrator/team-run.sh</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/orchestrator/team-run.sh</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>orchestrator</string>
+			</array>
+		</dict>
+		<key>../.claude/team/rules/ARCHITECTURE.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/rules/ARCHITECTURE.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>rules</string>
+			</array>
+		</dict>
+		<key>../.claude/team/rules/CODE_STYLE.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/rules/CODE_STYLE.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>rules</string>
+			</array>
+		</dict>
+		<key>../.claude/team/rules/GITHUB.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/rules/GITHUB.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>rules</string>
+			</array>
+		</dict>
+		<key>../.claude/team/rules/PROJECT.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/rules/PROJECT.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>rules</string>
+			</array>
+		</dict>
+		<key>../.claude/team/rules/QA.md</key>
+		<dict>
+			<key>Path</key>
+			<string>.claude/team/rules/QA.md</string>
+			<key>Group</key>
+			<array>
+				<string>.claude</string>
+				<string>team</string>
+				<string>rules</string>
 			</array>
 		</dict>
 	</dict>

@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Models
 import OversizeArchitecture
 import OversizeCore
 import OversizeLocalizable
@@ -11,18 +11,23 @@ import SwiftUI
 @View(module: ___VARIABLE_modelName___Detail.self)
 public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
     public var body: some View {
-        NavigationListCoverLayoutView {
+        NavigationListCoverLayout(coverHeight: 200) {
             stateView(viewState.state)
         } cover: {
-            cover
+            ___VARIABLE_modelName___DetailCover(
+                name: viewState.state.result?.___VARIABLE_modelVariableName___.name ?? "",
+                isFavorite: viewState.state.result?.___VARIABLE_modelVariableName___.isFavorite ?? false
+            )
         } coverBackground: {
-            coverBackground
+            ___VARIABLE_modelName___DetailCoverBackground(image: viewState.state.result?.___VARIABLE_modelVariableName___.image)
         }
         .listLayoutStyle(.smallInsetGrouped)
+        .contentMargins()
         .toolbar { toolbarContent }
-        .presentationAlert($viewState.alert)
+        .errorState(viewState.state)
         .presentationHUD($viewState.hud)
-        .navigationMove($viewState.destination)
+        .presentationAlert($viewState.alert)
+        .navigationOpen($viewState.destination)
         .navigationBack($viewState.isDismissed)
         .task { reducer.callAsFunction(.onAppear) }
     }
@@ -33,53 +38,12 @@ public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
         case .idle, .loading:
             ___VARIABLE_modelName___DetailPlaceholder()
         case let .result(model):
-            content(model.___VARIABLE_modelVariableName___)
-        case let .error(error):
-            ErrorView(error: error)
-        }
-    }
-
-    private var cover: some View {
-        HStack(spacing: .xxxSmall) {
-            Text(viewState.state.result?.___VARIABLE_modelVariableName___.name ?? "")
-                .title3()
-                .onSurfacePrimary()
-                .multilineTextAlignment(.center)
-
-            if viewState.state.result?.___VARIABLE_modelVariableName___.isFavorite ?? false {
-                Image.Base.Star.fill.icon(Color.warning)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var coverBackground: some View {
-        if let image = viewState.state.result?.___VARIABLE_modelVariableName___.image {
-            GeometryReader { geometry in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .clipped()
-            }
-        } else {
-            LinearGradient(
-                colors: [
-                    Color.backgroundPrimary,
-                    Color.backgroundTertiary,
-                ],
-                startPoint: .top,
-                endPoint: .bottom
+            ___VARIABLE_modelName___DetailContent(
+                ___VARIABLE_modelVariableName___: model.___VARIABLE_modelVariableName___,
+                ___VARIABLE_categoryVariableName___Name: model.___VARIABLE_categoryVariableName___?.name
             )
-        }
-    }
-
-    private func content(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) -> some View {
-        ListSection {
-            ListRow(___VARIABLE_modelVariableName___.date.formatted())
-            if let note = ___VARIABLE_modelVariableName___.note {
-                ListRow(note)
-            }
+        case .error:
+            EmptyView()
         }
     }
 }
@@ -89,97 +53,72 @@ public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
 private extension ___VARIABLE_modelName___DetailView {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
-        #if os(macOS)
-            ToolbarItemGroup(placement: .primaryAction) {
-                Button(action: {
-                    reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___)
-                }) {
+        ToolbarItem(placement: .primaryAction) {
+            Menu {
+                Button {
+                    reducer.callAsFunction(.onTapEdit)
+                } label: {
+                    Label {
+                        Text(L10n.Button.edit)
+                    } icon: {
+                        Image.Design.PencilAndSquare.mini
+                    }
+                }
+
+                if let model = viewState.state.result {
+                    categoryMenu(model)
+
+                    Button {
+                        reducer.callAsFunction(.onTapToggleFavorite)
+                    } label: {
+                        Label {
+                            Text(model.___VARIABLE_modelVariableName___.isFavorite ? "Unfavorite" : "Favorite")
+                        } icon: {
+                            model.___VARIABLE_modelVariableName___.isFavorite ? Image.Base.Unstar.mini : Image.Base.Star.mini
+                        }
+                    }
+                }
+
+                Button(role: .destructive) {
+                    reducer.callAsFunction(.onTapDelete)
+                } label: {
                     Label {
                         Text(L10n.Button.delete)
                     } icon: {
                         Image.Editor.TrashWithLines.mini
                     }
-                }
-            }
-        #else
-            ToolbarItem(placement: .confirmationAction) {
-                Menu {
-                    Button(action: { reducer.callAsFunction(.onTapEdit___VARIABLE_modelName___) }) {
-                        Label {
-                            Text(L10n.Button.edit)
-                        } icon: {
-                            Image.Design.PencilAndSquare.mini
-                        }
-                    }
-
-                    if let ___VARIABLE_modelVariableName___ = viewState.state.result?.___VARIABLE_modelVariableName___ {
-                        Menu {
-                            Button(action: { reducer.callAsFunction(.onTapSelect___VARIABLE_categoryName___(nil)) }) {
-                                Label {
-                                    Text("No Category")
-                                } icon: {
-                                    if ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id == nil {
-                                        Image.Base.Check.mini
-                                    }
-                                }
-                            }
-
-                            ForEach(viewState.state.result?.___VARIABLE_categoryPluralVariableName___ ?? []) { category in
-                                Button(action: { reducer.callAsFunction(.onTapSelect___VARIABLE_categoryName___(category)) }) {
-                                    Label {
-                                        Text(category.name)
-                                    } icon: {
-                                        if ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id == category.id {
-                                            Image.Base.Check.mini
-                                        }
-                                    }
-                                }
-                            }
-
-                            Divider()
-
-                            Button(action: { reducer.callAsFunction(.onTapCreate___VARIABLE_categoryName___) }) {
-                                Label {
-                                    Text("Create Category")
-                                } icon: {
-                                    Image.Base.Plus.mini
-                                }
-                            }
-                        } label: {
-                            Label {
-                                Text("Category")
-                            } icon: {
-                                Image.Base.Folder.mini
-                            }
-                        }
-
-                        Button(action: { reducer.callAsFunction(.onTapToggleFavorite) }) {
-                            Label {
-                                Text(___VARIABLE_modelVariableName___.isFavorite ? "Unfavorite" : "Favorite")
-                            } icon: {
-                                if ___VARIABLE_modelVariableName___.isFavorite {
-                                    Image.Base.Unstar.mini
-                                } else {
-                                    Image.Base.Star.mini
-                                }
-                            }
-                        }
-                    }
-
-                    Button(role: .destructive, action: { reducer.callAsFunction(.onTapDelete___VARIABLE_modelName___) }) {
-                        Label {
-                            Text(L10n.Button.delete)
-                        } icon: {
-                            Image.Editor.TrashWithLines.mini
-                        }
-                    }
                     .tint(.error)
+                }
 
-                } label: {
+            } label: {
+                Label {
+                    Text("Options")
+                } icon: {
                     Image.Base.more.icon()
                 }
-                .tint(.onSurfacePrimary)
             }
-        #endif
+            .tint(.onSurfacePrimary)
+        }
+    }
+
+    private func categoryMenu(_ model: ___VARIABLE_modelName___DetailViewState.StateModel) -> some View {
+        ___VARIABLE_categoryName___Menu(
+            selected___VARIABLE_categoryName___Id: model.___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id,
+            ___VARIABLE_categoryPluralVariableName___: model.___VARIABLE_categoryPluralVariableName___,
+            onSelect___VARIABLE_categoryName___: { reducer.callAsFunction(.onTapSelectCategory($0)) },
+            onTapCreate___VARIABLE_categoryName___: { reducer.callAsFunction(.onTapCreateCategory) }
+        )
+    }
+}
+
+#Preview("Detail") {
+    NavigationStack {
+        ___VARIABLE_modelName___Detail.build(input: .init(id: UUID()))
+    }
+}
+
+#Preview("Placeholder") {
+    List {
+        ___VARIABLE_modelName___DetailPlaceholder()
     }
 }

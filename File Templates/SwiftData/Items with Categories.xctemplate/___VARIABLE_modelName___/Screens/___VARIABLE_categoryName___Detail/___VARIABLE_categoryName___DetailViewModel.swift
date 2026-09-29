@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import OversizeArchitecture
 import OversizeCore
@@ -43,13 +43,13 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
         await state.update { viewState in
             viewState.alert = .delete {
                 Task {
-                    logData("Attempting to delete ___VARIABLE_categoryName___: \(___VARIABLE_categoryVariableName___.name)")
+                    Log.debug("Attempting to delete ___VARIABLE_categoryName___: \(___VARIABLE_categoryVariableName___.name)")
                     do {
                         try await self.___VARIABLE_modelVariableName___CategoryStorageService.delete(___VARIABLE_categoryVariableName___)
-                        logDeleted("___VARIABLE_categoryName___")
+                        Log.info("___VARIABLE_categoryName___ deleted")
                         await self.onDeleteSuccess()
                     } catch {
-                        logError("Failed to delete ___VARIABLE_categoryName___: \(___VARIABLE_categoryVariableName___.name)", error: error)
+                        Log.error("Failed to delete ___VARIABLE_categoryName___: \(___VARIABLE_categoryVariableName___.name)", error: error)
                         await self.onDeleteFailure(error)
                     }
                 }
@@ -70,7 +70,7 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
 
     func onTapToggleFavorite() async {
         guard let ___VARIABLE_categoryVariableName___ = await state.___VARIABLE_categoryVariableName___State.result else {
-            logWarning("Cannot toggle favorite - no ___VARIABLE_categoryName___ loaded")
+            Log.warning("Cannot toggle favorite - no ___VARIABLE_categoryName___ loaded")
             return
         }
         let wasFavorite = ___VARIABLE_categoryVariableName___.isFavorite
@@ -143,7 +143,7 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
         do {
             _ = try await ___VARIABLE_modelVariableName___CategoryStorageService.incrementViewCount(___VARIABLE_categoryVariableName___)
         } catch {
-            logError("Failed to increment view count for ___VARIABLE_categoryName___", error: error)
+            Log.error("Failed to increment view count for ___VARIABLE_categoryName___", error: error)
         }
     }
 
@@ -152,7 +152,7 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
     }
 
     func onTapEdit___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
-        logUI("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
+        Log.ui("Edit action triggered for ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)")
         await state.update {
             $0.destination = .___VARIABLE_modelVariableName___Edit(
                 ___VARIABLE_modelVariableName___,
@@ -189,12 +189,12 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
             viewState.alert = .delete {
                 Task {
                     do {
-                        logDeleted("___VARIABLE_modelName___")
+                        Log.info("___VARIABLE_modelName___ deleted")
                         try await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
                         await self.state.update { $0.hud = .delete() }
                         await self.fetchData()
                     } catch {
-                        logError("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
+                        Log.error("Failed to delete ___VARIABLE_modelName___: \(___VARIABLE_modelVariableName___.name)", error: error)
                         await self.state.update { $0.alert = .error(error) }
                     }
                 }

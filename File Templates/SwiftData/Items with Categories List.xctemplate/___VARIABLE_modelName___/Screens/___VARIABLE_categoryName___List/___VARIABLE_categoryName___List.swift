@@ -19,6 +19,21 @@ public struct ___VARIABLE_categoryName___ListOutput: Sendable {
     public init() {}
 }
 
+public struct ___VARIABLE_categoryName___ListQuery: Equatable, Sendable {
+    public let searchTerm: String
+    public let filterType: ___VARIABLE_categoryName___FilterType
+    public let sortType: ___VARIABLE_categoryName___SortType
+    public let sortOrder: ___VARIABLE_categoryName___SortOrder
+
+    @MainActor
+    init(_ viewState: ___VARIABLE_categoryName___ListViewState) {
+        searchTerm = viewState.searchTerm
+        filterType = viewState.filterType
+        sortType = viewState.storage.sortType
+        sortOrder = viewState.storage.sortOrder
+    }
+}
+
 public enum ___VARIABLE_categoryName___ViewOption: String, CaseIterable, Identifiable, Sendable {
     case standard, compact
 
@@ -36,13 +51,23 @@ public enum ___VARIABLE_categoryName___ViewOption: String, CaseIterable, Identif
     }
 }
 
+// MARK: - Display Extensions
+
+public extension ___VARIABLE_categoryName___ {
+    static let defaultEmoji = "🍏"
+
+    var displayEmoji: String {
+        emoji ?? Self.defaultEmoji
+    }
+}
+
 // MARK: - Filter Type Extensions
 
 public extension ___VARIABLE_categoryName___FilterType {
     var title: String {
         switch self {
         case .standard:
-            "All items"
+            "All categories"
         case .favorites:
             "Favorites"
         }
@@ -69,18 +94,18 @@ public extension ___VARIABLE_categoryName___FilterType {
     var emptyStateTitle: String {
         switch self {
         case .standard:
-            "Your list is empty"
+            "No categories yet"
         case .favorites:
-            "No favorite items yet"
+            "No favorite categories yet"
         }
     }
 
     var emptyStateSubtitle: String? {
         switch self {
         case .standard:
-            "Add your first item to get started"
+            "Add your first category to get started"
         case .favorites:
-            "Mark items as favorites to see them here"
+            "Mark categories as favorites to see them here"
         }
     }
 }

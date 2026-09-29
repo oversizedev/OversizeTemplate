@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import FactoryKit
 import ObservableDefaults
 import Observation
@@ -40,6 +40,13 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
     public let source: ___VARIABLE_modelName___EditInput.Source?
     public let ___VARIABLE_modelVariableName___Id: UUID
 
+    // Original Values
+    #if os(macOS)
+        public var originalImage: NSImage?
+    #else
+        public var originalImage: UIImage?
+    #endif
+
     /// View
     var title: String {
         if source == nil {
@@ -50,6 +57,10 @@ public final class ___VARIABLE_modelName___EditViewState: ViewStateProtocol {
     }
 
     /// Initialization
+    var isImageChanged: Bool {
+        image !== originalImage
+    }
+
     public init(input: ___VARIABLE_modelName___Edit.Input?) {
         source = input?.source
 
@@ -81,6 +92,7 @@ public extension ___VARIABLE_modelName___EditViewState {
             image = UIImage(data: data)
             #endif
         }
+        originalImage = image
         if let categoryId = ___VARIABLE_modelVariableName___.___VARIABLE_categoryVariableName___Id {
             selectedCategory = categoriesState.result?.first { $0.id == categoryId }
         } else {

@@ -5,4 +5,13 @@ DerivedData/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 /.idea/
 /build
-/.claude
+
+# XcodeGen output: regenerate with `make build` / `make build-prod`
+/___VARIABLE_productName:RFC1034Identifier___.xcodeproj/
+
+# Local packages
+/Packages/*/.build
+/Packages/*/Package.resolved
+
+# Claude Code: local permissions are per developer
+.claude/settings.local.json

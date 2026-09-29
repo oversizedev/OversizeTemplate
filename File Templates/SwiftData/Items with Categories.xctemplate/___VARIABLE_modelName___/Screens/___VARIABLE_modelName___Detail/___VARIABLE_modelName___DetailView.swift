@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import Database
+import ___VARIABLE_modelPackage___
 import OversizeArchitecture
 import OversizeCore
 import OversizeLocalizable
@@ -11,7 +11,7 @@ import SwiftUI
 @View(module: ___VARIABLE_modelName___Detail.self)
 public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
     public var body: some View {
-        NavigationCoverLayoutView(viewState.___VARIABLE_modelVariableName___State.result?.name ?? "") {
+        NavigationCoverLayout(viewState.___VARIABLE_modelVariableName___State.result?.name ?? "") {
             stateView(viewState.___VARIABLE_modelVariableName___State)
         } cover: {
             cover
@@ -27,7 +27,7 @@ public struct ___VARIABLE_modelName___DetailView: ViewProtocol {
         .presentationHUD($viewState.hud)
         .task { reducer.callAsFunction(.onAppear) }
         .refreshable { reducer.callAsFunction(.onRefresh) }
-        .navigationMove($viewState.destination)
+        .navigationOpen($viewState.destination)
         .navigationBack($viewState.isDismissed)
     }
 

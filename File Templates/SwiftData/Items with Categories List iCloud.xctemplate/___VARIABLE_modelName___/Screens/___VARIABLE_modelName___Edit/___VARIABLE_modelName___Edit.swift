@@ -1,7 +1,7 @@
 // ___FILEHEADER___
 
-import Database
 import Foundation
+import Models
 import OversizeArchitecture
 
 @Module
@@ -15,27 +15,16 @@ public struct ___VARIABLE_modelName___EditInput: Sendable {
         case ___VARIABLE_modelVariableName___(___VARIABLE_modelName___)
     }
 
+    public init() {
+        source = nil
+    }
+
     public init(id: UUID) {
         source = .id(id)
     }
 
     public init(___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) {
         source = .___VARIABLE_modelVariableName___(___VARIABLE_modelVariableName___)
-    }
-
-    public init() {
-        source = nil
-    }
-
-    public var ___VARIABLE_modelVariableName___Id: UUID? {
-        switch source {
-        case let .id(id):
-            id
-        case let .___VARIABLE_modelVariableName___(___VARIABLE_modelVariableName___):
-            ___VARIABLE_modelVariableName___.id
-        case .none:
-            nil
-        }
     }
 }
 

@@ -1,7 +1,7 @@
 packages:
   OversizeUI:
     url: https://github.com/oversizedev/OversizeUI.git
-    majorVersion: 3.0.2
+    majorVersion: 3.20.4
   OversizeServices:
     url: https://github.com/oversizedev/OversizeServices.git
     majorVersion: 1.4.0
@@ -13,22 +13,29 @@ packages:
     majorVersion: 1.4.0
   OversizeKit:
     url: https://github.com/oversizedev/OversizeKit.git
-    majorVersion: 2.0.0
+    majorVersion: 3.0.0
   OversizeCore:
     url: https://github.com/oversizedev/OversizeCore.git
     majorVersion: 1.3.0
-  OversizeComponents:
-    url: https://github.com/oversizedev/OversizeComponents.git
-    majorVersion: 2.0.0
+  OversizeNavigation:
+    url: https://github.com/oversizedev/OversizeNavigation.git
+    majorVersion: 0.9.0
+  OversizeArchitecture:
+    url: https://github.com/oversizedev/OversizeArchitecture.git
+    majorVersion: 0.2.0
+  Models:
+    path: ../Packages/Models
   Database:
     path: ../Packages/Database
   Env:
     path: ../Packages/Env
+  Services:
+    path: ../Packages/Services
   App:
     path: ../Packages/App
   FactoryKit:
     url: https://github.com/hmlongco/Factory.git
-    majorVersion: 2.1.3
+    majorVersion: 3.0.2
   NavigatorUI:
     url: https://github.com/hmlongco/Navigator.git
     majorVersion: 2.0.2

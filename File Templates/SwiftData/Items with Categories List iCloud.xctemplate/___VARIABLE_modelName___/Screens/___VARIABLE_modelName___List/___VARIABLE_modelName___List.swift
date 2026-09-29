@@ -1,7 +1,7 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Foundation
+import Models
 import OversizeArchitecture
 import OversizeResources
 import SwiftUI
@@ -12,18 +12,25 @@ import SwiftUI
 public enum ___VARIABLE_modelName___List: ModuleProtocol {}
 
 public struct ___VARIABLE_modelName___ListInput: Sendable {
-    public let ___VARIABLE_categoryVariableName___Id: UUID?
-
-    public init(___VARIABLE_categoryVariableName___Id: UUID? = nil) {
-        self.___VARIABLE_categoryVariableName___Id = ___VARIABLE_categoryVariableName___Id
-    }
+    public init() {}
 }
 
 public struct ___VARIABLE_modelName___ListOutput: Sendable {
-    public let onProductSelected: (@Sendable (___VARIABLE_modelName___) -> Void)?
+    public init() {}
+}
 
-    public init(onProductSelected: (@Sendable (___VARIABLE_modelName___) -> Void)? = nil) {
-        self.onProductSelected = onProductSelected
+public struct ___VARIABLE_modelName___ListQuery: Equatable, Sendable {
+    public let searchTerm: String
+    public let filterType: ___VARIABLE_modelName___FilterType
+    public let sortType: ___VARIABLE_modelName___SortType
+    public let sortOrder: ___VARIABLE_modelName___SortOrder
+
+    @MainActor
+    init(_ viewState: ___VARIABLE_modelName___ListViewState) {
+        searchTerm = viewState.searchTerm
+        filterType = viewState.filterType
+        sortType = viewState.storage.sortType
+        sortOrder = viewState.storage.sortOrder
     }
 }
 

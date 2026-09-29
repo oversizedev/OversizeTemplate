@@ -1,5 +1,6 @@
 // ___FILEHEADER___
 
+import ___VARIABLE_modelPackage___
 import Foundation
 import OversizeArchitecture
 
@@ -33,12 +34,12 @@ public struct ___VARIABLE_categoryName___DetailInput: Sendable {
 }
 
 public struct ___VARIABLE_categoryName___DetailOutput: Sendable {
-    public let onEdit: (@Sendable (___VARIABLE_categoryName___) -> Void)?
-    public let onDelete: (@Sendable (___VARIABLE_categoryName___) -> Void)?
+    public let onEdit: Callback<___VARIABLE_categoryName___>?
+    public let onDelete: Callback<___VARIABLE_categoryName___>?
 
     public init(
-        onEdit: (@Sendable (___VARIABLE_categoryName___) -> Void)? = nil,
-        onDelete: (@Sendable (___VARIABLE_categoryName___) -> Void)? = nil
+        onEdit: Callback<___VARIABLE_categoryName___>? = nil,
+        onDelete: Callback<___VARIABLE_categoryName___>? = nil
     ) {
         self.onEdit = onEdit
         self.onDelete = onDelete

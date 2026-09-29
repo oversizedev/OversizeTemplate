@@ -1,8 +1,5 @@
 //___FILEHEADER___
 
-import FactoryKit
-import Main
-import NavigatorUI
 import Onboarding
 import OversizeKit
 import OversizeNavigation
@@ -18,7 +15,7 @@ struct ___PACKAGENAME:identifier___App: App {
     var body: some Scene {
         WindowGroup {
             Launcher {
-                MainNavigationStack()
+                RootView()
             }
             .onboarding {
                 OnboardingNavigationStack()

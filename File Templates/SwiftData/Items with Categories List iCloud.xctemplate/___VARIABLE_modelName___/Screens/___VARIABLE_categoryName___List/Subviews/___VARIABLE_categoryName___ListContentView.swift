@@ -1,19 +1,17 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Models
 import OversizeLocalizable
-import OversizeResources
 import OversizeUI
 import SwiftUI
 
-/// Reusable content view component for displaying ___VARIABLE_categoryName___ lists
 public struct ___VARIABLE_categoryName___ListContentView: View {
     public enum Action: Sendable {
-        case onTapItem(___VARIABLE_categoryName___)
-        case onTapEditCategory(___VARIABLE_categoryName___)
-        case onTapToggleFavorite(___VARIABLE_categoryName___)
-        case onTapDuplicateCategory(___VARIABLE_categoryName___)
-        case onTapDeleteCategory(___VARIABLE_categoryName___)
+        case open(___VARIABLE_categoryName___)
+        case edit(___VARIABLE_categoryName___)
+        case toggleFavorite(___VARIABLE_categoryName___)
+        case duplicate(___VARIABLE_categoryName___)
+        case delete(___VARIABLE_categoryName___)
     }
 
     private let ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]
@@ -31,17 +29,17 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
     }
 
     public var body: some View {
-        ListSection {
+        Section {
             ForEach(___VARIABLE_categoryPluralVariableName___) { ___VARIABLE_categoryVariableName___ in
                 ___VARIABLE_categoryName___Row(___VARIABLE_categoryVariableName___, viewOption: viewOption) {
-                    onAction(.onTapItem(___VARIABLE_categoryVariableName___))
+                    onAction(.open(___VARIABLE_categoryVariableName___))
                 }
-                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                    Button(role: .destructive) {
-                        onAction(.onTapDeleteCategory(___VARIABLE_categoryVariableName___))
+                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                    Button {
+                        onAction(.delete(___VARIABLE_categoryVariableName___))
                     } label: {
                         Label {
-                            Text("Delete")
+                            Text(L10n.Button.delete)
                         } icon: {
                             Image.Editor.Trash.fill
                         }
@@ -50,7 +48,7 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
                 }
                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
                     Button {
-                        onAction(.onTapToggleFavorite(___VARIABLE_categoryVariableName___))
+                        onAction(.toggleFavorite(___VARIABLE_categoryVariableName___))
                     } label: {
                         Label {
                             Text(___VARIABLE_categoryVariableName___.isFavorite ? "Unfavorite" : "Favorite")
@@ -67,53 +65,61 @@ public struct ___VARIABLE_categoryName___ListContentView: View {
     }
 
     @ViewBuilder
-    private func contextMenu(for category: ___VARIABLE_categoryName___) -> some View {
-        Button(action: {
-            onAction(.onTapEditCategory(category))
-        }) {
+    private func contextMenu(for ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) -> some View {
+        Button {
+            onAction(.edit(___VARIABLE_categoryVariableName___))
+        } label: {
             Label {
                 Text(L10n.Button.edit)
             } icon: {
                 Image.Design.PencilAndSquare.mini
             }
         }
-        .tint(.onSurfacePrimary)
+        .tint(Color.onSurfacePrimary)
 
-        Button(action: {
-            onAction(.onTapToggleFavorite(category))
-        }) {
+        Button {
+            onAction(.toggleFavorite(___VARIABLE_categoryVariableName___))
+        } label: {
             Label {
-                Text(category.isFavorite ? "Unfavorite" : "Favorite")
+                Text(___VARIABLE_categoryVariableName___.isFavorite ? "Unfavorite" : "Favorite")
             } icon: {
-                if category.isFavorite {
-                    Image.Base.Unstar.mini
-                } else {
-                    Image.Base.Star.mini
-                }
+                ___VARIABLE_categoryVariableName___.isFavorite ? Image.Base.Unstar.mini : Image.Base.Star.mini
             }
         }
-        .tint(.onSurfacePrimary)
+        .tint(Color.onSurfacePrimary)
 
-        Button(action: {
-            onAction(.onTapDuplicateCategory(category))
-        }) {
+        Button {
+            onAction(.duplicate(___VARIABLE_categoryVariableName___))
+        } label: {
             Label {
                 Text("Duplicate")
             } icon: {
                 Image.Documentation.Copy.mini
             }
         }
-        .tint(.onSurfacePrimary)
+        .tint(Color.onSurfacePrimary)
 
-        Button(role: .destructive, action: {
-            onAction(.onTapDeleteCategory(category))
-        }) {
+        Button(role: .destructive) {
+            onAction(.delete(___VARIABLE_categoryVariableName___))
+        } label: {
             Label {
                 Text(L10n.Button.delete)
             } icon: {
                 Image.Editor.TrashWithLines.mini
             }
         }
-        .tint(.error)
+        .tint(Color.error)
+    }
+}
+
+#Preview {
+    List {
+        ___VARIABLE_categoryName___ListContentView(
+            ___VARIABLE_categoryPluralVariableName___: [
+                .init(name: "Video", emoji: "🎬", color: .red, date: .now, isFavorite: true),
+                .init(name: "Music", emoji: "🎵", color: .blue, date: .now),
+            ],
+            onAction: { _ in }
+        )
     }
 }

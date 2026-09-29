@@ -6,6 +6,21 @@ import SwiftUI
 
 @ModelActor
 public actor ___VARIABLE_categoryName___StorageService {
+    // MARK: - Validation
+
+    public func isNameTaken(_ name: String, excludingId: UUID? = nil) throws -> Bool {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        do {
+            let entities = try modelContext.fetch(FetchDescriptor<___VARIABLE_categoryName___Entity>())
+            return entities.contains { entity in
+                entity.id != excludingId && entity.name.caseInsensitiveCompare(trimmedName) == .orderedSame
+            }
+        } catch {
+            Log.error("Check ___VARIABLE_categoryName___ name uniqueness failed:", error: error)
+            throw PersistenceError.fetchFailed
+        }
+    }
+
     // MARK: - Save Operations
 
     public func save(
@@ -36,29 +51,43 @@ public actor ___VARIABLE_categoryName___StorageService {
 
     public func save(_ ___VARIABLE_categoryPluralVariableName___: [___VARIABLE_categoryName___]) throws -> [___VARIABLE_categoryName___] {
         let count = ___VARIABLE_categoryPluralVariableName___.count
-        logData("Saving \(count) ___VARIABLE_categoryName___(s)")
+        Log.debug("Saving \(count) ___VARIABLE_categoryName___(s)")
 
         do {
-            var saved___VARIABLE_categoryName___s: [___VARIABLE_categoryName___Entity] = []
+            var saved___VARIABLE_modelName___Categories: [___VARIABLE_categoryName___Entity] = []
+            var reservedNames: [String] = []
 
             for ___VARIABLE_categoryVariableName___ in ___VARIABLE_categoryPluralVariableName___ {
+                let name = try validatedName(___VARIABLE_categoryVariableName___.name)
+                let isReserved = reservedNames.contains { $0.caseInsensitiveCompare(name) == .orderedSame }
+                let isTaken = try isNameTaken(name)
+                if isReserved || isTaken {
+                    throw PersistenceError.duplicateItem
+                }
+                reservedNames.append(name)
+
                 let entity = ___VARIABLE_categoryName___Entity(from: ___VARIABLE_categoryVariableName___)
+                entity.name = name
                 modelContext.insert(entity)
-                saved___VARIABLE_categoryName___s.append(entity)
+                saved___VARIABLE_modelName___Categories.append(entity)
             }
 
             try modelContext.save()
-            return saved___VARIABLE_categoryName___s.map { ___VARIABLE_categoryName___(from: $0) }
+            return saved___VARIABLE_modelName___Categories.map { ___VARIABLE_categoryName___(from: $0) }
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Save failed:", error: error)
+            modelContext.rollback()
+            Log.error("Save failed:", error: error)
             throw count == 1 ? PersistenceError.saveFailed : PersistenceError.batchOperationFailed
         }
     }
 
     public func duplicate(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
-        let duplicated___VARIABLE_categoryName___ = ___VARIABLE_categoryName___(
+        let duplicated___VARIABLE_categoryName___ = try ___VARIABLE_categoryName___(
             imageData: ___VARIABLE_categoryVariableName___.imageData,
-            name: "\(___VARIABLE_categoryVariableName___.name) (Copy)",
+            name: availableCopyName(for: ___VARIABLE_categoryVariableName___.name),
             emoji: ___VARIABLE_categoryVariableName___.emoji,
             color: ___VARIABLE_categoryVariableName___.color,
             date: Date(),
@@ -96,7 +125,7 @@ public actor ___VARIABLE_categoryName___StorageService {
             let ___VARIABLE_categoryPluralVariableName___ = try modelContext.fetch(descriptor)
             return ___VARIABLE_categoryPluralVariableName___.map { ___VARIABLE_categoryName___(from: $0) }
         } catch {
-            logError("Fetch failed:", error: error)
+            Log.error("Fetch failed:", error: error)
             throw PersistenceError.fetchFailed
         }
     }
@@ -105,8 +134,10 @@ public actor ___VARIABLE_categoryName___StorageService {
         do {
             let ___VARIABLE_categoryVariableName___ = try fetch___VARIABLE_categoryName___(by: id)
             return ___VARIABLE_categoryName___(from: ___VARIABLE_categoryVariableName___)
+        } catch let error as PersistenceError {
+            throw error
         } catch {
-            logError("Fetch by id failed:", error: error)
+            Log.error("Fetch by id failed:", error: error)
             throw PersistenceError.fetchFailed
         }
     }
@@ -143,7 +174,7 @@ public actor ___VARIABLE_categoryName___StorageService {
             let ___VARIABLE_categoryPluralVariableName___ = try modelContext.fetch(descriptor)
             return ___VARIABLE_categoryPluralVariableName___.map { ___VARIABLE_categoryName___(from: $0) }
         } catch {
-            logError("Search failed:", error: error)
+            Log.error("Search failed:", error: error)
             throw PersistenceError.fetchFailed
         }
     }
@@ -153,36 +184,61 @@ public actor ___VARIABLE_categoryName___StorageService {
     public func update(
         _ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___,
         name: String? = nil,
-        emoji: String? = nil,
+        emoji: String?? = nil,
         color: Color? = nil,
         date: Date? = nil,
-        image: Data? = nil,
-        note: String? = nil,
+        image: Data?? = nil,
+        note noteText: String?? = nil,
         isFavorite: Bool? = nil,
         index: Int? = nil
     ) throws -> ___VARIABLE_categoryName___ {
         do {
             let entity = try fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
 
-            if let name { entity.name = name }
-            if let emoji { entity.emoji = emoji }
-            if let color { entity.colorData = .init(color: color) }
-            if let date { entity.date = date }
-            if let image { entity.imageData = image }
-            if let note { entity.note = note }
-            if let isFavorite { entity.isFavorite = isFavorite }
-            if let index { entity.index = index }
+            if let name {
+                let trimmedName = try validatedName(name)
+                if try isNameTaken(trimmedName, excludingId: entity.id) {
+                    throw PersistenceError.duplicateItem
+                }
+                entity.name = trimmedName
+            }
+            if let emoji {
+                entity.emoji = emoji
+            }
+            if let color {
+                entity.colorData = .init(color: color)
+            }
+            if let date {
+                entity.date = date
+            }
+            if let image {
+                entity.imageData = image
+            }
+            if let noteText {
+                entity.note = noteText
+            }
+            if let isFavorite {
+                entity.isFavorite = isFavorite
+            }
+            if let index {
+                entity.index = index
+            }
 
             try modelContext.save()
             return ___VARIABLE_categoryName___(from: entity)
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Update failed:", error: error)
-            throw PersistenceError.saveFailed
+            modelContext.rollback()
+            Log.error("Update failed:", error: error)
+            throw PersistenceError.updateFailed
         }
     }
 
     public func toggleFavorite(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
-        try update(___VARIABLE_categoryVariableName___, isFavorite: !___VARIABLE_categoryVariableName___.isFavorite)
+        let entity = try fetch___VARIABLE_categoryName___(by: ___VARIABLE_categoryVariableName___.id)
+        return try update(___VARIABLE_categoryVariableName___, isFavorite: !entity.isFavorite)
     }
 
     public func incrementViewCount(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) throws -> ___VARIABLE_categoryName___ {
@@ -191,9 +247,13 @@ public actor ___VARIABLE_categoryName___StorageService {
             entity.viewCount += 1
             try modelContext.save()
             return ___VARIABLE_categoryName___(from: entity)
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Increment view count failed:", error: error)
-            throw PersistenceError.saveFailed
+            modelContext.rollback()
+            Log.error("Increment view count failed:", error: error)
+            throw PersistenceError.updateFailed
         }
     }
 
@@ -213,8 +273,12 @@ public actor ___VARIABLE_categoryName___StorageService {
                 modelContext.delete(entity)
             }
             try modelContext.save()
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Delete failed:", error: error)
+            modelContext.rollback()
+            Log.error("Delete failed:", error: error)
             throw PersistenceError.deleteFailed
         }
     }
@@ -237,8 +301,12 @@ public actor ___VARIABLE_categoryName___StorageService {
 
             try modelContext.save()
             return ___VARIABLE_categoryName___(from: ___VARIABLE_categoryVariableName___Entity)
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Add ___VARIABLE_modelPluralVariableName___ to ___VARIABLE_categoryVariableName___ failed:", error: error)
+            modelContext.rollback()
+            Log.error("Add ___VARIABLE_modelPluralVariableName___ to ___VARIABLE_categoryVariableName___ failed:", error: error)
             throw PersistenceError.saveFailed
         }
     }
@@ -252,15 +320,21 @@ public actor ___VARIABLE_categoryName___StorageService {
                 let ___VARIABLE_modelVariableName___Descriptor = FetchDescriptor<___VARIABLE_modelName___Entity>(
                     predicate: #Predicate { $0.id == ___VARIABLE_modelVariableName___Id }
                 )
-                if let ___VARIABLE_modelVariableName___Entity = try modelContext.fetch(___VARIABLE_modelVariableName___Descriptor).first {
+                if let ___VARIABLE_modelVariableName___Entity = try modelContext.fetch(___VARIABLE_modelVariableName___Descriptor).first,
+                   ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___?.id == ___VARIABLE_categoryVariableName___Entity.id
+                {
                     ___VARIABLE_modelVariableName___Entity.___VARIABLE_categoryVariableName___ = nil
                 }
             }
 
             try modelContext.save()
             return ___VARIABLE_categoryName___(from: ___VARIABLE_categoryVariableName___Entity)
+        } catch let error as PersistenceError {
+            modelContext.rollback()
+            throw error
         } catch {
-            logError("Remove ___VARIABLE_modelPluralVariableName___ from ___VARIABLE_categoryVariableName___ failed:", error: error)
+            modelContext.rollback()
+            Log.error("Remove ___VARIABLE_modelPluralVariableName___ from ___VARIABLE_categoryVariableName___ failed:", error: error)
             throw PersistenceError.saveFailed
         }
     }
@@ -272,7 +346,7 @@ public actor ___VARIABLE_categoryName___StorageService {
             let descriptor = FetchDescriptor<___VARIABLE_categoryName___Entity>()
             return try modelContext.fetchCount(descriptor)
         } catch {
-            logError("Count failed:", error: error)
+            Log.error("Count failed:", error: error)
             throw PersistenceError.fetchFailed
         }
     }
@@ -291,7 +365,7 @@ public actor ___VARIABLE_categoryName___StorageService {
             let ___VARIABLE_modelPluralVariableName___ = try modelContext.fetch(descriptor)
             return ___VARIABLE_modelPluralVariableName___.map { ___VARIABLE_modelName___(from: $0) }
         } catch {
-            logError("Lazy load ___VARIABLE_modelPluralVariableName___ failed:", error: error)
+            Log.error("Lazy load ___VARIABLE_modelPluralVariableName___ failed:", error: error)
             throw PersistenceError.fetchFailed
         }
     }
@@ -306,5 +380,24 @@ public actor ___VARIABLE_categoryName___StorageService {
             throw PersistenceError.itemNotFound
         }
         return ___VARIABLE_categoryVariableName___
+    }
+
+    private func validatedName(_ name: String) throws -> String {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else {
+            throw PersistenceError.validationFailed(reason: "Category name cannot be empty")
+        }
+        return trimmedName
+    }
+
+    private func availableCopyName(for name: String) throws -> String {
+        let baseName = "\(name) (Copy)"
+        var candidate = baseName
+        var copyNumber = 2
+        while try isNameTaken(candidate) {
+            candidate = "\(baseName) \(copyNumber)"
+            copyNumber += 1
+        }
+        return candidate
     }
 }
