@@ -38,6 +38,10 @@ check "App packages must not use SwiftData directly (@Query, .modelContainer)" \
     '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+SwiftData\b|@Query\b|\.modelContainer\(' \
     "$PACKAGES/App/Sources"
 
+check "App packages must not import Database (use app services)" \
+    '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+Database\b' \
+    "$PACKAGES/App/Sources" "$PACKAGES/App/Tests"
+
 check "Services must work with Domain models only (no SwiftData)" \
     '^[[:space:]]*(@_exported[[:space:]]+)?import[[:space:]]+SwiftData\b' \
     "$PACKAGES/Services/Sources"

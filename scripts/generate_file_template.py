@@ -2,6 +2,12 @@
 # Regenerates the "Items with Categories List iCloud" file template from the
 # Recurio reference project by reverse variable substitution.
 # Usage: python3 scripts/generate_file_template.py [path-to-recurio]
+#
+# NOTE: Recurio main diverged into a product-specific domain after its issue #6
+# (billing cycles, payment methods, service APIs beyond generic CRUD). The last
+# generic reference state is Recurio commit 55f3342; since then the template is
+# maintained directly (service layer ported in-place, see OversizeTemplate #19),
+# so rerunning this script against Recurio main would overwrite that work.
 import shutil
 import sys
 from pathlib import Path

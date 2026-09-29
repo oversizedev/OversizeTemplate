@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Services
 import FactoryKit
 import FactoryTesting
 @testable import Main
@@ -41,7 +41,7 @@ struct ___VARIABLE_categoryName___EditViewModelTests {
         async let secondTap: Void = viewModel.handleAction(.onTapSave)
         _ = await (firstTap, secondTap)
 
-        let categories = try await Container.shared.___VARIABLE_categoryVariableName___StorageService().fetch()
+        let categories = try await Container.shared.___VARIABLE_categoryVariableName___Service().fetch()
         #expect(categories.map(\.name) == ["Music"])
         #expect(categories.first?.emoji == ___VARIABLE_categoryName___.defaultEmoji)
         #expect(recorder.values.count == 1)
@@ -85,7 +85,7 @@ struct ___VARIABLE_categoryName___EditViewModelTests {
         #expect(state.hasChanges)
         await viewModel.handleAction(.onTapSave)
 
-        let saved = try await Container.shared.___VARIABLE_categoryVariableName___StorageService().fetch(by: video.id)
+        let saved = try await Container.shared.___VARIABLE_categoryVariableName___Service().fetch(by: video.id)
         #expect(saved.emoji == "🎬")
         #expect(state.isDismissed)
     }

@@ -1,7 +1,7 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Env
+import Services
 import FactoryKit
 import Models
 import OversizeArchitecture
@@ -11,7 +11,7 @@ import SwiftUI
 
 @ViewModel(module: ___VARIABLE_categoryName___List.self)
 public actor ___VARIABLE_categoryName___ListViewModel: ViewModelProtocol {
-    @LazyInjected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_categoryVariableName___Service) private var ___VARIABLE_categoryVariableName___Service: ___VARIABLE_categoryName___Service
 
     private var saveTask: Task<Void, Never>?
 
@@ -108,14 +108,14 @@ private extension ___VARIABLE_categoryName___ListViewModel {
 private extension ___VARIABLE_categoryName___ListViewModel {
     func toggleFavorite(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async {
         await performWrite {
-            let updatedCategory = try await self.___VARIABLE_categoryVariableName___StorageService.toggleFavorite(___VARIABLE_categoryVariableName___)
+            let updatedCategory = try await self.___VARIABLE_categoryVariableName___Service.toggleFavorite(___VARIABLE_categoryVariableName___)
             await self.state.update { $0.hud = updatedCategory.isFavorite ? .favorite : .unfavorite }
         }
     }
 
     func duplicate(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async {
         await performWrite {
-            _ = try await self.___VARIABLE_categoryVariableName___StorageService.duplicate(___VARIABLE_categoryVariableName___)
+            _ = try await self.___VARIABLE_categoryVariableName___Service.duplicate(___VARIABLE_categoryVariableName___)
             await self.state.update { $0.hud = .success("Duplicated") }
         }
     }
@@ -130,7 +130,7 @@ private extension ___VARIABLE_categoryName___ListViewModel {
 
     func delete(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async {
         await performWrite {
-            try await self.___VARIABLE_categoryVariableName___StorageService.delete(___VARIABLE_categoryVariableName___)
+            try await self.___VARIABLE_categoryVariableName___Service.delete(___VARIABLE_categoryVariableName___)
             await self.state.update { $0.hud = .delete }
         }
     }
@@ -166,13 +166,13 @@ private extension ___VARIABLE_categoryName___ListViewModel {
 
         do {
             let ___VARIABLE_categoryPluralVariableName___ = if query.searchTerm.isEmpty {
-                try await ___VARIABLE_categoryVariableName___StorageService.fetch(
+                try await ___VARIABLE_categoryVariableName___Service.fetch(
                     filterType: query.filterType,
                     sortType: query.sortType,
                     sortOrder: query.sortOrder
                 )
             } else {
-                try await ___VARIABLE_categoryVariableName___StorageService.search(
+                try await ___VARIABLE_categoryVariableName___Service.search(
                     query: query.searchTerm,
                     filterType: query.filterType,
                     sortType: query.sortType,

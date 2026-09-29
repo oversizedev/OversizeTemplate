@@ -1,7 +1,7 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Env
+import Services
 import FactoryKit
 import Models
 import OversizeArchitecture
@@ -11,8 +11,8 @@ import SwiftUI
 
 @ViewModel(module: ___VARIABLE_modelName___List.self)
 public actor ___VARIABLE_modelName___ListViewModel: ViewModelProtocol {
-    @LazyInjected(\.___VARIABLE_modelVariableName___StorageService) private var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
-    @LazyInjected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_modelVariableName___Service) private var ___VARIABLE_modelVariableName___Service: ___VARIABLE_modelName___Service
+    @Injected(\.___VARIABLE_categoryVariableName___Service) private var ___VARIABLE_categoryVariableName___Service: ___VARIABLE_categoryName___Service
 
     private var saveTask: Task<Void, Never>?
 
@@ -127,21 +127,21 @@ private extension ___VARIABLE_modelName___ListViewModel {
 private extension ___VARIABLE_modelName___ListViewModel {
     func toggleFavorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await performWrite {
-            let updated___VARIABLE_modelName___ = try await self.___VARIABLE_modelVariableName___StorageService.toggleFavorite(___VARIABLE_modelVariableName___)
+            let updated___VARIABLE_modelName___ = try await self.___VARIABLE_modelVariableName___Service.toggleFavorite(___VARIABLE_modelVariableName___)
             await self.state.update { $0.hud = updated___VARIABLE_modelName___.isFavorite ? .favorite : .unfavorite }
         }
     }
 
     func duplicate(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await performWrite {
-            _ = try await self.___VARIABLE_modelVariableName___StorageService.duplicate(___VARIABLE_modelVariableName___)
+            _ = try await self.___VARIABLE_modelVariableName___Service.duplicate(___VARIABLE_modelVariableName___)
             await self.state.update { $0.hud = .success("Duplicated") }
         }
     }
 
     func assignCategory(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?, to ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, showsHUD: Bool = true) async {
         await performWrite {
-            _ = try await self.___VARIABLE_modelVariableName___StorageService.update___VARIABLE_categoryName___(___VARIABLE_modelVariableName___, categoryId: ___VARIABLE_categoryVariableName___?.id)
+            _ = try await self.___VARIABLE_modelVariableName___Service.update___VARIABLE_categoryName___(___VARIABLE_modelVariableName___, categoryId: ___VARIABLE_categoryVariableName___?.id)
             if showsHUD {
                 await self.state.update { $0.hud = ___VARIABLE_categoryVariableName___ == nil ? .success("Category removed") : .success("Category assigned") }
             }
@@ -158,7 +158,7 @@ private extension ___VARIABLE_modelName___ListViewModel {
 
     func delete(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await performWrite {
-            try await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
+            try await self.___VARIABLE_modelVariableName___Service.delete(___VARIABLE_modelVariableName___)
             await self.state.update { $0.hud = .delete }
         }
     }
@@ -193,15 +193,15 @@ private extension ___VARIABLE_modelName___ListViewModel {
         let query = await ___VARIABLE_modelName___ListQuery(state)
 
         do {
-            async let ___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_categoryVariableName___StorageService.fetch()
+            async let ___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_categoryVariableName___Service.fetch()
             let ___VARIABLE_modelPluralVariableName___ = if query.searchTerm.isEmpty {
-                try await ___VARIABLE_modelVariableName___StorageService.fetch(
+                try await ___VARIABLE_modelVariableName___Service.fetch(
                     filterType: query.filterType,
                     sortType: query.sortType,
                     sortOrder: query.sortOrder
                 )
             } else {
-                try await ___VARIABLE_modelVariableName___StorageService.search(
+                try await ___VARIABLE_modelVariableName___Service.search(
                     query: query.searchTerm,
                     filterType: query.filterType,
                     sortType: query.sortType,

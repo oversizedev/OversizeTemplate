@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Services
 import FactoryKit
 import FactoryTesting
 @testable import Main
@@ -76,14 +76,14 @@ struct ___VARIABLE_modelName___DetailViewModelTests {
         await waitUntil { state.isDismissed }
 
         #expect(recorder.values.map(\.id) == [netflix.id])
-        #expect(try await Container.shared.___VARIABLE_modelVariableName___StorageService().fetch().isEmpty)
+        #expect(try await Container.shared.___VARIABLE_modelVariableName___Service().fetch().isEmpty)
     }
 
     @Test func `delete failure shows alert and keeps screen`() async throws {
         let netflix = try await TestData.make___VARIABLE_modelName___("Netflix")
         let (state, viewModel) = makeViewModel(id: netflix.id)
         await viewModel.handleAction(.onAppear)
-        try await Container.shared.___VARIABLE_modelVariableName___StorageService().delete(netflix)
+        try await Container.shared.___VARIABLE_modelVariableName___Service().delete(netflix)
 
         await viewModel.handleAction(.onTapDelete)
         confirmDelete(state.alert)
@@ -110,7 +110,7 @@ struct ___VARIABLE_modelName___DetailViewModelTests {
         }
         #expect(___VARIABLE_modelVariableName___.id == netflix.id)
 
-        let updated = try await Container.shared.___VARIABLE_modelVariableName___StorageService().update(netflix, name: "Netflix HD")
+        let updated = try await Container.shared.___VARIABLE_modelVariableName___Service().update(netflix, name: "Netflix HD")
         onSave?(updated)
         await waitUntil { state.state.result?.___VARIABLE_modelVariableName___.name == "Netflix HD" }
 

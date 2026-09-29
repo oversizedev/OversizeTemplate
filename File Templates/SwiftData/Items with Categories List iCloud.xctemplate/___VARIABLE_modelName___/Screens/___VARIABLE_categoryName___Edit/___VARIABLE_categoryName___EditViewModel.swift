@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Services
 import FactoryKit
 import Models
 import OversizeArchitecture
@@ -10,7 +10,7 @@ import SwiftUI
 
 @ViewModel(module: ___VARIABLE_categoryName___Edit.self)
 public actor ___VARIABLE_categoryName___EditViewModel: ViewModelProtocol {
-    @LazyInjected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_categoryVariableName___Service) private var ___VARIABLE_categoryVariableName___Service: ___VARIABLE_categoryName___Service
 
     private var saveTask: Task<Void, Never>?
 
@@ -140,7 +140,7 @@ private extension ___VARIABLE_categoryName___EditViewModel {
         let excludingId: UUID? = await state.source == nil ? nil : state.___VARIABLE_categoryVariableName___Id
         var isDuplicate = false
         do {
-            isDuplicate = try await ___VARIABLE_categoryVariableName___StorageService.isNameTaken(trimmedName, excludingId: excludingId)
+            isDuplicate = try await ___VARIABLE_categoryVariableName___Service.isNameTaken(trimmedName, excludingId: excludingId)
         } catch {
             Log.error("Failed to check ___VARIABLE_categoryName___ name uniqueness:", error: error)
         }
@@ -158,7 +158,7 @@ private extension ___VARIABLE_categoryName___EditViewModel {
 private extension ___VARIABLE_categoryName___EditViewModel {
     func fetch___VARIABLE_categoryName___(_ id: UUID) async {
         do {
-            let ___VARIABLE_categoryVariableName___ = try await ___VARIABLE_categoryVariableName___StorageService.fetch(by: id)
+            let ___VARIABLE_categoryVariableName___ = try await ___VARIABLE_categoryVariableName___Service.fetch(by: id)
             let form = Self.form(from: ___VARIABLE_categoryVariableName___)
             await state.update { viewState in
                 viewState.___VARIABLE_categoryVariableName___State = .result(___VARIABLE_categoryVariableName___)
@@ -176,8 +176,8 @@ private extension ___VARIABLE_categoryName___EditViewModel {
 
 private extension ___VARIABLE_categoryName___EditViewModel {
     func create(_ form: ___VARIABLE_categoryName___EditViewState.Form) async throws -> ___VARIABLE_categoryName___ {
-        let count = try await ___VARIABLE_categoryVariableName___StorageService.count()
-        return try await ___VARIABLE_categoryVariableName___StorageService.save(
+        let count = try await ___VARIABLE_categoryVariableName___Service.count()
+        return try await ___VARIABLE_categoryVariableName___Service.save(
             name: form.trimmedName,
             emoji: form.emoji,
             color: form.color,
@@ -191,7 +191,7 @@ private extension ___VARIABLE_categoryName___EditViewModel {
     func update(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___, with form: ___VARIABLE_categoryName___EditViewState.Form) async throws -> ___VARIABLE_categoryName___ {
         let originalImage = await state.originalForm?.image
         let image: Data?? = try form.image === originalImage ? nil : .some(Self.imageData(from: form.image))
-        return try await ___VARIABLE_categoryVariableName___StorageService.update(
+        return try await ___VARIABLE_categoryVariableName___Service.update(
             ___VARIABLE_categoryVariableName___,
             name: form.trimmedName,
             emoji: .some(form.emoji),

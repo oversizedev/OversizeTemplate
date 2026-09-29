@@ -29,7 +29,6 @@ import PackageDescription
 
 let commonDependencies: [PackageDescription.Package.Dependency] = [
     .package(name: "Models", path: "../Models"),
-    .package(name: "Database", path: "../Database"),
     .package(name: "Env", path: "../Env"),
     .package(name: "Services", path: "../Services"),
     .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "3.0.2")),
@@ -85,7 +84,6 @@ let package = Package(
             name: "Main",
             dependencies: [
                 .product(name: "Models", package: "Models"),
-                .product(name: "Database", package: "Database"),
                 .product(name: "Env", package: "Env"),
                 .product(name: "Services", package: "Services"),
                 .product(name: "OversizeResources", package: "OversizeResources"),
@@ -131,7 +129,6 @@ let package = Package(
             dependencies: [
                 "Main",
                 .product(name: "Models", package: "Models"),
-                .product(name: "Database", package: "Database"),
                 .product(name: "Services", package: "Services"),
                 .product(name: "FactoryKit", package: "Factory"),
                 .product(name: "FactoryTesting", package: "Factory"),

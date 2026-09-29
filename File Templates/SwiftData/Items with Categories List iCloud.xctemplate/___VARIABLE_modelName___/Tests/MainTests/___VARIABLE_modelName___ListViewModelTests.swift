@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Services
 import FactoryKit
 import FactoryTesting
 @testable import Main
@@ -87,7 +87,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
         confirmDelete(state.alert)
         await waitUntil { state.state.result?.___VARIABLE_modelPluralVariableName___.isEmpty == true }
 
-        #expect(try await Container.shared.___VARIABLE_modelVariableName___StorageService().fetch().isEmpty)
+        #expect(try await Container.shared.___VARIABLE_modelVariableName___Service().fetch().isEmpty)
         #expect(state.hud != nil)
     }
 
@@ -125,7 +125,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
         onSave?(category)
         await waitUntil { state.state.result?.___VARIABLE_modelPluralVariableName___.first?.___VARIABLE_categoryVariableName___Id == category.id }
 
-        #expect(try await Container.shared.___VARIABLE_modelVariableName___StorageService().fetch(by: netflix.id).___VARIABLE_categoryVariableName___Id == category.id)
+        #expect(try await Container.shared.___VARIABLE_modelVariableName___Service().fetch(by: netflix.id).___VARIABLE_categoryVariableName___Id == category.id)
     }
 
     @Test func `opening detail sets destination and delete callback refreshes`() async throws {
@@ -140,7 +140,7 @@ struct ___VARIABLE_modelName___ListViewModelTests {
         }
         #expect(___VARIABLE_modelVariableName___.id == netflix.id)
 
-        try await Container.shared.___VARIABLE_modelVariableName___StorageService().delete(netflix)
+        try await Container.shared.___VARIABLE_modelVariableName___Service().delete(netflix)
         onDelete?(netflix)
         await waitUntil { state.state.result?.___VARIABLE_modelPluralVariableName___.isEmpty == true }
 

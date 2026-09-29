@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Services
 import FactoryKit
 import FactoryTesting
 @testable import Main
@@ -59,7 +59,7 @@ struct ___VARIABLE_categoryName___DetailViewModelTests {
         await waitUntil { state.isDismissed }
 
         #expect(recorder.values.map(\.id) == [video.id])
-        #expect(try await Container.shared.___VARIABLE_modelVariableName___StorageService().fetch(by: netflix.id).___VARIABLE_categoryVariableName___Id == nil)
+        #expect(try await Container.shared.___VARIABLE_modelVariableName___Service().fetch(by: netflix.id).___VARIABLE_categoryVariableName___Id == nil)
     }
 
     @Test func `delete without output still dismisses`() async throws {

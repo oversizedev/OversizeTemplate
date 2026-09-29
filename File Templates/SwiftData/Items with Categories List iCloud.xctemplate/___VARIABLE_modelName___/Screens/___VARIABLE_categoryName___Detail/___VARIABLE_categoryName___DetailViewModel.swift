@@ -1,7 +1,7 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Env
+import Services
 import FactoryKit
 import Models
 import OversizeArchitecture
@@ -11,8 +11,8 @@ import SwiftUI
 
 @ViewModel(module: ___VARIABLE_categoryName___Detail.self)
 public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
-    @LazyInjected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
-    @LazyInjected(\.___VARIABLE_modelVariableName___StorageService) private var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
+    @Injected(\.___VARIABLE_categoryVariableName___Service) private var ___VARIABLE_categoryVariableName___Service: ___VARIABLE_categoryName___Service
+    @Injected(\.___VARIABLE_modelVariableName___Service) private var ___VARIABLE_modelVariableName___Service: ___VARIABLE_modelName___Service
 
     private var saveTask: Task<Void, Never>?
 
@@ -50,7 +50,7 @@ public actor ___VARIABLE_categoryName___DetailViewModel: ViewModelProtocol {
     func onTapToggleFavorite() async {
         guard let ___VARIABLE_categoryVariableName___ = await state.state.result?.___VARIABLE_categoryVariableName___ else { return }
         await performWrite {
-            let updatedCategory = try await self.___VARIABLE_categoryVariableName___StorageService.toggleFavorite(___VARIABLE_categoryVariableName___)
+            let updatedCategory = try await self.___VARIABLE_categoryVariableName___Service.toggleFavorite(___VARIABLE_categoryVariableName___)
             await self.state.update { $0.hud = updatedCategory.isFavorite ? .favorite : .unfavorite }
             await self.fetchData()
             self.output?.onEdit?(updatedCategory)
@@ -124,7 +124,7 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
 private extension ___VARIABLE_categoryName___DetailViewModel {
     func delete(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) async {
         await performWrite {
-            try await self.___VARIABLE_categoryVariableName___StorageService.delete(___VARIABLE_categoryVariableName___)
+            try await self.___VARIABLE_categoryVariableName___Service.delete(___VARIABLE_categoryVariableName___)
             await self.state.update { $0.isDismissed = true }
             self.output?.onDelete?(___VARIABLE_categoryVariableName___)
         }
@@ -132,7 +132,7 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
 
     func toggle___VARIABLE_modelName___Favorite(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await performWrite {
-            let updated___VARIABLE_modelName___ = try await self.___VARIABLE_modelVariableName___StorageService.toggleFavorite(___VARIABLE_modelVariableName___)
+            let updated___VARIABLE_modelName___ = try await self.___VARIABLE_modelVariableName___Service.toggleFavorite(___VARIABLE_modelVariableName___)
             await self.state.update { $0.hud = updated___VARIABLE_modelName___.isFavorite ? .favorite : .unfavorite }
             await self.fetchData()
         }
@@ -140,7 +140,7 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
 
     func duplicate___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await performWrite {
-            _ = try await self.___VARIABLE_modelVariableName___StorageService.duplicate(___VARIABLE_modelVariableName___)
+            _ = try await self.___VARIABLE_modelVariableName___Service.duplicate(___VARIABLE_modelVariableName___)
             await self.state.update { $0.hud = .success("Duplicated") }
             await self.fetchData()
         }
@@ -156,7 +156,7 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
 
     func delete___VARIABLE_modelName___(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___) async {
         await performWrite {
-            try await self.___VARIABLE_modelVariableName___StorageService.delete(___VARIABLE_modelVariableName___)
+            try await self.___VARIABLE_modelVariableName___Service.delete(___VARIABLE_modelVariableName___)
             await self.state.update { $0.hud = .delete }
             await self.fetchData()
         }
@@ -164,7 +164,7 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
 
     func assignCategory(_ ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___?, to ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, showsHUD: Bool = true) async {
         await performWrite {
-            _ = try await self.___VARIABLE_modelVariableName___StorageService.update___VARIABLE_categoryName___(___VARIABLE_modelVariableName___, categoryId: ___VARIABLE_categoryVariableName___?.id)
+            _ = try await self.___VARIABLE_modelVariableName___Service.update___VARIABLE_categoryName___(___VARIABLE_modelVariableName___, categoryId: ___VARIABLE_categoryVariableName___?.id)
             if showsHUD {
                 await self.state.update { $0.hud = ___VARIABLE_categoryVariableName___ == nil ? .success("Category removed") : .success("Category assigned") }
             }
@@ -198,13 +198,13 @@ private extension ___VARIABLE_categoryName___DetailViewModel {
             await state.update { $0.state = .loading }
         }
         do {
-            async let ___VARIABLE_categoryVariableName___ = ___VARIABLE_categoryVariableName___StorageService.fetch(by: state.___VARIABLE_categoryVariableName___Id)
-            async let ___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelVariableName___StorageService.fetch(
+            async let ___VARIABLE_categoryVariableName___ = ___VARIABLE_categoryVariableName___Service.fetch(by: state.___VARIABLE_categoryVariableName___Id)
+            async let ___VARIABLE_modelPluralVariableName___ = ___VARIABLE_modelVariableName___Service.fetch(
                 sortType: .date,
                 sortOrder: .descending,
                 ___VARIABLE_categoryVariableName___Id: state.___VARIABLE_categoryVariableName___Id
             )
-            async let ___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_categoryVariableName___StorageService.fetch()
+            async let ___VARIABLE_categoryPluralVariableName___ = ___VARIABLE_categoryVariableName___Service.fetch()
             let model = try await ___VARIABLE_categoryName___DetailViewState.StateModel(
                 ___VARIABLE_categoryVariableName___: ___VARIABLE_categoryVariableName___,
                 ___VARIABLE_modelPluralVariableName___: ___VARIABLE_modelPluralVariableName___,

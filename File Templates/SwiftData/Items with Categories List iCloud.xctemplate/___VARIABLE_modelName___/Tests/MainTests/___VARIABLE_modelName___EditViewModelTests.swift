@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Services
 import FactoryKit
 import FactoryTesting
 @testable import Main
@@ -30,7 +30,7 @@ struct ___VARIABLE_modelName___EditViewModelTests {
         async let secondTap: Void = viewModel.handleAction(.onTapSave)
         _ = await (firstTap, secondTap)
 
-        let ___VARIABLE_modelPluralVariableName___ = try await Container.shared.___VARIABLE_modelVariableName___StorageService().fetch()
+        let ___VARIABLE_modelPluralVariableName___ = try await Container.shared.___VARIABLE_modelVariableName___Service().fetch()
         #expect(___VARIABLE_modelPluralVariableName___.map(\.name) == ["Netflix"])
         #expect(recorder.values.count == 1)
         #expect(state.isDismissed)
@@ -47,7 +47,7 @@ struct ___VARIABLE_modelName___EditViewModelTests {
 
         #expect(state.isValidForm == false)
         #expect(state.isDismissed == false)
-        #expect(try await Container.shared.___VARIABLE_modelVariableName___StorageService().fetch().isEmpty)
+        #expect(try await Container.shared.___VARIABLE_modelVariableName___Service().fetch().isEmpty)
     }
 
     @Test func `create form tracks changes`() async {
@@ -89,7 +89,7 @@ struct ___VARIABLE_modelName___EditViewModelTests {
         #expect(state.hasChanges)
         await viewModel.handleAction(.onTapSave)
 
-        let saved = try await Container.shared.___VARIABLE_modelVariableName___StorageService().fetch(by: netflix.id)
+        let saved = try await Container.shared.___VARIABLE_modelVariableName___Service().fetch(by: netflix.id)
         #expect(saved.___VARIABLE_categoryVariableName___Id == nil)
         #expect(saved.note == nil)
         #expect(state.isDismissed)
@@ -122,7 +122,7 @@ struct ___VARIABLE_modelName___EditViewModelTests {
 
         await viewModel.handleAction(.onTapSave)
 
-        let saved = try await Container.shared.___VARIABLE_modelVariableName___StorageService().fetch(by: netflix.id)
+        let saved = try await Container.shared.___VARIABLE_modelVariableName___Service().fetch(by: netflix.id)
         #expect(saved.name == "Draft")
         #expect(saved.note == "Family")
         #expect(saved.___VARIABLE_categoryVariableName___Id == category.id)

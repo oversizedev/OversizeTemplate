@@ -1,6 +1,6 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
+import Services
 import FactoryKit
 import FactoryTesting
 @testable import Main
@@ -61,7 +61,7 @@ struct ___VARIABLE_categoryName___ListViewModelTests {
         confirmDelete(state.alert)
         await waitUntil { state.state.result?.___VARIABLE_categoryPluralVariableName___.isEmpty == true }
 
-        #expect(try await Container.shared.___VARIABLE_categoryVariableName___StorageService().fetch().isEmpty)
+        #expect(try await Container.shared.___VARIABLE_categoryVariableName___Service().fetch().isEmpty)
     }
 
     @Test func `duplicate double tap creates one copy`() async throws {

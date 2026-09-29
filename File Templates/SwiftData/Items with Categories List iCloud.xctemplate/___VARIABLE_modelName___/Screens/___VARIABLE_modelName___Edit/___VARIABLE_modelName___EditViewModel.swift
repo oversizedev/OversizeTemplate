@@ -1,7 +1,7 @@
 // ___FILEHEADER___
 
-import ___VARIABLE_modelPackage___
 import Env
+import Services
 import FactoryKit
 import Models
 import OversizeArchitecture
@@ -11,8 +11,8 @@ import SwiftUI
 
 @ViewModel(module: ___VARIABLE_modelName___Edit.self)
 public actor ___VARIABLE_modelName___EditViewModel: ViewModelProtocol {
-    @LazyInjected(\.___VARIABLE_modelVariableName___StorageService) private var ___VARIABLE_modelVariableName___StorageService: ___VARIABLE_modelName___StorageService
-    @LazyInjected(\.___VARIABLE_categoryVariableName___StorageService) private var ___VARIABLE_categoryVariableName___StorageService: ___VARIABLE_categoryName___StorageService
+    @Injected(\.___VARIABLE_modelVariableName___Service) private var ___VARIABLE_modelVariableName___Service: ___VARIABLE_modelName___Service
+    @Injected(\.___VARIABLE_categoryVariableName___Service) private var ___VARIABLE_categoryVariableName___Service: ___VARIABLE_categoryName___Service
 
     private var saveTask: Task<Void, Never>?
 
@@ -145,7 +145,7 @@ private extension ___VARIABLE_modelName___EditViewModel {
 private extension ___VARIABLE_modelName___EditViewModel {
     func fetch___VARIABLE_modelName___Categories() async {
         do {
-            let ___VARIABLE_categoryPluralVariableName___ = try await ___VARIABLE_categoryVariableName___StorageService.fetch()
+            let ___VARIABLE_categoryPluralVariableName___ = try await ___VARIABLE_categoryVariableName___Service.fetch()
             await state.update { viewState in
                 viewState.___VARIABLE_categoryPluralVariableName___State = .result(___VARIABLE_categoryPluralVariableName___)
                 if let categoryId = viewState.form.___VARIABLE_categoryVariableName___Id,
@@ -165,7 +165,7 @@ private extension ___VARIABLE_modelName___EditViewModel {
 
     func fetch___VARIABLE_modelName___(_ id: UUID) async {
         do {
-            let ___VARIABLE_modelVariableName___ = try await ___VARIABLE_modelVariableName___StorageService.fetch(by: id)
+            let ___VARIABLE_modelVariableName___ = try await ___VARIABLE_modelVariableName___Service.fetch(by: id)
             let form = Self.form(from: ___VARIABLE_modelVariableName___)
             await state.update { viewState in
                 viewState.___VARIABLE_modelVariableName___State = .result(___VARIABLE_modelVariableName___)
@@ -188,7 +188,7 @@ private extension ___VARIABLE_modelName___EditViewModel {
 
 private extension ___VARIABLE_modelName___EditViewModel {
     func create(_ form: ___VARIABLE_modelName___EditViewState.Form) async throws -> ___VARIABLE_modelName___ {
-        try await ___VARIABLE_modelVariableName___StorageService.save(
+        try await ___VARIABLE_modelVariableName___Service.save(
             name: form.trimmedName,
             color: form.color,
             date: form.date ?? Date(),
@@ -201,7 +201,7 @@ private extension ___VARIABLE_modelName___EditViewModel {
     func update(_ ___VARIABLE_modelVariableName___: ___VARIABLE_modelName___, with form: ___VARIABLE_modelName___EditViewState.Form) async throws -> ___VARIABLE_modelName___ {
         let originalImage = await state.originalForm?.image
         let image: Data?? = try form.image === originalImage ? nil : .some(Self.imageData(from: form.image))
-        return try await ___VARIABLE_modelVariableName___StorageService.update(
+        return try await ___VARIABLE_modelVariableName___Service.update(
             ___VARIABLE_modelVariableName___,
             name: form.trimmedName,
             color: form.color,
