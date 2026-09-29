@@ -1,29 +1,16 @@
 //___FILEHEADER___
 
-import App
 import Env
-import Foundation
-import NavigatorUI
-import OversizeKit
-import OversizeRouter
 import SwiftUI
 
-extension RootTabs: @retroactive NavigationDestination {
+extension RootTabs: @retroactive View {
     public var body: some View {
-        RootTabsViewBuilder(destination: self)
-    }
-}
-
-private struct RootTabsViewBuilder: View {
-    let destination: RootTabs
-    var body: some View {
-        switch destination {
+        switch self {
         case .main:
-            EmptyView()
+            MainNavigationStack()
+
         case .settings:
-            SettingsNavigationStack {
-                EmptyView()
-            }
+            AppSettingsNavigationStack()
         }
     }
 }

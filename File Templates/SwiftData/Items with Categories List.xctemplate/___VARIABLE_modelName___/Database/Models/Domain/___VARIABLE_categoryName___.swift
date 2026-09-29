@@ -1,0 +1,73 @@
+// ___FILEHEADER___
+
+import Foundation
+import SwiftUI
+
+public struct ___VARIABLE_categoryName___: Identifiable, Hashable, Equatable, Sendable {
+    public let id: UUID
+    public let imageData: Data?
+    public let name: String
+    public let emoji: String?
+    public let color: Color
+    public let date: Date
+    public let note: String?
+    public let isFavorite: Bool
+    public let index: Int
+
+    public init(
+        id: UUID = UUID(),
+        imageData: Data? = nil,
+        name: String,
+        emoji: String?,
+        color: Color,
+        date: Date,
+        note: String? = nil,
+        isFavorite: Bool = false,
+        index: Int = 0
+    ) {
+        self.id = id
+        self.imageData = imageData
+        self.name = name
+        self.emoji = emoji
+        self.color = color
+        self.date = date
+        self.note = note
+        self.isFavorite = isFavorite
+        self.index = index
+    }
+}
+
+// MARK: - Hashable
+
+public extension ___VARIABLE_categoryName___ {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+// MARK: - SwiftData Conversion
+
+public extension ___VARIABLE_categoryName___ {
+    init(from entity: ___VARIABLE_categoryName___Entity) {
+        self.init(
+            id: entity.id,
+            imageData: entity.imageData,
+            name: entity.name,
+            emoji: entity.emoji,
+            color: entity.color,
+            date: entity.date,
+            note: entity.note,
+            isFavorite: entity.isFavorite,
+            index: entity.index
+        )
+    }
+}
+
+// MARK: - Computed Properties
+
+public extension ___VARIABLE_categoryName___ {
+    var image: Image? {
+        guard let imageData else { return nil }
+        return .init(data: imageData)
+    }
+}

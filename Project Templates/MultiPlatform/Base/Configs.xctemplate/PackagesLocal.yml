@@ -1,27 +1,33 @@
 packages:
   OversizeUI:
-    path: ../../Packages/OversizeUI
+    path: ${HOME}/Developer/Packages/OversizeUI
   OversizeServices:
-    path: ../../Packages/OversizeServices
+    path: ${HOME}/Developer/Packages/OversizeServices
   OversizeResources:
-    path: ../../Packages/OversizeResources
+    path: ${HOME}/Developer/Packages/OversizeResources
   OversizeLocalizable:
-    path: ../../Packages/OversizeLocalizable
+    path: ${HOME}/Developer/Packages/OversizeLocalizable
   OversizeKit:
-    path: ../../Packages/OversizeKit
+    path: ${HOME}/Developer/Packages/OversizeKit
   OversizeCore:
-    path: ../../Packages/OversizeCore
-  OversizeComponents:
-    path: ../../Packages/OversizeComponents
+    path: ${HOME}/Developer/Packages/OversizeCore
+  OversizeNavigation:
+    path: ${HOME}/Developer/Packages/OversizeNavigation
+  OversizeArchitecture:
+    path: ${HOME}/Developer/Packages/OversizeArchitecture
+  Models:
+    path: ../Packages/Models
   Database:
     path: ../Packages/Database
   Env:
     path: ../Packages/Env
+  Services:
+    path: ../Packages/Services
   App:
     path: ../Packages/App
   FactoryKit:
     url: https://github.com/hmlongco/Factory.git
-    majorVersion: 2.1.3
+    majorVersion: 3.0.2
   NavigatorUI:
     url: https://github.com/hmlongco/Navigator.git
-    majorVersion: 1.0.0
+    majorVersion: 2.0.2

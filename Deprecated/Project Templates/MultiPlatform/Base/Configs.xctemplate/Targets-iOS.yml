@@ -1,0 +1,126 @@
+targets:
+  ___VARIABLE_productName:RFC1034Identifier___:
+    type: application
+    platform: iOS
+    deploymentTarget: 17.0
+    info:
+      path: ../___VARIABLE_productName:RFC1034Identifier___/Resources/Info.plist
+      properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UIBackgroundModes:
+          - remote-notification
+    sources:
+      - path: ../Configs
+      - path: ../___VARIABLE_productName:RFC1034Identifier___
+    settings:
+      base:
+        INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen.storyboard
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        INFOPLIST_KEY_NSFaceIDUsageDescription: Auth in app
+        # INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.medical
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: ___VARIABLE_bundleIdentifierPrefix:bundleIdentifier___.___VARIABLE_productName:RFC1034Identifier___.dev
+          PRODUCT_NAME: ___VARIABLE_productName:RFC1034Identifier___ Dev
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon(Dev)
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+        TestFlight:
+          PRODUCT_BUNDLE_IDENTIFIER: ___VARIABLE_bundleIdentifierPrefix:bundleIdentifier___.___VARIABLE_productName:RFC1034Identifier___
+          PRODUCT_NAME: ___VARIABLE_productName:RFC1034Identifier___ TestFlight
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: TESTFLIGHT
+        AppStore:
+          PRODUCT_BUNDLE_IDENTIFIER: ___VARIABLE_bundleIdentifierPrefix:bundleIdentifier___.___VARIABLE_productName:RFC1034Identifier___
+          PRODUCT_NAME: ___VARIABLE_productName:RFC1034Identifier___
+          ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: APPSTORE
+
+    dependencies:
+      - package: FactoryKit
+      - package: OversizeUI
+      - package: OversizeServices
+      - package: OversizeResources
+      - package: OversizeLocalizable
+      - package: OversizeKit
+        products:
+          - OversizeKit
+          - OversizeNoticeKit
+      - package: OversizeCore
+      - package: OversizeComponents
+      - package: OversizeRouter
+      - package: Database
+      - package: Env
+      - package: App
+      - sdk: StoreKit.framework
+    entitlements:
+      path: ../___VARIABLE_productName:RFC1034Identifier___/Resources/___VARIABLE_productName:RFC1034Identifier___.entitlements
+      properties:
+        aps-environment: development
+        com.apple.developer.default-data-protection: NSFileProtectionComplete
+        com.apple.developer.icloud-container-identifiers: [iCloud.app.oversize.___VARIABLE_productName:RFC1034Identifier___]
+        com.apple.developer.icloud-services: [CloudKit]
+        com.apple.security.app-sandbox: true
+
+schemes:
+  ___VARIABLE_productName:RFC1034Identifier___ (Dev):
+    build:
+      targets:
+        ___VARIABLE_productName:RFC1034Identifier___: all
+    run:
+      config: Debug
+      commandLineArguments:
+        "-com.apple.CoreData.SQLDebug 1": true
+      environmentVariables:
+        OS_ACTIVITY_MODE: disable
+      storeKitConfiguration: ___VARIABLE_productName:RFC1034Identifier___/Resources/StoreKit.storekit
+    test:
+      config: Debug
+      gatherCoverageData: true
+    analyze:
+      config: Debug
+    profile:
+      config: Debug
+    archive:
+      config: Debug
+      
+  ___VARIABLE_productName:RFC1034Identifier___ (TestFlight):
+    build:
+      targets:
+        ___VARIABLE_productName:RFC1034Identifier___: all
+    run:
+      config: TestFlight
+    test:
+      config: TestFlight
+      gatherCoverageData: true
+    analyze:
+      config: TestFlight
+    profile:
+      config: TestFlight
+    archive:
+      config: TestFlight
+      
+  ___VARIABLE_productName:RFC1034Identifier___ (AppStore):
+    build:
+      targets:
+        ___VARIABLE_productName:RFC1034Identifier___: all
+    run:
+      config: AppStore
+    test:
+      config: AppStore
+      gatherCoverageData: true
+    analyze:
+      config: AppStore
+    profile:
+      config: AppStore
+    archive:
+      config: AppStore

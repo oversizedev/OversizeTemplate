@@ -1,0 +1,17 @@
+options:
+  bundleIdPrefix: ___VARIABLE_bundleIdentifierPrefix:bundleIdentifier___
+  xcodeVersion: 26.2
+  deploymentTarget:
+    iOS: 26.2
+  groupSortPosition: top
+  generateEmptyDirectories: true
+  findCarthageFrameworks: true
+  minimumXcodeGenVersion: 2.44.1
+  fileTypes:
+    "icon":
+      file: true
+
+configs:
+  Debug: debug
+  TestFlight: release
+  AppStore: release

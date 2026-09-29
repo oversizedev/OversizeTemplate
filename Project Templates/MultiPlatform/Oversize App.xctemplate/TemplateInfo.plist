@@ -18,7 +18,7 @@
 	<key>SortOrder</key>
 	<integer>1</integer>
 	<key>NameOfInitialFileForEditor</key>
-	<string>ContentView.swift</string>
+	<string>RootView.swift</string>
 	<key>Platforms</key>
 	<array/>
 	<key>Options</key>

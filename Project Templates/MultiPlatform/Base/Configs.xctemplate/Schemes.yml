@@ -1,0 +1,47 @@
+schemes:
+  ___VARIABLE_productName:RFC1034Identifier___ (Dev):
+    build:
+      targets:
+        ___VARIABLE_productName:RFC1034Identifier___: all
+    run:
+      config: Debug
+      commandLineArguments:
+        "-com.apple.CoreData.SQLDebug 1": true
+      environmentVariables:
+        CG_NUMERICS_SHOW_BACKTRACE: 1
+      #storeKitConfiguration: ___VARIABLE_productName:RFC1034Identifier___/Resources/StoreKit.storekit
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - ___VARIABLE_productName:RFC1034Identifier___UITests
+        - package: Database/DatabaseTests
+        - package: Services/ServicesTests
+        - package: App/MainTests
+    analyze:
+      config: Debug
+    profile:
+      config: Debug
+    archive:
+      config: Debug
+
+  ___VARIABLE_productName:RFC1034Identifier___ (AppStore):
+    build:
+      targets:
+        ___VARIABLE_productName:RFC1034Identifier___: all
+    run:
+      config: AppStore
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - ___VARIABLE_productName:RFC1034Identifier___UITests
+        - package: Database/DatabaseTests
+        - package: Services/ServicesTests
+        - package: App/MainTests
+    analyze:
+      config: AppStore
+    profile:
+      config: AppStore
+    archive:
+      config: AppStore

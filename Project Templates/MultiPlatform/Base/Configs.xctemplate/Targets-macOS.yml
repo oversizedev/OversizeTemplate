@@ -2,7 +2,7 @@ targets:
   ___VARIABLE_productName:RFC1034Identifier___:
     type: application
     platform: macOS
-    deploymentTarget: 14.0
+    deploymentTarget: 15.0
     sources:
       - path: ../Configs
       - path: ../___VARIABLE_productName:RFC1034Identifier___
@@ -31,9 +31,9 @@ targets:
       - package: OversizeResources
       - package: OversizeLocalizable
       - package: OversizeCore
-      - package: OversizeComponents
       - package: Database
       - package: Env
+      - package: Models
       - package: App
       - sdk: StoreKit.framework
     entitlements:

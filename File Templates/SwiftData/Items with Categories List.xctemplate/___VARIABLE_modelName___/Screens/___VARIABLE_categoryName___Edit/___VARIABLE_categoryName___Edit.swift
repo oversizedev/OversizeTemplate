@@ -1,0 +1,37 @@
+// ___FILEHEADER___
+
+import ___VARIABLE_modelPackage___
+import Foundation
+import OversizeArchitecture
+
+@Module
+public enum ___VARIABLE_categoryName___Edit: ModuleProtocol {}
+
+public struct ___VARIABLE_categoryName___EditInput: Sendable {
+    public let source: Source?
+
+    public enum Source: Sendable {
+        case id(UUID)
+        case ___VARIABLE_categoryVariableName___(___VARIABLE_categoryName___)
+    }
+
+    public init() {
+        source = nil
+    }
+
+    public init(id: UUID) {
+        source = .id(id)
+    }
+
+    public init(___VARIABLE_categoryVariableName___: ___VARIABLE_categoryName___) {
+        source = .___VARIABLE_categoryVariableName___(___VARIABLE_categoryVariableName___)
+    }
+}
+
+public struct ___VARIABLE_categoryName___EditOutput: Sendable {
+    public let onSave: Callback<___VARIABLE_categoryName___>?
+
+    public init(onSave: Callback<___VARIABLE_categoryName___>? = nil) {
+        self.onSave = onSave
+    }
+}
