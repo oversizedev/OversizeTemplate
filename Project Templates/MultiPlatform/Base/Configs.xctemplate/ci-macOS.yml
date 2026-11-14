@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".claude/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Checks
+    uses: oversizedev/GithubWorkflows/.github/workflows/checks.yml@main
+    with:
+      commands: make arch-check
+
+  build-release:
+    name: Build AppStore
+    needs: checks
+    if: github.event_name == 'pull_request'
+    uses: oversizedev/GithubWorkflows/.github/workflows/build-app.yml@main
+    with:
+      path: ___VARIABLE_productName:RFC1034Identifier___
+      scheme: ___VARIABLE_productName:RFC1034Identifier___ (AppStore)
+      configuration: AppStore
+      destination: generic/platform=macOS
+      xcodegen: true
+      pre-build: FORCE_REMOTE_PACKAGES=1 xcodegen --spec project.yml
+    secrets: inherit
+
+  build-for-testing:
+    name: Build for testing
+    needs: checks
+    uses: oversizedev/GithubWorkflows/.github/workflows/build-for-testing.yml@main
+    with:
+      path: ___VARIABLE_productName:RFC1034Identifier___
+      scheme: ___VARIABLE_productName:RFC1034Identifier___ (Dev)
+      platform: macOS
+      artifact: test-products
+      xcodegen: true
+      pre-build: FORCE_REMOTE_PACKAGES=1 xcodegen --spec project.yml
+    secrets: inherit
+
+  tests:
+    name: Tests
+    needs: build-for-testing
+    uses: oversizedev/GithubWorkflows/.github/workflows/test-app.yml@main
+    with:
+      name: Tests
+      artifact: ${{ needs.build-for-testing.outputs.artifact }}
+      platform: macOS
+
+  testflight:
+    name: TestFlight
+    needs: tests
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    uses: oversizedev/GithubWorkflows/.github/workflows/testflight.yml@main
+    with:
+      path: ___VARIABLE_productName:RFC1034Identifier___
+      scheme: ___VARIABLE_productName:RFC1034Identifier___ (AppStore)
+      platform: macOS
+      configuration: AppStore
+      team-id: ER582ZK85C
+      xcodegen: true
+      pre-build: FORCE_REMOTE_PACKAGES=1 xcodegen --spec project.yml
+    secrets: inherit
