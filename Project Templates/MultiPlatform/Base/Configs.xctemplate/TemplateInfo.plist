@@ -86,6 +86,7 @@
 		<string>../scripts/check_architecture.sh</string>
 		<string>../scripts/add_permissions.sh</string>
 		<string>../ci_scripts/ci_post_clone.sh</string>
+		<string>../.github/workflows/ci.yml</string>
 		<string>../AGENTS.md</string>
 		<string>../CLAUDE.md</string>
 		<string>../.claude/agents/Explore.md</string>
@@ -290,6 +291,16 @@
 			<key>Group</key>
 			<array>
 				<string>ci_scripts</string>
+			</array>
+		</dict>
+		<key>../.github/workflows/ci.yml</key>
+		<dict>
+			<key>Path</key>
+			<string>.github/workflows/ci.yml</string>
+			<key>Group</key>
+			<array>
+				<string>.github</string>
+				<string>workflows</string>
 			</array>
 		</dict>
 		<key>../AGENTS.md</key>

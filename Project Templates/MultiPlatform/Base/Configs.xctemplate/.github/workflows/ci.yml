@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".claude/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Checks
+    uses: oversizedev/GithubWorkflows/.github/workflows/checks.yml@main
+    with:
+      commands: make arch-check
+
+  build-release:
+    name: Build AppStore
+    needs: checks
+    if: github.event_name == 'pull_request'
+    uses: oversizedev/GithubWorkflows/.github/workflows/build-app.yml@main
+    with:
+      path: ___VARIABLE_productName:RFC1034Identifier___
+      scheme: ___VARIABLE_productName:RFC1034Identifier___ (AppStore)
+      configuration: AppStore
+      destination: generic/platform=iOS
+      xcodegen: true
+      pre-build: FORCE_REMOTE_PACKAGES=1 xcodegen --spec project.yml
+    secrets: inherit
+
+  build-for-testing:
+    name: Build for testing
+    needs: checks
+    uses: oversizedev/GithubWorkflows/.github/workflows/build-for-testing.yml@main
+    with:
+      path: ___VARIABLE_productName:RFC1034Identifier___
+      scheme: ___VARIABLE_productName:RFC1034Identifier___ (Dev)
+      artifact: test-products
+      xcodegen: true
+      pre-build: FORCE_REMOTE_PACKAGES=1 xcodegen --spec project.yml
+    secrets: inherit
+
+  unit-tests:
+    name: Unit tests
+    needs: build-for-testing
+    uses: oversizedev/GithubWorkflows/.github/workflows/test-app.yml@main
+    with:
+      name: Unit tests
+      artifact: ${{ needs.build-for-testing.outputs.artifact }}
+      skip-testing: ___VARIABLE_productName:RFC1034Identifier___UITests
+
+  ui-tests:
+    name: UI tests
+    needs: build-for-testing
+    uses: oversizedev/GithubWorkflows/.github/workflows/test-app.yml@main
+    with:
+      name: UI tests
+      artifact: ${{ needs.build-for-testing.outputs.artifact }}
+      only-testing: ___VARIABLE_productName:RFC1034Identifier___UITests
+
+  testflight:
+    name: TestFlight
+    needs: [unit-tests, ui-tests]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    uses: oversizedev/GithubWorkflows/.github/workflows/testflight.yml@main
+    with:
+      path: ___VARIABLE_productName:RFC1034Identifier___
+      scheme: ___VARIABLE_productName:RFC1034Identifier___ (AppStore)
+      configuration: AppStore
+      team-id: ER582ZK85C
+      xcodegen: true
+      pre-build: FORCE_REMOTE_PACKAGES=1 xcodegen --spec project.yml
+    secrets: inherit
