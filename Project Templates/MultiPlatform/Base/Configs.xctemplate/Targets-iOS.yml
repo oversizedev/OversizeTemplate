@@ -2,6 +2,14 @@ targets:
   ___VARIABLE_productName:RFC1034Identifier___:
     type: application
     platform: iOS
+    preBuildScripts:
+      - name: Prevent Debug Archive
+        basedOnDependencyAnalysis: false
+        script: |
+          if [ "$ACTION" = "install" ] && [ "$CONFIGURATION" = "Debug" ]; then
+            echo "error: Debug archives are disabled. Use the ___VARIABLE_productName:RFC1034Identifier___ (AppStore) scheme."
+            exit 1
+          fi
     info:
       path: ../___VARIABLE_productName:RFC1034Identifier___/Resources/Info.plist
       properties:

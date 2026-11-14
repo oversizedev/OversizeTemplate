@@ -23,6 +23,7 @@
 						<key>Nodes</key>
 						<array>
 							<string>../Configs/Targets.yml</string>
+							<string>../.github/workflows/ci.yml</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -35,6 +36,16 @@
 									<string>Configs</string>
 								</array>
 							</dict>
+							<key>../.github/workflows/ci.yml</key>
+							<dict>
+								<key>Path</key>
+								<string>ci-iOS.yml</string>
+								<key>Group</key>
+								<array>
+									<string>.github</string>
+									<string>workflows</string>
+								</array>
+							</dict>
 						</dict>
 					</dict>
 				</array>
@@ -44,6 +55,7 @@
 						<key>Nodes</key>
 						<array>
 							<string>../Configs/Targets.yml</string>
+							<string>../.github/workflows/ci.yml</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -54,6 +66,16 @@
 								<key>Group</key>
 								<array>
 									<string>Configs</string>
+								</array>
+							</dict>
+							<key>../.github/workflows/ci.yml</key>
+							<dict>
+								<key>Path</key>
+								<string>ci-macOS.yml</string>
+								<key>Group</key>
+								<array>
+									<string>.github</string>
+									<string>workflows</string>
 								</array>
 							</dict>
 						</dict>

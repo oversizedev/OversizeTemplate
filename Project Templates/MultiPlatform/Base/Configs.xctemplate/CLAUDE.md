@@ -232,6 +232,16 @@ intents (deep links, tab switching).
 - `Configs/Packages.yml` / `Configs/PackagesLocal.yml` - Remote / local dependencies
 - `scripts/check_architecture.sh`, `scripts/generate_init_scripts.py`, `scripts/verify_init.sh` - Guards
 
+## CI and TestFlight
+
+- One workflow `.github/workflows/ci.yml` built from reusable steps in `oversizedev/GithubWorkflows`:
+  Checks → Build AppStore (PRs) and Build for testing → Unit tests ∥ UI tests → TestFlight (`main` only)
+- TestFlight builds are uploaded only by CI: archive of the `(AppStore)` scheme, cloud signing with the
+  App Store Connect API key (`ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY`), build number from the run number
+- Debug archives are blocked by the `Prevent Debug Archive` pre-build script in `Configs/Targets*.yml`
+  and by `testflight.yml` (`disallowed-configurations`); never upload builds from Xcode Organizer
+- Xcode jobs run on the self-hosted Mac for private repositories; the Linux self-hosted runner never builds apps
+
 ## Build Configurations
 
 Two configurations (`Configs/Base.yml`, `Configs/Settings.yml`, `Configs/Targets.yml`):
